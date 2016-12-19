@@ -9,10 +9,12 @@ class Inicio extends CI_Controller
 
 		//$this->db->get('ciudad'); 
 		$data = $arrayName = array('titulo' => 'SEPP');
+
 		$this->load->view("plantilla/head", $data);
 		$this->load->view("plantilla/header");
 		$this->load->view("plantilla/nav");
 		$this->load->view("plantilla/content");
+		$this->load->view("plantilla/nav_right");
 		$this->load->view("plantilla/footer");
 
 		// print("Hola Mundo");
