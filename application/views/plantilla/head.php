@@ -1,3 +1,6 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +32,8 @@
     <link rel="stylesheet" href="<?= base_url() ?>dashboard/plugins/select2/select2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= base_url() ?>dashboard/dist/css/AdminLTE.min.css">
-
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
