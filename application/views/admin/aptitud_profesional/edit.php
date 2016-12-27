@@ -1,7 +1,7 @@
-<?php 
-    $this->load->view("plantilla/head", ['titulo' => $titulo]);
-    $this->load->view("plantilla/header");
-    $this->load->view("plantilla/nav");
+<?php
+$this->load->view("plantilla/head", ['titulo' => $titulo]);
+$this->load->view("plantilla/header");
+$this->load->view("plantilla/nav");
 ?>
 
 <div class="content-wrapper">
@@ -30,19 +30,24 @@
 
                     <div class="box-header">
                         <div class="col-md-2 col-md-offset-10 text-center">
-                            <a href="<?= base_url() . "admin/profesor" ?>">
+                            <a href="<?= base_url() . "admin/aptitud_profesional" ?>">
                                 <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                             </a>
                         </div>
                     </div>
+
+
+
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
-                    
-                    <?= form_open("admin/profesor/add") ?>
-                        <!-- ////   LOAD FORM    ////////////////////--> 
-                        <?php $this->load->view("admin/profesor/partes/form_profesor"); ?>
-                    
+
+                    <?= form_open("admin/aptitud_profesional/edit/" . @$aptitud_profesional['id']) ?>
+
+                    <!-- ////   LOAD FORM    ////////////////////--> 
+                    <?php $this->load->view("admin/aptitud_profesional/partes/form_aptitud_profesional", $aptitud_profesional); ?>
+
                     <?= form_close() ?>
+
 
                 </div><!-- /.box -->
 
@@ -54,32 +59,5 @@
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-<script>
-    $(document).ready(function() {
-        $("#id_facultad").trigger("change");
-    });
-
-    $("#id_facultad").change(function() {
-        var valor = $("#id_facultad").val();
-        $("#id_programa").empty();
-        $("#id_programaDiv").hide();
-        if (valor !== "") {
-            $.ajax({
-                url: "<?= base_url("admin/profesor") ?>" + "/traerPrograma/" + valor,
-                type: "POST",
-                dataType: "json",
-                success: function(msg) {
-                    $("#id_programaDiv").show();
-                    $("#id_programa").append("<option value=''>Seleccione el programa</option>");
-                    for (i = 0; i < msg.length; i++) {
-                        $("#id_programa").append("<option value='" + msg[i].id + "'>" + msg[i].nombre + "</option>");
-                    }
-                }
-
-            });
-        }
-
-    });
-</script>
 
 <?php $this->load->view("plantilla/footer"); ?>

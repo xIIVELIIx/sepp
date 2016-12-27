@@ -8,8 +8,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?= $titulo ?>
-            <small>M&oacute;dulo de Administrador</small>
+            Dashboard
+            <small>Control panel</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -38,9 +38,9 @@
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
                     
-                    <?= form_open("admin/profesor/add") ?>
+                    <?= form_open("admin/modalidad/add") ?>
                         <!-- ////   LOAD FORM    ////////////////////--> 
-                        <?php $this->load->view("admin/profesor/partes/form_profesor"); ?>
+                        <?php $this->load->view("admin/modalidad/partes/form_modalidad"); ?>
                     
                     <?= form_close() ?>
 

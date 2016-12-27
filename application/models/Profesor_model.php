@@ -67,11 +67,30 @@ class Profesor_model extends CI_Model {
     }
     
     public function update($data) {
-        
         extract($data);
         $this->db->where('id', $id);
         $this->db->where('id_rol_usuario', ID_ROL_PROFESOR);
         $this->db->update($this->tabla, $data);
+        return true;
+        
+    }
+    
+    public function delete($data) {
+        
+        extract($data);
+        $this->db->where('id', $id);
+        $this->db->where('id_rol_usuario', ID_ROL_PROFESOR);
+        $this->db->update($this->tabla, ['id_estado' => "10"]);
+        return true;
+        
+    }
+    
+    public function enable($data) {
+        
+        extract($data);
+        $this->db->where('id', $id);
+        $this->db->where('id_rol_usuario', ID_ROL_PROFESOR);
+        $this->db->update($this->tabla, ['id_estado' => "8"]);
         return true;
         
     }

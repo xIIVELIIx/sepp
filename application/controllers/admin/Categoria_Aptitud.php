@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Profesor extends CI_Controller {
+class Categoria_Aptitud extends CI_Controller {
 
     /**
      * Index Page for this controller.
@@ -21,7 +21,7 @@ class Profesor extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->model('profesor_model');
+        $this->load->model('categoria_aptitud_model');
         $this->load->helper('html_builder_helper');
     }
 
@@ -32,29 +32,13 @@ class Profesor extends CI_Controller {
             redirect('user/login');
         }
 
-        $lista_profesores = $this->profesor_model->getAll();
+        $lista_categorias = $this->categoria_aptitud_model->getAll();
         //die(print_r($lista_profesores,true));
-        $html = profesor_list_table($lista_profesores);
+        $html = categoria_aptitud_list_table($lista_categorias);
 
-        $data ["titulo"] = "Lista de profesores";
+        $data ["titulo"] = "Lista de Categor&iacute;as de Aptitudes Profesionales";
         $data ["html"] = $html;
-        $this->load->view("admin/profesor/list", $data);
-    }
-
-    public function view($id) {
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-        
-        $this->load->model("facultades_model");
-        $this->load->model("sedes_model");
-        
-        $data["profesor"] = get_object_vars($this->profesor_model->get($id)[0]);
-        $data ["titulo"] = "Detalles de un profesor - SEPP";
-        
-        $this->load->view("admin/profesor/view", $data);
-        
+        $this->load->view("admin/categoria_aptitud/list", $data);
     }
 
     public function add() {
@@ -69,28 +53,28 @@ class Profesor extends CI_Controller {
 
         $data["sedes"] = $this->sedes_model->SelectAllSedes();
         $data["facultades"] = $this->facultades_model->SelectAllFacultades();
-        $data ["titulo"] = "Agregar un nuevo profesor";
+        $data ["titulo"] = "Agregar una nueva categor&iacute;a de aptitud profesional";
 
 
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 
-            $this->load->view("admin/profesor/add", $data);
+            $this->load->view("admin/categoria_aptitud/add", $data);
         } else {
 
-            $this->form_validation->set_rules($this->user_model->getValidationRules());
+            $this->form_validation->set_rules($this->categoria_aptitud_model->getValidationRules());
 
             if ($this->form_validation->run() === FALSE) {
 
-                $this->load->view("admin/profesor/add", $data);
+                $this->load->view("admin/categoria_aptitud/add", $data);
             } else {
+                
+                if ($this->categoria_aptitud_model->insert($this->input->post())) {
 
-                if ($this->profesor_model->insert($this->input->post())) {
-
-                    $this->session->set_flashdata('message', "Usuario <b>" . $this->input->post('nombre') . " " . $this->input->post('apellido') . "</b> creado exitosamente.");
-                    redirect('admin/profesor');
+                    $this->session->set_flashdata('message', "Categor&iacute;a <b>" . $this->input->post('nombre') . "</b> creada exitosamente.");
+                    redirect('admin/categoria_aptitud');
                 } else {
                     $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
-                    redirect('admin/profesor');
+                    redirect('admin/categoria_aptitud');
                 }
             }
         }
@@ -105,33 +89,34 @@ class Profesor extends CI_Controller {
 
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
-        $datosProfesor = $this->profesor_model->get($id);
-        if($datosProfesor == NULL){
-            redirect('admin/profesor', 'refresh');
+        $datosCategoria = $this->categoria_aptitud_model->get($id);
+        if($datosCategoria == NULL){
+            redirect('admin/categoria_aptitud', 'refresh');
         }
         $data["sedes"] = $this->sedes_model->SelectAllSedes();
         $data["facultades"] = $this->facultades_model->SelectAllFacultades();
-        $data ["titulo"] = "Editar un profesor";
-        $data["profesor"] = get_object_vars($datosProfesor[0]);
+        $data ["titulo"] = "Editar una Categor&iacute;a de aptitud profesional";
+        $data["categoria_aptitud"] = get_object_vars($datosCategoria[0]);
 
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 
-            $this->load->view("admin/profesor/edit", $data);
+            $this->load->view("admin/categoria_aptitud/edit", $data);
         } else {
+            
             $regla = "update";
-            $this->form_validation->set_rules($this->user_model->getValidationRules($regla));
+            $this->form_validation->set_rules($this->categoria_aptitud_model->getValidationRules($regla));
 
             if ($this->form_validation->run() === FALSE) {
 
-                $this->load->view("admin/profesor/edit", $data);
+                $this->load->view("admin/categoria_aptitud/edit", $data);
             } else {
 
-                if ($this->profesor_model->update($this->input->post())) {
+                if ($this->categoria_aptitud_model->update($this->input->post())) {
 
-                    $this->session->set_flashdata('message', "Usuario actualizado exitosamente.");
-                    redirect('admin/profesor');
+                    $this->session->set_flashdata('message', "Categor&iacute;a de aptitud profesional actualizada exitosamente.");
+                    redirect('admin/categoria_aptitud');
                 } else {
-                    $this->load->view("admin/profesor/edit", $data);
+                    $this->load->view("admin/categoria_aptitud/edit", $data);
                 }
             }
         }
@@ -144,8 +129,8 @@ class Profesor extends CI_Controller {
             redirect('user/login');
         }
         if ($this->input->is_ajax_request()) {
-            $this->profesor_model->delete(['id' => $id]);
-            $this->session->set_flashdata('message', "Usuario deshabilitado exitosamente.");
+            $this->categoria_aptitud_model->delete(['id' => $id]);
+            $this->session->set_flashdata('error', "Categor&iacute;a deshabilitada exitosamente.");
             echo json_encode("correcto");
         } else {
             $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
@@ -160,8 +145,8 @@ class Profesor extends CI_Controller {
             redirect('user/login');
         }
         if ($this->input->is_ajax_request()) {
-            $this->profesor_model->enable(['id' => $id]);
-            $this->session->set_flashdata('error', "Usuario habilitado exitosamente.");
+            $this->categoria_aptitud_model->enable(['id' => $id]);
+            $this->session->set_flashdata('message', "Categor&iacute;a habilitada exitosamente.");
             echo json_encode("correcto");
         } else {
             $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");

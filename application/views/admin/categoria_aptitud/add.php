@@ -13,7 +13,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Dashboard</li>
+            <li class="active"></li>
         </ol>
     </section>
 
@@ -30,7 +30,7 @@
 
                     <div class="box-header">
                         <div class="col-md-2 col-md-offset-10 text-center">
-                            <a href="<?= base_url() . "admin/profesor" ?>">
+                            <a href="<?= base_url() . "admin/categoria_aptitud" ?>">
                                 <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                             </a>
                         </div>
@@ -38,9 +38,9 @@
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
                     
-                    <?= form_open("admin/profesor/add") ?>
+                    <?= form_open("admin/categoria_aptitud/add") ?>
                         <!-- ////   LOAD FORM    ////////////////////--> 
-                        <?php $this->load->view("admin/profesor/partes/form_profesor"); ?>
+                        <?php $this->load->view("admin/categoria_aptitud/partes/form_categoria_aptitud"); ?>
                     
                     <?= form_close() ?>
 

@@ -13,7 +13,7 @@ $this->load->view("plantilla/nav");
         </h1>
         <ol class="breadcrumb">
             <li><a href="<?= base_url("test") ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Profesores</li>
+            <li class="active">Empresas</li>
         </ol>
     </section>
 
@@ -32,8 +32,8 @@ $this->load->view("plantilla/nav");
                             <?= show_notification(); ?>
                         </div>
                         <div class="col-md-2 text-center">
-                            <a href="<?= base_url() . "admin/profesor/add" ?>">
-                                <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nuevo profesor</button>
+                            <a href="<?= base_url() . "admin/empresa/add" ?>">
+                                <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nueva Empresa</button>
                             </a>
                         </div>
                     </div>
@@ -42,8 +42,9 @@ $this->load->view("plantilla/nav");
                             <thead>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>Programa</th>
-                                    <th>Facultad</th>
+                                    <th>Direcci&oacute;n</th>
+                                    <th>Ciudad</th>
+                                    <th>Telefono</th>
                                     <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -51,8 +52,9 @@ $this->load->view("plantilla/nav");
                             <tfoot>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>Programa</th>
-                                    <th>Facultad</th>
+                                    <th>Direcci&oacute;n</th>
+                                    <th>Ciudad</th>
+                                    <th>Telefono</th>
                                     <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -81,7 +83,7 @@ $this->load->view("plantilla/nav");
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma deshabilitar al usuario?</h3>
+                    <h3>&iquest;Confirma deshabilitar la Empresa?</h3>
                     <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="remove_id" value="" />
@@ -101,7 +103,7 @@ $this->load->view("plantilla/nav");
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma habilitar nuevamente al usuario?</h3>
+                    <h3>&iquest;Confirma habilitar nuevamente la Empresa?</h3>
                     <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="enable_id" value="" />
@@ -150,10 +152,10 @@ $this->load->view("plantilla/nav");
 
         $.ajax({
             type: 'POST',
-            url: "<?= base_url("admin/profesor/remove/") ?>" + id_usuario,
+            url: "<?= base_url("admin/empresa/remove/") ?>" + id_usuario,
             dataType: 'json',
             success: function(data) {
-                window.location.href = "<?= base_url("admin/profesor") ?>";
+                window.location.href = "<?= base_url("admin/empresa") ?>";
             }
         });
     });
@@ -172,10 +174,10 @@ $this->load->view("plantilla/nav");
 
         $.ajax({
             type: 'POST',
-            url: "<?= base_url("admin/profesor/enable/") ?>" + id_usuario,
+            url: "<?= base_url("admin/empresa/enable/") ?>" + id_usuario,
             dataType: 'json',
             success: function(data) {
-                window.location.href = "<?= base_url("admin/profesor") ?>";
+                window.location.href = "<?= base_url("admin/empresa") ?>";
             }
         });
     });

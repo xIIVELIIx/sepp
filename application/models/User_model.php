@@ -55,27 +55,29 @@ class User_model extends CI_Model {
         
     }
     
-    public function getValidationRules() {
+    public function getValidationRules($tipo = '') {
+        $reglaCc = ($tipo === "update") ? '' : '|is_unique[usuario.cedula]';
+        $reglaCodigo = ($tipo === "update") ? '' : '|is_unique[usuario.codigo_uniminuto]';
         $config = array(
             array(
                 'field' => 'cedula',
                 'label' => 'C&eacute;dula',
-                'rules' => 'trim|required|is_natural|is_unique[usuario.cedula]'
+                'rules' => 'trim|required|is_natural'.$reglaCc
             ),
             array(
                 'field' => 'codigo_uniminuto',
                 'label' => 'C&oacute;digo Uniminuto',
-                'rules' => 'trim|required|is_unique[usuario.codigo_uniminuto]|is_natural'
+                'rules' => 'trim|required|is_natural'.$reglaCodigo
             ),
             array(
                 'field' => 'nombre',
                 'label' => 'Primer Nombre',
-                'rules' => 'trim|required|alpha'
+                'rules' => 'trim|required'
             ),
             array(
                 'field' => 'apellido',
                 'label' => 'Primer Apellido',
-                'rules' => 'trim|required|alpha'
+                'rules' => 'trim|required'
             ),
             array(
                 'field' => 'email1',

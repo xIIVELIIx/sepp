@@ -9,7 +9,7 @@ $this->load->view("plantilla/nav");
     <section class="content-header">
         <h1>
             <?= $titulo ?>
-            <small>M&oacute;dulo de Administrador</small>
+            <small>Control panel</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="<?= base_url("test") ?>"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -32,8 +32,8 @@ $this->load->view("plantilla/nav");
                             <?= show_notification(); ?>
                         </div>
                         <div class="col-md-2 text-center">
-                            <a href="<?= base_url() . "admin/profesor/add" ?>">
-                                <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nuevo profesor</button>
+                            <a href="<?= base_url() . "admin/categoria_aptitud/add" ?>">
+                                <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nueva categor&iacute;a</button>
                             </a>
                         </div>
                     </div>
@@ -41,20 +41,19 @@ $this->load->view("plantilla/nav");
                         <table id="data_table1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nombres</th>
+                                    <th>Nombre</th>
+                                    <th>Descripci&oacute;n</th>
                                     <th>Programa</th>
-                                    <th>Facultad</th>
-                                    <th>Estado</th>
+                                    <th>Habilitado</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Nombres</th>
+                                    <th>Nombre</th>
+                                    <th>Descripci&oacute;n</th>
                                     <th>Programa</th>
-                                    <th>Facultad</th>
-                                    <th>Estado</th>
-                                    <th>&nbsp;</th>
+                                    <th>Habilitado</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -81,7 +80,7 @@ $this->load->view("plantilla/nav");
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma deshabilitar al usuario?</h3>
+                    <h3>&iquest;Confirma deshabilitar categor&iacute;a?</h3>
                     <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="remove_id" value="" />
@@ -101,7 +100,7 @@ $this->load->view("plantilla/nav");
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma habilitar nuevamente al usuario?</h3>
+                    <h3>&iquest;Confirma habilitar nuevamente la categor&iacute;a?</h3>
                     <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="enable_id" value="" />
@@ -150,10 +149,10 @@ $this->load->view("plantilla/nav");
 
         $.ajax({
             type: 'POST',
-            url: "<?= base_url("admin/profesor/remove/") ?>" + id_usuario,
+            url: "<?= base_url("admin/categoria_aptitud/remove/") ?>" + id_usuario,
             dataType: 'json',
             success: function(data) {
-                window.location.href = "<?= base_url("admin/profesor") ?>";
+                window.location.href = "<?= base_url("admin/categoria_aptitud") ?>";
             }
         });
     });
@@ -172,10 +171,10 @@ $this->load->view("plantilla/nav");
 
         $.ajax({
             type: 'POST',
-            url: "<?= base_url("admin/profesor/enable/") ?>" + id_usuario,
+            url: "<?= base_url("admin/categoria_aptitud/enable/") ?>" + id_usuario,
             dataType: 'json',
             success: function(data) {
-                window.location.href = "<?= base_url("admin/profesor") ?>";
+                window.location.href = "<?= base_url("admin/categoria_aptitud") ?>";
             }
         });
     });

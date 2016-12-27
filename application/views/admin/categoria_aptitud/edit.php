@@ -1,7 +1,7 @@
-<?php 
-    $this->load->view("plantilla/head", ['titulo' => $titulo]);
-    $this->load->view("plantilla/header");
-    $this->load->view("plantilla/nav");
+<?php
+$this->load->view("plantilla/head", ['titulo' => $titulo]);
+$this->load->view("plantilla/header");
+$this->load->view("plantilla/nav");
 ?>
 
 <div class="content-wrapper">
@@ -30,19 +30,24 @@
 
                     <div class="box-header">
                         <div class="col-md-2 col-md-offset-10 text-center">
-                            <a href="<?= base_url() . "admin/profesor" ?>">
+                            <a href="<?= base_url() . "admin/categoria_aptitud" ?>">
                                 <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                             </a>
                         </div>
                     </div>
+
+
+
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
-                    
-                    <?= form_open("admin/profesor/add") ?>
-                        <!-- ////   LOAD FORM    ////////////////////--> 
-                        <?php $this->load->view("admin/profesor/partes/form_profesor"); ?>
-                    
+
+                    <?= form_open("admin/categoria_aptitud/edit/" . @$categoria_aptitud['id']) ?>
+
+                    <!-- ////   LOAD FORM    ////////////////////--> 
+                    <?php $this->load->view("admin/categoria_aptitud/partes/form_categoria_aptitud", $categoria_aptitud); ?>
+
                     <?= form_close() ?>
+
 
                 </div><!-- /.box -->
 
@@ -72,7 +77,8 @@
                     $("#id_programaDiv").show();
                     $("#id_programa").append("<option value=''>Seleccione el programa</option>");
                     for (i = 0; i < msg.length; i++) {
-                        $("#id_programa").append("<option value='" + msg[i].id + "'>" + msg[i].nombre + "</option>");
+                        var selected = (msg[i].id == <?= $categoria_aptitud["id_programa"] ?>) ? "selected=\"selected\"" : '';
+                        $("#id_programa").append("<option value='" + msg[i].id + "'" + selected + ">" + msg[i].nombre + "</option>").trigger("change");
                     }
                 }
 
