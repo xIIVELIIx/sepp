@@ -12,7 +12,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="<?= base_url("admin/modalidad") ?>"><i class="fa fa-circle-o"></i> Modalidades de Pr&aacute;ctica</a></li>
-                    <li><a href="<?= base_url("admin/carrera") ?>"><i class="fa fa-circle-o"></i> Carreras</a></li>
+                    <li><a href="<?= base_url("admin/programas") ?>"><i class="fa fa-circle-o"></i> Programas</a></li>
                 </ul>
             </li>
             <li class="treeview active">
@@ -29,6 +29,7 @@
                     <i class="glyphicon glyphicon-user"></i> <span>Usuarios</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li><a href="<?= base_url("admin/coordinador") ?>"><i class="fa fa-circle-o"></i> Coordinadores </a></li>
                     <li><a href="<?= base_url("admin/profesor") ?>"><i class="fa fa-circle-o"></i> Profesores </a></li>
                     <li><a href="<?= base_url("admin/empresa") ?>"><i class="fa fa-circle-o"></i> Empresas </a></li>
                 </ul>

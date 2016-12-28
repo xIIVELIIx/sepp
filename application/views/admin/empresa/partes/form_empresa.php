@@ -44,7 +44,7 @@
             </label>
             <div class="input-group">         
                 <div class="input-group-addon">      
-                    <i class="fa fa-envelope"></i>   
+                    <i class="fa fa-building"></i>   
                 </div>
                 <input type="text" id="direccion" name="direccion" value="<?= set_value("direccion", @$direccion) ?>" class="form-control" required="required">
             </div>

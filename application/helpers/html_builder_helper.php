@@ -3,9 +3,9 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-if (!function_exists('profesor_list_table')) {
+if (!function_exists('usuario_list_table')) {
 
-    function profesor_list_table($data) {
+    function usuario_list_table($data,$rol) {
         //setlocale(LC_MONETARY, 'en_US');
         //print_r($data);
         $html = "";
@@ -22,11 +22,11 @@ if (!function_exists('profesor_list_table')) {
                 $html .= "<td class=\"text-success\">" . $a->estado . "</td>";
             }
 
-            $view_btn = "<a class=\"btn btn-info btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"".base_url()."admin/profesor/view/".$a->id."\" >
+            $view_btn = "<a class=\"btn btn-info btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"".base_url()."admin/$rol/view/".$a->id."\" >
                                 <span class=\"glyphicon glyphicon-eye-open\"></span>
                             </a>";
 
-            $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "admin/profesor/edit/" . $a->id . "\" >
+            $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "admin/$rol/edit/" . $a->id . "\" >
                                 <span class=\"glyphicon glyphicon-edit\"></span>
                             </a>";
             if ($a->estado !== "no_disponible" && $a->estado !== "inactivo") {
