@@ -12,7 +12,66 @@
  * @author fabianortiz
  */
 class User_model extends CI_Model {
-    //put your code here
+    
+    public function __construct() { 
+        
+        $this->tabla = "usuario";
+        $this->load->helper('db_helper');
+    }
+    
+    public function get($select = array(), $join = array(), $where = array(), $order = "", $limit = "" ){
+        
+        // select
+        $this->db->select(get_select_string($select));
+        // from
+        //$this->db->from($this->tabla);
+        // join(s)
+        if(count($join) > 0){
+            foreach($join as $a){
+                $this->db->join($a[0], $a[1]);
+            }            
+        }
+        // where 
+        $this->db->where(get_where_string($where));
+        // order by
+        if(!empty($order)){
+            $this->db->order_by($order);    
+        }
+        // limit
+        if(!empty($limit)){
+            $this->db->limit($limit); 
+        }        
+        
+        $query = $this->db->get($this->tabla);
+        $result = $query->result();
+       
+        return $result;
+    }
+       
+    public function insert($data) {
+        
+        $this->db->insert($this->tabla,$data);
+        return $this->db->affected_rows();
+        
+    }
+    
+    public function update($data) {
+        extract($data);
+        $this->db->where('id', $id);
+        $this->db->update($this->tabla, $data);
+        return true;
+        
+    }
+        
+    public function setState($data) {
+        
+        extract($data);
+        $this->db->where('id', $id);
+        $this->db->update($this->tabla, ['id_estado' => "8"]);
+        return true;
+        
+    }
+    
     
     public function getUsers($param = "", $value = ""){
         
