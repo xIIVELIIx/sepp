@@ -16,7 +16,7 @@ class User_model extends CI_Model {
     
     public function getUsers($param = "", $value = ""){
         
-        $sql = "SELECT * FROM user WHERE $param = '$value'";
+        $sql = "SELECT * FROM usuario WHERE $param = '$value'";
         $query = $query = $this->db->query($sql);
         
         $result = $query->result();

@@ -21,17 +21,15 @@ class Categoria_Aptitud extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
+        if ($this->session->userdata("id_rol_usuario") != ID_ROL_ADMINISTRADOR || $this->user_model->isLoggedIn() !== TRUE) {
+            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
+            redirect('user/login');
+        }
         $this->load->model('categoria_aptitud_model');
         $this->load->helper('html_builder_helper');
     }
 
     public function index() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $lista_categorias = $this->categoria_aptitud_model->getAll();
         //die(print_r($lista_profesores,true));
         $html = categoria_aptitud_list_table($lista_categorias);
@@ -42,12 +40,6 @@ class Categoria_Aptitud extends CI_Controller {
     }
 
     public function add() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
 
@@ -81,12 +73,6 @@ class Categoria_Aptitud extends CI_Controller {
     }
 
     public function edit($id = "") {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
         $datosCategoria = $this->categoria_aptitud_model->get($id);
@@ -123,11 +109,6 @@ class Categoria_Aptitud extends CI_Controller {
     }
 
     public function remove($id) {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         if ($this->input->is_ajax_request()) {
             $this->categoria_aptitud_model->delete(['id' => $id]);
             $this->session->set_flashdata('error', "Categor&iacute;a deshabilitada exitosamente.");
@@ -139,11 +120,6 @@ class Categoria_Aptitud extends CI_Controller {
     }
     
     public function enable($id) {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         if ($this->input->is_ajax_request()) {
             $this->categoria_aptitud_model->enable(['id' => $id]);
             $this->session->set_flashdata('message', "Categor&iacute;a habilitada exitosamente.");

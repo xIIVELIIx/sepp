@@ -21,20 +21,18 @@ class Coordinador extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
+        if ($this->session->userdata("id_rol_usuario") != ID_ROL_ADMINISTRADOR || $this->user_model->isLoggedIn() !== TRUE) {
+            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
+            redirect('user/login');
+        }
         $this->load->model('coordinador_model');
         $this->load->helper('html_builder_helper');
     }
 
     public function index() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $lista_coordinadores = $this->coordinador_model->getAll();
         //die(print_r($lista_coordinadores,true));
-        $html = usuario_list_table($lista_coordinadores,'coordinador');
+        $html = usuario_list_table($lista_coordinadores, 'coordinador');
 
         $data ["titulo"] = "Lista de Coordinadores";
         $data ["html"] = $html;
@@ -42,28 +40,16 @@ class Coordinador extends CI_Controller {
     }
 
     public function view($id) {
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-        
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
-        
+
         $data["coordinador"] = get_object_vars($this->coordinador_model->get($id)[0]);
         $data ["titulo"] = "Detalles de un coordinador - SEPP";
-        
+
         $this->load->view("admin/coordinador/view", $data);
-        
     }
 
     public function add() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
 
@@ -97,16 +83,10 @@ class Coordinador extends CI_Controller {
     }
 
     public function edit($id = "") {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
         $datoscoordinador = $this->coordinador_model->get($id);
-        if($datoscoordinador == NULL){
+        if ($datoscoordinador == NULL) {
             redirect('admin/coordinador', 'refresh');
         }
         $data["sedes"] = $this->sedes_model->SelectAllSedes();
@@ -138,11 +118,6 @@ class Coordinador extends CI_Controller {
     }
 
     public function remove($id) {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         if ($this->input->is_ajax_request()) {
             $this->coordinador_model->delete(['id' => $id]);
             $this->session->set_flashdata('message', "Usuario deshabilitado exitosamente.");
@@ -152,13 +127,8 @@ class Coordinador extends CI_Controller {
             redirect('admin/coordinador');
         }
     }
-    
-    public function enable($id) {
 
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
+    public function enable($id) {
         if ($this->input->is_ajax_request()) {
             $this->coordinador_model->enable(['id' => $id]);
             $this->session->set_flashdata('error', "Usuario habilitado exitosamente.");
