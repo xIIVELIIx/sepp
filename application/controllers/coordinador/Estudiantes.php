@@ -38,7 +38,7 @@ class Estudiantes extends CI_Controller {
 
     public function view($id_estudiante) {
         $where_array = array("usuario.id = " . $id_estudiante);
-        $estudiante = $this->estudiante_model->listEstudiantes($where_array);
+        $estudiante = $this->estudiante_model->detalleEstudiantes($where_array);
         $data["estudiante"] = get_object_vars($estudiante[0]);
         $data ["titulo"] = "Detalle de estudiantes";
         $data ["nav"] = "nav_coordinador";
