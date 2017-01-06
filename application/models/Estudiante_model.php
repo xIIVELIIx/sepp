@@ -19,7 +19,8 @@ class Estudiante_model extends User_model {
         $select = array(['usuario.*'],
             ['facultades.nombre', 'facultad'],
             ['programas.nombre', 'programa'],
-            ['estados_usuario.nombre', 'estado'],);
+            ['estados_usuario.nombre', 'estado'],
+            ['sedes.nombre','sede']);
 
         $join = array(['facultades', 'facultades.id = usuario.id_facultad'],
             ['programas', 'programas.id = usuario.id_programa'],
