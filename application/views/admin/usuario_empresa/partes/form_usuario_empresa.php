@@ -1,4 +1,4 @@
-<input type="hidden" id="id_rol_usuario" name="id_rol_usuario" value="<?= ID_ROL_COORDINADOR ?>" >
+<input type="hidden" id="id_rol_usuario" name="id_rol_usuario" value="<?= ID_ROL_EMPRESA ?>" >
 <input type="hidden" id="id" name="id" value="<?= @$id ?>" >
 <div class="box-body">
     <div class="col-md-6">
@@ -11,16 +11,6 @@
                 <input type="number" id="cedula" name="cedula" value="<?= set_value('cedula', @$cedula); ?>" class="form-control" required="required"  min="0">
             </div>
         </div>
-        <div class="form-group">
-            <label>C&oacute;digo Uniminuto<span class="required">*</span></label>
-            <div class="input-group">
-                <div class="input-group-addon">
-                    <i class="fa fa-barcode"></i>
-                </div>
-                <input type="number" id="codigo_uniminuto" name="codigo_uniminuto" value="<?= set_value('codigo_uniminuto', @$codigo_uniminuto); ?>" required="required" class="form-control" >
-            </div>
-        </div>
-
         <div class="form-group">
             <label>Nombres<span class="required">*</span>
             </label>
@@ -85,45 +75,28 @@
             </label>
             <div class="input-group">         
                 <div class="input-group-addon">  
-                    <i class="fa fa-phone"></i>   
+                    <i class="fa fa-mobile-phone"></i>   
                 </div>
                 <input type="number" id="celular" name="celular" value="<?= set_value("celular", @$celular) ?>" class="form-control" min="0">
             </div>
         </div>
 
         <div class="form-group">
-            <label>Facultad<span class="required">*</span>
+            <label>Empresa<span class="required">*</span>
             </label>
             <div class="input-group">        
                 <div class="input-group-addon">                
-                    <i class="fa fa-institution"></i>              
+                    <i class="fa fa-keyboard-o"></i>              
                 </div>
-                <select name="id_facultad" id="id_facultad" required="required" class="form-control">
-                    <option value="">Seleccione la facultad</option>
-                    <?php foreach ($facultades->result() as $value): ?>
-                        <?php $attribFacultad = ($value->id === @$id_facultad) ? TRUE : '' ?>
-                        <option value="<?= $value->id ?>" <?= set_select("id_facultad", $value->id, $attribFacultad); ?> ><?= $value->nombre ?></option>
+                <select name="id_empresa" id="id_empresa" required="required" class="form-control">
+                    <option value="">Seleccione la empresa</option>
+                    <?php foreach ($empresas as $value): ?>
+                        <?php $attribEmpresa = ($value->id === @$id_empresa) ? TRUE : '' ?>
+                        <option value="<?= $value->id ?>" <?= set_select("id_empresa", $value->id, $attribEmpresa); ?> ><?= $value->nombre ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label>Sede<span class="required">*</span>
-            </label>
-            <div class="input-group">           
-                <div class="input-group-addon">    
-                    <i class="fa fa-home"></i>    
-                </div>
-                <select name="id_sede" id="id_sede" required="required" class="form-control">
-                    <option value="">Seleccione la Sede</option>
-                    <?php foreach ($sedes->result() as $value): ?>
-                        <?php $attribSede = ($value->id === @$id_sede) ? TRUE : '' ?>
-                        <option value="<?= $value->id ?>" <?= set_select("id_sede", $value->id, $attribSede); ?> ><?= $value->nombre ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
         <div class="form-group">
             <label>&nbsp;</label>
             <div class="input-group">

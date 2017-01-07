@@ -59,33 +59,5 @@ $this->load->view("plantilla/nav");
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-<script>
-    $(document).ready(function() {
-        $("#id_facultad").trigger("change");
-    });
-
-    $("#id_facultad").change(function() {
-        var valor = $("#id_facultad").val();
-        $("#id_programa").empty();
-        $("#id_programaDiv").hide();
-        if (valor !== "") {
-            $.ajax({
-                url: "<?= base_url("admin/coordinador") ?>" + "/traerPrograma/" + valor,
-                type: "POST",
-                dataType: "json",
-                success: function(msg) {
-                    $("#id_programaDiv").show();
-                    $("#id_programa").append("<option value=''>Seleccione el programa</option>");
-                    for (i = 0; i < msg.length; i++) {
-                        var selected = (msg[i].id == <?= $coordinador["id_programa"] ?>) ? "selected=\"selected\"" : '';
-                        $("#id_programa").append("<option value='" + msg[i].id + "'" + selected + ">" + msg[i].nombre + "</option>").trigger("change");
-                    }
-                }
-
-            });
-        }
-
-    });
-</script>
 
 <?php $this->load->view("plantilla/footer"); ?>

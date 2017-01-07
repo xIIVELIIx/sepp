@@ -51,6 +51,15 @@ class Modalidad_model extends CI_Model {
         $this->db->where('id', $id);
         $this->db->update($this->tabla, ['activo' => "0"]);
     }
+    
+    public function enable($data) {
+        
+        extract($data);
+        $this->db->where('id', $id);
+        $this->db->update($this->tabla, ['activo' => "1"]);
+        return true;
+        
+    }
 
     public function getValidationRules() {
         $config = array(

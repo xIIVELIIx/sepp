@@ -14,39 +14,25 @@
 
 
 
-class Profesor_model extends User_model {
+class Empresa_user_model extends User_model {
         
     public function __construct() {
         parent::__construct();
-        $this->estados = array( 'activo' => 8,
-                                'inactivo' => 9,
-                                'bloqueado' => 10,
+        $this->estados = array( 'activo' => 13,
+                                'inactivo' => 14,
                                 );
     }
     
     public function obtener($id_usuario){
         
-        /*
-            SELECT usuario.*, facultades.nombre AS facultad,programas.nombre  AS programa,sedes.nombre AS sede,estados_usuario.nombre AS estado 
-            FROM usuario
-            JOIN facultades ON facultades.id = usuario.id_facultad
-            JOIN programas ON programas.id = usuario.id_programa
-            JOIN sedes ON sedes.id = usuario.id_sede
-            JOIN estados_usuario ON estados_usuario.id = usuario.id_estado
-            WHERE usuario.id_rol_usuario = ID_ROL_PROFESOR AND usuario.id = X 
-         */
-        
         $select = array(['usuario.*'],
-                    ['facultades.nombre','facultad'],
-                    ['programas.nombre','programa'],
+                    ['empresas.nombre','empresa'],
                     ['estados_usuario.nombre','estado'],);
         
-        $join = array(['facultades','facultades.id = usuario.id_facultad'],
-                    ['programas','programas.id = usuario.id_programa'],
-                    ['sedes','sedes.id = usuario.id_sede'],
+        $join = array(['empresas','empresas.id = usuario.id_empresa'],
                     ['estados_usuario','estados_usuario.id = usuario.id_estado'],);
         
-        $where = array('usuario.id_rol_usuario = '.ID_ROL_PROFESOR,
+        $where = array('usuario.id_rol_usuario = '.ID_ROL_EMPRESA,
                         'usuario.id = '.$id_usuario,);
         
         $limit = "1";
@@ -62,35 +48,22 @@ class Profesor_model extends User_model {
     
     public function listar(){
         
-        /*
-            SELECT usuario.*, facultades.nombre AS facultad,programas.nombre  AS programa,sedes.nombre AS sede,estados_usuario.nombre AS estado 
-            FROM usuario
-            JOIN facultades ON facultades.id = usuario.id_facultad
-            JOIN programas ON programas.id = usuario.id_programa
-            JOIN sedes ON sedes.id = usuario.id_sede
-            JOIN estados_usuario ON estados_usuario.id = usuario.id_estado
-            WHERE usuario.id_rol_usuario = ID_ROL_PROFESOR
-            ORDER BY usuario.id ASC
-         */
-        
         $select = array(['usuario.*'],
-                    ['facultades.nombre','facultad'],
-                    ['programas.nombre','programa'],
+                    ['empresas.nombre','empresa'],
                     ['estados_usuario.nombre','estado'],);
         
-        $join = array(['facultades','facultades.id = usuario.id_facultad'],
-                    ['programas','programas.id = usuario.id_programa'],
-                    ['sedes','sedes.id = usuario.id_sede'],
+        $join = array(['empresas','empresas.id = usuario.id_empresa'],
                     ['estados_usuario','estados_usuario.id = usuario.id_estado'],);
         
-        $where = array('usuario.id_rol_usuario = '.ID_ROL_PROFESOR,);
-        $order = "usuario,id ASC";
+        $where = array('usuario.id_rol_usuario = '.ID_ROL_EMPRESA,);
+        
+        $limit = "1";
               
         /*
-         * FIRMA DE GET_LIST
+         * FIRMA DE GET
          * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
          */
-        $result = $this->get($select,$join,$where,$order);
+        $result = $this->get($select,$join,$where,NULL,1);
        
         return $result;
     }
@@ -102,17 +75,11 @@ class Profesor_model extends User_model {
     
     public function getValidationRules($tipo = '') {
         $reglaCc = ($tipo === "update") ? '' : '|is_unique[usuario.cedula]';
-        $reglaCodigo = ($tipo === "update") ? '' : '|is_unique[usuario.codigo_uniminuto]';
         $config = array(
             array(
                 'field' => 'cedula',
                 'label' => 'C&eacute;dula',
                 'rules' => 'trim|required|is_natural'.$reglaCc
-            ),
-            array(
-                'field' => 'codigo_uniminuto',
-                'label' => 'C&oacute;digo Uniminuto',
-                'rules' => 'trim|required|is_natural'.$reglaCodigo
             ),
             array(
                 'field' => 'nombre',
@@ -145,20 +112,10 @@ class Profesor_model extends User_model {
                 'rules' => 'trim|exact_length[10]'
             ),
             array(
-                'field' => 'id_facultad',
+                'field' => 'id_empresa',
                 'label' => 'Facultad',
                 'rules' => 'trim|required|is_natural'
             ),
-            array(
-                'field' => 'id_programa',
-                'label' => 'Programa',
-                'rules' => 'trim|required|is_natural'
-            ),
-            array(
-                'field' => 'id_sede',
-                'label' => 'Sede',
-                'rules' => 'trim|required|is_natural'
-            )
         );
         return $config;
     }

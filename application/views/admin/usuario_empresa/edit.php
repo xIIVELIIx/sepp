@@ -1,7 +1,7 @@
-<?php 
-    $this->load->view("plantilla/head", ['titulo' => $titulo]);
-    $this->load->view("plantilla/header");
-    $this->load->view("plantilla/nav");
+<?php
+$this->load->view("plantilla/head", ['titulo' => $titulo]);
+$this->load->view("plantilla/header");
+$this->load->view("plantilla/nav");
 ?>
 
 <div class="content-wrapper">
@@ -30,19 +30,24 @@
 
                     <div class="box-header">
                         <div class="col-md-2 col-md-offset-10 text-center">
-                            <a href="<?= base_url() . "admin/coordinador" ?>">
+                            <a href="<?= base_url() . "admin/usuario_empresa" ?>">
                                 <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                             </a>
                         </div>
                     </div>
+
+
+
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
-                    
-                    <?= form_open("admin/coordinador/add") ?>
-                        <!-- ////   LOAD FORM    ////////////////////--> 
-                        <?php $this->load->view("admin/coordinador/partes/form_coordinador"); ?>
-                    
+
+                    <?= form_open("admin/usuario_empresa/edit/" . @$usuario_empresa['id']) ?>
+
+                    <!-- ////   LOAD FORM    ////////////////////--> 
+                    <?php $this->load->view("admin/usuario_empresa/partes/form_usuario_empresa", $usuario_empresa); ?>
+
                     <?= form_close() ?>
+
 
                 </div><!-- /.box -->
 

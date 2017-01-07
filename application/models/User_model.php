@@ -55,32 +55,17 @@ class User_model extends CI_Model {
         
     }
     
-    public function update($data) {
+    public function update($data,$where) {
+        // no actualizar id ni id_rol_usuario
+        unset($data['id']);
+        unset($data['id_rol_usuario']);
+        
         extract($data);
-        $this->db->where('id', $id);
+        $this->db->where($where);
         $this->db->update($this->tabla, $data);
+        //$this->db->affected_rows();
+              
         return true;
-        
-    }
-        
-    public function setState($data) {
-        
-        extract($data);
-        $this->db->where('id', $id);
-        $this->db->update($this->tabla, ['id_estado' => "8"]);
-        return true;
-        
-    }
-    
-    
-    public function getUsers($param = "", $value = ""){
-        
-        $sql = "SELECT * FROM usuario WHERE $param = '$value'";
-        $query = $query = $this->db->query($sql);
-        
-        $result = $query->result();
-        
-        return $result;
         
     }
     
@@ -88,11 +73,18 @@ class User_model extends CI_Model {
         
         $user_info = array();
         
-        $sql = "SELECT * FROM usuario WHERE usuario = ? AND password = MD5(?)";
+        $select = array(['usuario.*']);
         
-        $query = $this->db->query($sql,array($usuario,$password));
+        $where = array("usuario = '$usuario'",
+                        "password = MD5('$password')",);
         
-        $result = $query->result();
+        $limit = "1";
+              
+        /*
+         * FIRMA DE GET
+         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
+         */
+        $result = $this->get($select,NULL,$where,NULL,1);
         
         if($result !== FALSE){
             $user_info = $result[0];
@@ -114,66 +106,4 @@ class User_model extends CI_Model {
         
     }
     
-    public function getValidationRules($tipo = '') {
-        $reglaCc = ($tipo === "update") ? '' : '|is_unique[usuario.cedula]';
-        $reglaCodigo = ($tipo === "update") ? '' : '|is_unique[usuario.codigo_uniminuto]';
-        $config = array(
-            array(
-                'field' => 'cedula',
-                'label' => 'C&eacute;dula',
-                'rules' => 'trim|required|is_natural'.$reglaCc
-            ),
-            array(
-                'field' => 'codigo_uniminuto',
-                'label' => 'C&oacute;digo Uniminuto',
-                'rules' => 'trim|required|is_natural'.$reglaCodigo
-            ),
-            array(
-                'field' => 'nombre',
-                'label' => 'Primer Nombre',
-                'rules' => 'trim|required'
-            ),
-            array(
-                'field' => 'apellido',
-                'label' => 'Primer Apellido',
-                'rules' => 'trim|required'
-            ),
-            array(
-                'field' => 'email1',
-                'label' => 'Primer Email',
-                'rules' => 'trim|required|valid_email'
-            ),
-            array(
-                'field' => 'email2',
-                'label' => 'Segundo Email',
-                'rules' => 'trim|valid_email'
-            ),
-            array(
-                'field' => 'telefono_fijo',
-                'label' => 'Tel&eacute;fono Fijo',
-                'rules' => 'trim|is_natural|exact_length[7]'
-            ),
-            array(
-                'field' => 'celular',
-                'label' => 'Celular',
-                'rules' => 'trim|exact_length[10]'
-            ),
-            array(
-                'field' => 'id_facultad',
-                'label' => 'Facultad',
-                'rules' => 'trim|required|is_natural'
-            ),
-            array(
-                'field' => 'id_programa',
-                'label' => 'Programa',
-                'rules' => 'trim|required|is_natural'
-            ),
-            array(
-                'field' => 'id_sede',
-                'label' => 'Sede',
-                'rules' => 'trim|required|is_natural'
-            )
-        );
-        return $config;
-    }
 }

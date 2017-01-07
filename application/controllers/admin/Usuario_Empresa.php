@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Profesor extends CI_Controller {
+class Usuario_Empresa extends CI_Controller {
 
     /**
      * Index Page for this controller.
@@ -25,94 +25,94 @@ class Profesor extends CI_Controller {
             $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
             redirect('user/login');
         }
-        $this->load->model('profesor_model');
+        $this->load->model('empresa_user_model');
         $this->load->helper('html_builder_helper');
     }
 
     public function index() {
-        $lista_profesores = $this->profesor_model->listar();
-        //die(print_r($lista_profesores,true));
-        $html = usuario_list_table($lista_profesores, 'profesor');
+        $lista_usuarios = $this->empresa_user_model->listar();
+        //die(print_r($lista_usuarios,true));
+        $html = usuario_list_table($lista_usuarios, 'usuario_empresa');
 
-        $data ["titulo"] = "Lista de profesores";
+        $data ["titulo"] = "Lista de usuarios de empresas";
         $data ["html"] = $html;
-        $this->load->view("admin/profesor/list", $data);
+        $this->load->view("admin/usuario_empresa/list", $data);
     }
 
     public function view($id) {
-        $this->load->model("facultades_model");
-        $this->load->model("sedes_model");
+        $this->load->model("empresa_model");
+        $datosUsuario = $this->empresa_user_model->obtener($id)[0];
+        $data["usuario_empresa"] = get_object_vars($datosUsuario);
+        $data["empresa"] = get_object_vars($this->empresa_model->get($datosUsuario->id_empresa)[0]);
+        //print_r($data);die();
+        $data ["titulo"] = "Detalles de un usuario empresa - SEPP";
 
-        $data["profesor"] = get_object_vars($this->profesor_model->obtener($id)[0]);
-        $data ["titulo"] = "Detalles de un profesor - SEPP";
-
-        $this->load->view("admin/profesor/view", $data);
+        $this->load->view("admin/usuario_empresa/view", $data);
     }
 
     public function add() {
-        $this->load->model("facultades_model");
-        $this->load->model("sedes_model");
-
-        $data["sedes"] = $this->sedes_model->SelectAllSedes();
-        $data["facultades"] = $this->facultades_model->SelectAllFacultades();
-        $data ["titulo"] = "Agregar un nuevo profesor";
+        
+        $this->load->model("empresa_model");
+        $data["empresas"] = $this->empresa_model->getAll();
+        
+        $data ["titulo"] = "Agregar un nuevo usuario de empresa";
 
 
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 
-            $this->load->view("admin/profesor/add", $data);
+            $this->load->view("admin/usuario_empresa/add", $data);
             
         } else {
 
-            $this->form_validation->set_rules($this->profesor_model->getValidationRules());
+            $this->form_validation->set_rules($this->empresa_user_model->getValidationRules());
 
             if ($this->form_validation->run() === FALSE) {
 
-                $this->load->view("admin/profesor/add", $data);
+                $this->load->view("admin/usuario_empresa/add", $data);
             } else {
 
-                if ($this->profesor_model->insert($this->input->post())) {
+                if ($this->empresa_user_model->insert($this->input->post())) {
 
                     $this->session->set_flashdata('message', "Usuario <b>" . $this->input->post('nombre') . " " . $this->input->post('apellido') . "</b> creado exitosamente.");
-                    redirect('admin/profesor');
+                    redirect('admin/usuario_empresa');
                 } else {
                     $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
-                    redirect('admin/profesor');
+                    redirect('admin/usuario_empresa');
                 }
             }
         }
     }
 
     public function edit($id = "") {
-        $this->load->model("facultades_model");
-        $this->load->model("sedes_model");
-        $datosProfesor = $this->profesor_model->obtener($id);
-        if ($datosProfesor == NULL) {
-            redirect('admin/profesor', 'refresh');
+        
+        $this->load->model("empresa_model");
+        $datosUsuario = $this->empresa_user_model->obtener($id);
+        
+        if ($datosUsuario == NULL) {
+            redirect('admin/usuario_empresa', 'refresh');
         }
-        $data["sedes"] = $this->sedes_model->SelectAllSedes();
-        $data["facultades"] = $this->facultades_model->SelectAllFacultades();
-        $data ["titulo"] = "Editar un profesor";
-        $data["profesor"] = get_object_vars($datosProfesor[0]);
+        
+        $data["empresas"] = $this->empresa_model->getAll();
+        $data ["titulo"] = "Editar un usuario de empresa";
+        $data["usuario_empresa"] = get_object_vars($datosUsuario[0]);
 
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-
-            $this->load->view("admin/profesor/edit", $data);
+            $this->load->view("admin/usuario_empresa/edit", $data);
         } else {
             $regla = "update";
-            $this->form_validation->set_rules($this->profesor_model->getValidationRules($regla));
+            $this->form_validation->set_rules($this->empresa_user_model->getValidationRules($regla));
 
             if ($this->form_validation->run() === FALSE) {
 
-                $this->load->view("admin/profesor/edit", $data);
+                $this->load->view("admin/usuario_empresa/edit", $data);
             } else {
-
-                if ($this->profesor_model->update($this->input->post(),["id" => $this->input->post('id')])) {
+                
+                if ($this->empresa_user_model->update($this->input->post(),["id" => $this->input->post('id')])) {
 
                     $this->session->set_flashdata('message', "Usuario actualizado exitosamente.");
-                    redirect('admin/profesor');
+                    redirect('admin/usuario_empresa');
                 } else {
-                    $this->load->view("admin/profesor/edit", $data);
+                    $this->load->view("admin/usuario_empresa/edit", $data);
                 }
             }
         }
@@ -120,23 +120,23 @@ class Profesor extends CI_Controller {
 
     public function remove($id) {
         if ($this->input->is_ajax_request()) {
-            $this->profesor_model->cambiarEstado(['id' => $id],"inactivo");
+            $this->empresa_user_model->cambiarEstado(['id' => $id],"inactivo");
             $this->session->set_flashdata('message', "Usuario deshabilitado exitosamente.");
             echo json_encode("correcto");
         } else {
             $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
-            redirect('admin/profesor');
+            redirect('admin/usuario_empresa');
         }
     }
     
     public function enable($id) {
         if ($this->input->is_ajax_request()) {
-            $this->profesor_model->cambiarEstado(['id' => $id],"activo");
+            $this->empresa_user_model->cambiarEstado(['id' => $id],"activo");
             $this->session->set_flashdata('error', "Usuario habilitado exitosamente.");
             echo json_encode("correcto");
         } else {
             $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
-            redirect('admin/profesor');
+            redirect('admin/usuario_empresa');
         }
     }
 

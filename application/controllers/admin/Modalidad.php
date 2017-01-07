@@ -97,5 +97,16 @@ class Modalidad extends CI_Controller {
             redirect('admin/profesor');
         }
     }
+    
+    public function enable($id) {
+        if ($this->input->is_ajax_request()) {
+            $this->modalidad_model->enable(['id' => $id]);
+            $this->session->set_flashdata('message', "Modalidad habilitada exitosamente.");
+            echo json_encode("correcto");
+        } else {
+            $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
+            redirect('admin/profesor');
+        }
+    }
 
 }

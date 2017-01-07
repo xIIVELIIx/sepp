@@ -45,7 +45,6 @@ $this->load->view("plantilla/nav");
                                     <th>Direcci&oacute;n</th>
                                     <th>Ciudad</th>
                                     <th>Telefono</th>
-                                    <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -55,7 +54,6 @@ $this->load->view("plantilla/nav");
                                     <th>Direcci&oacute;n</th>
                                     <th>Ciudad</th>
                                     <th>Telefono</th>
-                                    <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </tfoot>

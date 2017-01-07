@@ -8,12 +8,12 @@ $this->load->view("plantilla/nav");
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Modalidades
-            <small>Control panel</small>
+            <?= $titulo ?>
+            <small>M&oacute;dulo de Administrador</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="<?= base_url("admin/home") ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Modalidades</li>
+            <li><a href="<?= base_url("test") ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Usuarios de empresa</li>
         </ol>
     </section>
 
@@ -32,8 +32,8 @@ $this->load->view("plantilla/nav");
                             <?= show_notification(); ?>
                         </div>
                         <div class="col-md-2 text-center">
-                            <a href="<?= base_url() . "admin/modalidad/add" ?>">
-                                <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nueva modalidad</button>
+                            <a href="<?= base_url() . "admin/usuario_empresa/add" ?>">
+                                <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nuevo Usuario</button>
                             </a>
                         </div>
                     </div>
@@ -42,7 +42,9 @@ $this->load->view("plantilla/nav");
                             <thead>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>visitas</th>
+                                    <th>Email</th>
+                                    <th>Tel&eacute;fono</th>
+                                    <th>Empresa</th>
                                     <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -50,7 +52,9 @@ $this->load->view("plantilla/nav");
                             <tfoot>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>visitas</th>
+                                    <th>Email</th>
+                                    <th>Tel&eacute;fono</th>
+                                    <th>Empresa</th>
                                     <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -72,8 +76,6 @@ $this->load->view("plantilla/nav");
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="remove_modal" role="dialog">
     <div class="modal-dialog">
@@ -81,11 +83,11 @@ $this->load->view("plantilla/nav");
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma deshabilitar la modalidad?</h3>
+                    <h3>&iquest;Confirma deshabilitar al usuario?</h3>
                     <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="remove_id" value="" />
-                        <button id="btn_cancelar" class="btn btn-default"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
+                        <button id="btn_cancelar_remove" class="btn btn-default"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
                         <button id="btn_borrar" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle">&nbsp</span>Deshabilitar</button>
                     </div>
                 </div>
@@ -101,7 +103,7 @@ $this->load->view("plantilla/nav");
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma habilitar nuevamente la modalidad?</h3>
+                    <h3>&iquest;Confirma habilitar nuevamente al usuario?</h3>
                     <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="enable_id" value="" />
@@ -150,20 +152,19 @@ $this->load->view("plantilla/nav");
 
         $.ajax({
             type: 'POST',
-            url: "<?= base_url("admin/modalidad/remove/") ?>" + id_usuario,
+            url: "<?= base_url("admin/usuario_empresa/remove/") ?>" + id_usuario,
             dataType: 'json',
             success: function(data) {
-                window.location.href = "<?= base_url("admin/modalidad") ?>";
+                window.location.href = "<?= base_url("admin/usuario_empresa") ?>";
             }
         });
     });
 
-    $('#btn_cancelar').click(function() {
+    $('#btn_cancelar_remove').click(function() {
         $('#remove_modal').modal('hide');
     });
 
 </script>
-
 
 <script>
 
@@ -173,10 +174,10 @@ $this->load->view("plantilla/nav");
 
         $.ajax({
             type: 'POST',
-            url: "<?= base_url("admin/modalidad/enable/") ?>" + id_usuario,
+            url: "<?= base_url("admin/usuario_empresa/enable/") ?>" + id_usuario,
             dataType: 'json',
             success: function(data) {
-                window.location.href = "<?= base_url("admin/categoria_aptitud") ?>";
+                window.location.href = "<?= base_url("admin/usuario_empresa") ?>";
             }
         });
     });

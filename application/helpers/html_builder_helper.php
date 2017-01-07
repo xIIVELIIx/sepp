@@ -13,8 +13,17 @@ if (!function_exists('usuario_list_table')) {
 
             $html .= "<tr>";
             $html .= "<td>" . $a->nombre . " " . $a->apellido . "</td>";
-            $html .= "<td>" . $a->programa . "</td>";
-            $html .= "<td>" . $a->facultad . "</td>";
+            
+            //  Si es usuario empresa, mostrar unos campos, si es UNIMINUTO mostrar otros
+            
+            if($rol != "usuario_empresa"){
+                $html .= "<td>" . $a->programa . "</td>";
+                $html .= "<td>" . $a->facultad . "</td>";
+            }else{
+                $html .= "<td>" . $a->email1 . "</td>";
+                $html .= "<td>" . $a->telefono_fijo . "</td>";
+                $html .= "<td>" . $a->empresa . "</td>";
+            }
 
             if ($a->estado !== "activo") {
                 $html .= "<td class=\"text-danger\">" . $a->estado . "</td>";
@@ -29,7 +38,7 @@ if (!function_exists('usuario_list_table')) {
             $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "admin/$rol/edit/" . $a->id . "\" >
                                 <span class=\"glyphicon glyphicon-edit\"></span>
                             </a>";
-            if ($a->estado !== "no_disponible" && $a->estado !== "inactivo") {
+            if ($a->estado !== "bloqueado" && $a->estado !== "inactivo") {
                 $option_btn = "<button class=\"btn btn-danger btn-xs remove\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Deshabilitar\" id=\"$a->id\" >
                                 <span class=\"glyphicon glyphicon-remove\"></span>
                             </button>";
@@ -173,7 +182,7 @@ if (!function_exists('modalidad_list_table')) {
                                 <span class=\"glyphicon glyphicon-remove\"></span>
                             </button>";
             } else {
-                $option_btn = "<button class=\"btn btn-success btn-xs active\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Habilitar\" id=\"$a->id\" >
+                $option_btn = "<button class=\"btn btn-success btn-xs enable\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Habilitar\" id=\"$a->id\" >
                                 <span class=\"glyphicon glyphicon-check\"></span>
                             </button>";
             }
@@ -200,7 +209,6 @@ if (!function_exists('empresa_list_table')) {
             $html .= "<td>" . $a->direccion . "</td>";
             $html .= "<td>" . $a->ciudad . "</td>";
             $html .= "<td>" . $a->telefono . "</td>";
-            $html .= "<td>ESTADO</td>";
 
             /*
               if ($a->estado !== "activo") {
