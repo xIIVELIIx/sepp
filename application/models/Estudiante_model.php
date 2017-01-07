@@ -20,13 +20,13 @@ class Estudiante_model extends User_model {
             ['facultades.nombre', 'facultad'],
             ['programas.nombre', 'programa'],
             ['estados_usuario.nombre', 'estado'],
-            ['sedes.nombre','sede']);
+            ['sedes.nombre', 'sede']);
 
         $join = array(['facultades', 'facultades.id = usuario.id_facultad'],
             ['programas', 'programas.id = usuario.id_programa'],
             ['sedes', 'sedes.id = usuario.id_sede'],
             ['estados_usuario', 'estados_usuario.id = usuario.id_estado']
-            );
+        );
 
         $where = $whereArray;
 
@@ -39,8 +39,8 @@ class Estudiante_model extends User_model {
 //        exit;
         return $result;
     }
-    
-     public function detalleEstudiantes($whereArray) {
+
+    public function detalleEstudiantes($whereArray) {
         $select = array(['usuario.*'],
             ['facultades.nombre', 'facultad'],
             ['practica_profesional.id', 'id_practica'],
@@ -60,14 +60,14 @@ class Estudiante_model extends User_model {
             ['practica_profesional.id_estado_practica'],
             ['programas.nombre', 'programa'],
             ['estados_usuario.nombre', 'estado'],
-            ['sedes.nombre','sede']);
+            ['sedes.nombre', 'sede']);
 
         $join = array(['facultades', 'facultades.id = usuario.id_facultad'],
             ['programas', 'programas.id = usuario.id_programa'],
             ['sedes', 'sedes.id = usuario.id_sede'],
             ['estados_usuario', 'estados_usuario.id = usuario.id_estado'],
             ['practica_profesional', 'practica_profesional.id_estudiante = usuario.id'],
-            );
+        );
 
         $where = $whereArray;
 
@@ -76,9 +76,25 @@ class Estudiante_model extends User_model {
          * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
          */
         $result = $this->get($select, $join, $where, NULL);
-        echo $this->db->last_query();
-        exit;
+//        echo $this->db->last_query();
+//        exit;
         return $result;
+    }
+
+    public function obtenerAptitudEstudiante($id_estudiante) {
+        /* SELECT aptitud_profesional.nombre, aptitud_profesional.descripcion, categorias_aptitudes.nombre AS nombre_categoria,
+         *  categorias_aptitudes.descripcion AS descripcion_categoria 
+         * FROM perfil_estudiante INNER JOIN aptitud_profesional ON aptitud_profesional.id = perfil_estudiante.id_aptitud 
+         * INNER JOIN categorias_aptitudes ON categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud 
+         * WHERE id_estudiante = 7 */
+        $this->db->select("aptitud_profesional.*,categorias_aptitudes.nombre AS categoria");
+        $this->db->from("perfil_estudiante");
+        $this->db->join("aptitud_profesional", "aptitud_profesional.id = perfil_estudiante.id_aptitud");
+        $this->db->join("categorias_aptitudes", "categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud");
+        $this->db->where("perfil_estudiante.id_estudiante", $id_estudiante);
+        $query = $this->db->get();
+
+        return $query->result();
     }
 
 }
