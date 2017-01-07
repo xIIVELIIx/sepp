@@ -119,7 +119,7 @@ class Coordinador extends CI_Controller {
 
     public function remove($id) {
         if ($this->input->is_ajax_request()) {
-            $this->coordinador_model->cambiarEstado(['id' => $id],"inactivo");
+            $this->coordinador_model->actualizarEstado(['id' => $id],"inactivo");
             $this->session->set_flashdata('message', "Usuario deshabilitado exitosamente.");
             echo json_encode("correcto");
         } else {
@@ -130,7 +130,7 @@ class Coordinador extends CI_Controller {
     
     public function enable($id) {
         if ($this->input->is_ajax_request()) {
-            $this->coordinador_model->cambiarEstado(['id' => $id],"activo");
+            $this->coordinador_model->actualizarEstado(['id' => $id],"activo");
             $this->session->set_flashdata('error', "Usuario habilitado exitosamente.");
             echo json_encode("correcto");
         } else {

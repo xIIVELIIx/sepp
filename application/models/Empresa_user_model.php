@@ -68,7 +68,7 @@ class Empresa_user_model extends User_model {
         return $result;
     }
     
-    public function cambiarEstado($where,$estado){
+    public function actualizarEstado($where,$estado){
         $result = $this->update(['id_estado' => $this->estados[$estado]],$where);
         return $result;
     }
