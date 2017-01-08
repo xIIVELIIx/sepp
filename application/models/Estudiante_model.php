@@ -80,6 +80,102 @@ class Estudiante_model extends User_model {
 //        exit;
         return $result;
     }
+    
+    public function crearEstudiante($data){
+        
+        $data['id_facultad'] = "1";
+        $data['id_rol_usuario'] = ID_ROL_ESTUDIANTE;
+        $data['id_sede'] = "1";
+        $data['id_estado'] = "7";
+        
+        return $this->insert($data);
+
+    }
+    
+    public function validarEmailEstudiante($email){
+        
+        $where = array('username = '.$email,
+                        'email1 = '.$email,);
+        
+        /*
+         * FIRMA DE GET
+         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
+         */
+        $result = $this->get(NULL,NULL,$where,NULL,1);
+       
+        return $result;
+        
+    }
+    
+    public function enviarEmailActivacionEstudiante($email){
+        
+        $where = array('username = '.$email,
+                        'email1 = '.$email,);
+        
+        /*
+         * FIRMA DE GET
+         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
+         */
+        $result = $this->get(NULL,NULL,$where,NULL,1);
+       
+        return $result;
+        
+    }
+    
+    public function getValidationRules($tipo = '') {
+        $reglaCc = ($tipo === "update") ? '' : '|is_unique[usuario.cedula]';
+        $reglaCodigo = ($tipo === "update") ? '' : '|is_unique[usuario.codigo_uniminuto]';
+        $config = array(
+            array(
+                'field' => 'cedula',
+                'label' => 'C&eacute;dula',
+                'rules' => 'trim|required|is_natural'.$reglaCc
+            ),
+            array(
+                'field' => 'codigo_uniminuto',
+                'label' => 'C&oacute;digo Uniminuto',
+                'rules' => 'trim|required|is_natural'.$reglaCodigo
+            ),
+            array(
+                'field' => 'nombre',
+                'label' => 'Primer Nombre',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'apellido',
+                'label' => 'Primer Apellido',
+                'rules' => 'trim|required'
+            ),
+            array(
+                'field' => 'email1',
+                'label' => 'Primer Email',
+                'rules' => 'trim|required|valid_email'
+            ),
+            array(
+                'field' => 'email2',
+                'label' => 'Segundo Email',
+                'rules' => 'trim|valid_email'
+            ),
+            array(
+                'field' => 'telefono_fijo',
+                'label' => 'Tel&eacute;fono Fijo',
+                'rules' => 'trim|is_natural|exact_length[7]'
+            ),
+            array(
+                'field' => 'celular',
+                'label' => 'Celular',
+                'rules' => 'trim|exact_length[10]'
+            ),
+            array(
+                'field' => 'id_programa',
+                'label' => 'Programa',
+                'rules' => 'trim|required|is_natural'
+            ),
+        );
+        return $config;
+    }
+    
+ 
 
     public function obtenerAptitudEstudiante($id_estudiante) {
         $this->db->select("aptitud_profesional.*,categorias_aptitudes.nombre AS categoria");
