@@ -92,13 +92,13 @@
             </div>
         </div>
 
-        <div class="form-group" id="id_programaDiv" hidden>
+        <div class="form-group">
             <label>Programa</label>
             <div class="input-group">            
                 <div class="input-group-addon">  
                     <i class="fa fa-graduation-cap"></i> 
                 </div>
-                <p><?= set_value("id_programa",@$id_programa) ?></p>
+                <p><?= set_value("id_programa",@$programa) ?></p>
             </div>
         </div>
 

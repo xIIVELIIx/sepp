@@ -82,11 +82,6 @@ class Estudiante_model extends User_model {
     }
 
     public function obtenerAptitudEstudiante($id_estudiante) {
-        /* SELECT aptitud_profesional.nombre, aptitud_profesional.descripcion, categorias_aptitudes.nombre AS nombre_categoria,
-         *  categorias_aptitudes.descripcion AS descripcion_categoria 
-         * FROM perfil_estudiante INNER JOIN aptitud_profesional ON aptitud_profesional.id = perfil_estudiante.id_aptitud 
-         * INNER JOIN categorias_aptitudes ON categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud 
-         * WHERE id_estudiante = 7 */
         $this->db->select("aptitud_profesional.*,categorias_aptitudes.nombre AS categoria");
         $this->db->from("perfil_estudiante");
         $this->db->join("aptitud_profesional", "aptitud_profesional.id = perfil_estudiante.id_aptitud");
