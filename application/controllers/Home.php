@@ -64,7 +64,8 @@ class Home extends CI_Controller {
                         if($registros_previos[0]->activado == 0){
                             $estado_token = "El correo ".$this->input->post("email1")." ya tiene un token pendiente de activaci&oacute;n."
                                     . " Se reenvi&oacute; nuevamente el link de activaci&oacute;n a &eacute;sta cuenta.";
-                            $this->estudiante_model->enviarEmailActivacionEstudiante(get_object_vars($registros_previos[0]));
+                            
+                            $this->estudiante_model->enviarEmailActivacionEstudiante(json_decode(get_object_vars($registros_previos[0])['datos_json'],TRUE));
                         }else{
                             $estado_token = "El correo ".$this->input->post("email1")." ya tiene un token activado."
                                     . "Intenta con uno nuevo.";
