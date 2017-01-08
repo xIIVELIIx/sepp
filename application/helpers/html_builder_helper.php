@@ -148,16 +148,21 @@ if (!function_exists('show_notification')) {
 
         if ($CI->session->flashdata('error') !== FALSE && $CI->session->flashdata('error') != "") {
 
-            $html = "<div class=\"well well-sm alert-info\">" . $CI->session->flashdata('error') . "</div>";
-        } elseif ($CI->session->flashdata('message') !== FALSE && $CI->session->flashdata('message') != "") {
+            $html = "<div class=\"alert alert-danger alert-dismissible\">"
+                . "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>"
+                . "<strong><i class=\"icon fa fa-check\"></i>&nbsp;" . $CI->session->flashdata('error') . "</strong></div>";
 
-            $html = "<div class=\"well well-sm alert-info\">" . $CI->session->flashdata('message') . "</div>";
+        } elseif ($CI->session->flashdata('message') !== FALSE && $CI->session->flashdata('message') != "") {
+            $html = "<div class=\"alert alert-info alert-dismissible\">"
+                . "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>"
+                . "<strong><i class=\"icon fa fa-check\"></i>&nbsp;" . $CI->session->flashdata('message') . "</strong></div>";
         }
 
         return $html;
     }
 
 }
+
 
 if (!function_exists('modalidad_list_table')) {
 

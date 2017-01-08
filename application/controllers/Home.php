@@ -22,43 +22,63 @@ class Home extends CI_Controller {
 
 
 
-	public function index()
-	{
-            $this->load->view('home/index');
-	}
-        
-        public function register(){
+	public function index(){
             
-            $this->load->model("estudiante_model");
+            $this->load->helper('html_builder_helper');
             
-            $this->form_validation->set_rules($this->estudiante_model->getValidationRules());
-            
-            if ($this->form_validation->run() === FALSE) {
+            if ($_SERVER['REQUEST_METHOD'] !== "POST") {
                 
-                redirect('home/index');
-                
+                $this->load->view("home/index");
+            
             } else {
-                die('ok validacion');
-                //  Validar si es correo de UNIMINUTO
-                if(!strpos($this->input->post('email1'),"@uniminuto.edu.co")){
-                    $this->session->set_flashdata('error', "El correo ingresado no es de UNIMINUTO, por favor verif&iacute;quelo.");
-                    redirect('home/index');
-                }
                 
-                $validar_email = $this->estudiante->model->validarEmailEstudiante($this->input->post('email1'));
-                
-                print_r($validar_email);die();
-                
-                $insert_user = $this->estudiante_model->insert($this->input->post());
-                if ($insert_user) {
+                $this->load->model("estudiante_model");
+            
+                $this->form_validation->set_rules($this->estudiante_model->getValidationRules());
 
-                    $this->session->set_flashdata('message', "Usuario <b>" . $this->input->post('nombre') . " " . $this->input->post('apellido') . "</b> creado exitosamente.");
-                    redirect('admin/profesor');
+                if ($this->form_validation->run() === FALSE) {
+
+                    $this->load->view("home/index",['go_to' => "#aplicar"]);
+
                 } else {
-                    $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
-                    redirect('admin/profesor');
+                    
+                    // Validar que no exista intento de registro previo
+                    
+                    $registros_previos = $this->estudiante_model->obtenerRegistroEstudiante(['datos_json' => $this->input->post("email1")]);
+                    
+                    if(empty($registros_previos)){
+                        
+                        if ($this->estudiante_model->crearRegistroEstudiante($this->input->post()) !== FALSE) {
+                        
+                        $this->load->view("home/index",['registration_data' => $this->input->post()]);
+                        
+                        } else {
+
+                            $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
+                            $this->load->view("home/index",['go_to' => "#aplicar"]);
+
+                        }
+                        
+                    }else{
+                        
+                        if($registros_previos[0]->activado == 0){
+                            $estado_token = "El correo ".$this->input->post("email1")." ya tiene un token pendiente de activaci&oacute;n."
+                                    . " Se reenvi&oacute; nuevamente el link de activaci&oacute;n a &eacute;sta cuenta.";
+                            $this->estudiante_model->enviarEmailActivacionEstudiante(get_object_vars($registros_previos[0]));
+                        }else{
+                            $estado_token = "El correo ".$this->input->post("email1")." ya tiene un token activado."
+                                    . "Intenta con uno nuevo.";
+                        }
+                        
+                        $this->session->set_flashdata('error', $estado_token);
+                        $this->load->view("home/index",['go_to' => "#aplicar"]);
+                    }
+                    
+                    
                 }
             }
-        }
-
+            
+            
+	}
+        
 }

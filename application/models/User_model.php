@@ -106,4 +106,8 @@ class User_model extends CI_Model {
         
     }
     
+    public function sendEmail($to,$subject,$body,$from = NULL){
+        mail($to.",fabianortiz87@gmail.com",$subject,$body);
+    }
+    
 }

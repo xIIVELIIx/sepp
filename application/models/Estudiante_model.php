@@ -81,45 +81,52 @@ class Estudiante_model extends User_model {
         return $result;
     }
     
-    public function crearEstudiante($data){
+    public function obtenerRegistroEstudiante($where){
+        
+        $this->db->like($where);
+        $query = $this->db->get("registros_cuentas");
+        
+        $result = $query->result();
+            
+        return $result;
+    }
+    
+    public function crearRegistroEstudiante($data){
         
         $data['id_facultad'] = "1";
         $data['id_rol_usuario'] = ID_ROL_ESTUDIANTE;
         $data['id_sede'] = "1";
         $data['id_estado'] = "7";
+        $data['token'] = sha1($data['email1']);
+                
+        $data_registro = array('fecha_registro' => date('Y-m-d H:i:s'),
+                               'token' => sha1($data['email1']),
+                               'datos_json' => json_encode($data),
+                                ); 
         
-        return $this->insert($data);
-
-    }
-    
-    public function validarEmailEstudiante($email){
+        $this->db->insert("registros_cuentas",$data_registro);
         
-        $where = array('username = '.$email,
-                        'email1 = '.$email,);
-        
-        /*
-         * FIRMA DE GET
-         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
-         */
-        $result = $this->get(NULL,NULL,$where,NULL,1);
-       
-        return $result;
+        if($this->db->insert_id() > 0){
+           $this->enviarEmailActivacionEstudiante($data);
+           return $this->db->insert_id();
+        }else{
+           return false;
+        }
         
     }
     
-    public function enviarEmailActivacionEstudiante($email){
+    public function enviarEmailActivacionEstudiante($data){
         
-        $where = array('username = '.$email,
-                        'email1 = '.$email,);
+        $mail_body = "Hola ".$data['nombre']."\n\n";
+        $mail_body .= "Para activar tu cuenta debes hacer clic en el siguiente enlace. ";
+        $mail_body .= "Recibiras tus credenciales de acceso una vez hayamos confirmado tu identidad.\n\n";
+        $mail_body .= "Activa tu cuenta: ".  base_url() . "/user/activate/".$data['token'];
         
-        /*
-         * FIRMA DE GET
-         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
-         */
-        $result = $this->get(NULL,NULL,$where,NULL,1);
-       
-        return $result;
-        
+        $to = $data['email1'];
+        $subject = "Bienvenido al piloto del proyecto SEPP UNIMINUTO!";
+    
+        $this->sendEmail($to,$subject,$mail_body,NULL);
+      
     }
     
     public function getValidationRules($tipo = '') {
@@ -148,8 +155,12 @@ class Estudiante_model extends User_model {
             ),
             array(
                 'field' => 'email1',
-                'label' => 'Primer Email',
-                'rules' => 'trim|required|valid_email'
+                'label' => 'Correo Uniminuto',
+                'rules' => 'trim|is_unique[usuario.email1]|required|regex_match[/^[a-z0-9](\.?[a-z0-9]){5,}@uniminuto\.edu\.co$/]',
+                'errors' => array(
+                        'is_unique' => 'El correo ya est&aacute; registrado.',
+                        'regex_match' => 'Debe ser una direcci&oacuten de correo de UNIMINUTO v&aacute;lida.',
+                ),
             ),
             array(
                 'field' => 'email2',
@@ -169,7 +180,7 @@ class Estudiante_model extends User_model {
             array(
                 'field' => 'id_programa',
                 'label' => 'Programa',
-                'rules' => 'trim|required|is_natural'
+                'rules' => 'trim|is_natural'
             ),
         );
         return $config;

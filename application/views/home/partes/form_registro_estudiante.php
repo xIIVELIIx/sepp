@@ -1,4 +1,4 @@
-<div class="col-sm-8 col-sm-offset-2">
+
     <h3>Reg&iacute;state aqu&iacute;</h3>
     <p>Si ya est&aacute;s registrado, debes    <a href="user/login">iniciar sesi&oacute;n</a>.</p>
     
@@ -58,7 +58,7 @@
     <div class="form-group">
         <div class="input-group">         
             <div class="input-group-addon">  
-                <i class="fa fa-phone"></i>   
+                <i class="fa fa-mobile-phone"></i>   
             </div>
             <input type="number" id="celular" name="celular" placeholder="Celular" value="<?= set_value("celular", @$celular) ?>" class="form-control" min="0">
         </div>
@@ -69,7 +69,7 @@
                 <i class="fa fa-graduation-cap"></i> 
             </div>
             <select name="id_programa" id="id_programa" required="required" class="form-control" disabled>
-                <option value="">Ingenier&iacute;a de Sistemas (Piloto)</option>
+                <option value="1">Ingenier&iacute;a de Sistemas (Piloto del Proyecto)</option>
             </select>
         </div>
     </div>
@@ -78,4 +78,3 @@
             <span class="glyphicon glyphicon-send">&nbsp;</span>Registrarme en SEPP UNIMINUTO
         </button>
     </div>
-</div>
