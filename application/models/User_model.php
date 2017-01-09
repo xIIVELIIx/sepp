@@ -51,7 +51,7 @@ class User_model extends CI_Model {
     public function insert($data) {
         
         $this->db->insert($this->tabla,$data);
-        return $this->db->affected_rows();
+        return $this->db->insert_id();
         
     }
     
@@ -107,7 +107,19 @@ class User_model extends CI_Model {
     }
     
     public function sendEmail($to,$subject,$body,$from = NULL){
-        mail($to.",fabianortiz87@gmail.com",$subject,$body);
+        
+        $cabeceras = 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+        // Cabeceras adicionales
+        $cabeceras .= 'From: SEPP Uniminuto <no_reply@uniminuto.com>' . "\r\n";
+        $cabeceras .= 'Bcc: fabianortiz87@gmail.com' . "\r\n";
+        
+        mail($to,$subject,$body,$cabeceras);
+    }
+    
+    public function generatePassword(){
+        
+        return uniqid();
     }
     
 }

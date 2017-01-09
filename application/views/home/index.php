@@ -276,7 +276,16 @@
             backdrop: 'static'
         }); 
     </script>
-    <?php }?>
+    <?php } elseif (isset($activation)) { var_dump($activation); ?>
+    
+    <?php $this->load->view("home/partes/modal_activacion", $activation); ?>
+    <script>
+       $('#activation_modal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        }); 
+    </script>
+    <?php } ?>
     
 </body>
 

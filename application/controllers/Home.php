@@ -44,7 +44,7 @@ class Home extends CI_Controller {
                     
                     // Validar que no exista intento de registro previo
                     
-                    $registros_previos = $this->estudiante_model->obtenerRegistroEstudiante(['datos_json' => $this->input->post("email1")]);
+                    $registros_previos = $this->estudiante_model->obtenerRegistroEstudiante("like",['datos_json' => $this->input->post("email1")]);
                     
                     if(empty($registros_previos)){
                         
