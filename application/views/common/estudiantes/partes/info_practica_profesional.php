@@ -1,11 +1,27 @@
-<ul>
-<?php foreach ($aptitud_profesional as $value): ?>
-    <li><a href="#aptitud<?= $value->id ?>" data-toggle="collapse"><?= $value->categoria ?></a></li>
-    <div id="aptitud<?= $value->id ?>" class="collapse">
-        <ul>
-            <li><strong>Nombre: </strong><?= $value->nombre ?><br></li>
-            <li><strong>Descripci&oacute;n: </strong><?= $value->descripcion ?></li>
-        </ul>
-    </div><br>
-<?php endforeach; ?>
-</ul>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box box-solid">
+            <div class="box-body">
+                <h4>Modalidad</h4>
+                <p><?= $nombre ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-solid">
+            <div class="box-body">
+                <h4>Visitas</h4>
+                <p><?= $numero_visitas ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-solid">
+            <div class="box-body">
+                <h4>Estado</h4>
+                <p><?= $estado_practica ?></p>
+            </div>
+        </div>
+    </div>
+</div>

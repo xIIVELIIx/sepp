@@ -46,6 +46,92 @@ class User extends CI_Controller {
         redirect('user/login');
     }
 
+    public function activate($token = ""){
+        
+        $this->load->model('estudiante_model');
+        $this->load->helper('html_builder_helper');
+        
+        // Verificar si el token existe
+        $token_data = $this->estudiante_model->obtenerRegistroEstudiante("where",['token'=>$token]);
+        //var_dump($token_data);die();
+        
+        if(empty($token_data)){
+            
+            $resultado = "<h3 class=\"text-danger\">"
+                    . "<span class\"glyphicon glyphicon-warning-sign\">&nbsp;</span>"
+                    . "Ooops...</h3>";
+            
+            $mensaje = "El token que est&aacute;s intentando activar no es v&aacute;lido. "
+                    . "Verif&iacute;calo en la bandeja de entrada de tu correo uniminuto.";
+            
+            $boton = "<button id=\"btn_close\" onclick=\"location.href='". base_url()."'\" class=\"btn btn-info\"><span class=\"glyphicon glyphicon-check\">&nbsp</span>Entendido</button>";
+            
+            $this->load->view("home/index",['activation' => compact("resultado","mensaje","boton")]);
+            
+        }else{
+            
+            // Token ya activado
+            if($token_data[0]->activado == "1"){
+                
+                $resultado = "<h3 class=\"text-danger\">"
+                    . "<span class\"glyphicon glyphicon-warning-sign\">&nbsp;</span>"
+                    . "Ooops...</h3>";
+                
+                $mensaje = "El token que est&aacute;s intentando activar ya fue activado en ".$token_data[0]->fecha_activacion.". "
+                        . "Inicia sesi&oacute;n con las credenciales enviadas a tu correo electr&oacute;nico de Uniminuto";
+                
+
+                $boton = "<button id=\"btn_close\" onclick=\"location.href='". base_url()."user/login'\" class=\"btn btn-info\"><span class=\"glyphicon glyphicon-log-in\">&nbsp</span>Iniciar sesi&oacute;n</button>";
+                
+                
+                $this->load->view("home/index",['activation' => compact("resultado","mensaje","boton")]);
+            }
+            // Token valido
+            else{
+                
+                // Crear usuario Estudiante
+                $datos_usuario = json_decode(get_object_vars($token_data[0])['datos_json'],TRUE);
+                //$password = $this->user_model->generatePassword();
+                $password = "123456";
+                $datos_usuario['usuario'] = $datos_usuario['email1'];
+                $datos_usuario['password'] = md5($password);
+                unset($datos_usuario['token']);
+                
+                $id_usuario = $this->user_model->insert($datos_usuario);
+                
+                if($id_usuario > 0){
+                    
+                    // Enviar mail de credenciales
+                    $this->estudiante_model->enviarEmailCredenciales($datos_usuario,$password);
+                    
+                    // Actualizar registro
+                    $this->estudiante_model->actualizarRegistroUsuario($token_data[0]->id,$id_usuario);
+                    
+                    // Respuesta exitosa
+                    $resultado = "<h3 class=\"text-success\">"
+                                . "<span class\"glyphicon glyphicon-thumbs-up\">&nbsp;</span>"
+                                . "&iexcl;Perfecto, ".$datos_usuario['nombre']."!</h3>";
+
+                    $mensaje = "Tu cuenta ha sido exitosamente activada. Verifica tu correo electr&oacute;nico, pues hemos enviado un mensaje "
+                            . "con tus credenciales de acceso para que empieces una gran experiencia con tu pr&aacute;ctica profesional.";
+
+
+                    $boton = "<button id=\"btn_close\" onclick=\"location.href='". base_url()."user/login'\" class=\"btn btn-info\"><span class=\"glyphicon glyphicon-log-in\">&nbsp</span>Iniciar sesi&oacute;n</button>";
+
+
+                    $this->load->view("home/index",['activation' => compact("resultado","mensaje","boton")]);
+                    
+                    
+                }else{
+                    die("Shite!.. $id_usuario");
+                }
+                
+                $this->load->view("home/index",['activation' => compact("resultado","mensaje","boton")]);
+            }
+            
+        }
+    }
+    
     private function menu($rol) {
         switch ($rol) {
             case ID_ROL_ADMINISTRADOR:
@@ -54,7 +140,9 @@ class User extends CI_Controller {
             case ID_ROL_COORDINADOR:
                 redirect('coordinador/home');
                 break;
-
+            case ID_ROL_ESTUDIANTE:
+                redirect('estudiante/home');
+                break;
             default:
                 break;
         }

@@ -4,12 +4,12 @@
     <div class="col-md-6">
 
         <div class="form-group">
-            <label>Nombre<span class="required">*</span></label>
+            <label>Nombre</label>
             <div class="input-group">
                 <div class="input-group-addon">
                     <i class="fa fa-barcode"></i>
                 </div>
-                <input type="text" id="nombre" name="nombre" value="<?= set_value('nombre', @$nombre); ?>" class="form-control" required="required"  min="0">
+                <p><?= set_value('nombre', @$nombre); ?></p>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
                 <div class="input-group-addon"> 
                     <i class="fa fa-phone"></i>       
                 </div>
-                <input type="number" id="telefono" name="telefono" value="<?= set_value("telefono", @$telefono) ?>" class="form-control" min="0">
+                <p><?= set_value("telefono", @$telefono) ?></p>
             </div>
         </div>
 
@@ -31,7 +31,37 @@
                 <div class="input-group-addon">  
                     <i class="fa fa-phone"></i>   
                 </div>
-                <input type="number" id="celular" name="celular" value="<?= set_value("celular", @$celular) ?>" class="form-control" min="0">
+                <p><?= set_value("celular", @$celular) ?></p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Jefe Inmediato</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-user"></i>
+                </div>
+                <p><?= set_value('nombre_jefe', @$nombre_jefe. ' ' . @$apellido_jefe); ?></p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Email Jefe</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-user"></i>
+                </div>
+                <p><?= set_value('email_jefe', @$email_jefe); ?></p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Cargo Jefe</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-user"></i>
+                </div>
+                <p><?= set_value('cargo_jefe', @$cargo_jefe); ?></p>
             </div>
         </div>
 
@@ -46,34 +76,61 @@
                 <div class="input-group-addon">      
                     <i class="fa fa-building"></i>   
                 </div>
-                <input type="text" id="direccion" name="direccion" value="<?= set_value("direccion", @$direccion) ?>" class="form-control" required="required">
+                <p><?= set_value("direccion", @$direccion) ?></p>
             </div>
         </div>
 
         <div class="form-group">
-            <label>Ciudad<span class="required">*</span>
+            <label>Ciudad
             </label>
             <div class="input-group">        
                 <div class="input-group-addon">                
                     <i class="fa fa-institution"></i>              
                 </div>
-                <select name="id_ciudad" id="id_ciudad" required="required" class="form-control">
-                    <option value="">Seleccione la Ciudad</option>
-                    <?php foreach ($ciudades->result() as $value): ?>
-                        <?php $attribCiudad = ($value->id === @$id_ciudad) ? TRUE : '' ?>
-                        <option value="<?= $value->id ?>" <?= set_select("id_ciudad", $value->id, $attribCiudad); ?> ><?= $value->nombre ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <p><?= set_value("direccion", @$ciudad) ?></p>
             </div>
         </div>
-
+        
         <div class="form-group">
-            <label>&nbsp;</label>
-            <div class="input-group">
-                <button id="btn_save" class="btn btn-small btn-success">
-                    <span class="glyphicon glyphicon-save">&nbsp;</span>Guardar
-                </button>
+            <label>Cargo Practicante</label>
+            <div class="input-group">        
+                <div class="input-group-addon">                
+                    <i class="fa fa-briefcase"></i>              
+                </div>
+                <p><?= set_value("cargo", @$cargo_practicante) ?></p>
             </div>
         </div>
+        
+         <div class="form-group">
+             <label>Tel&eacute;fono Jefe</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-phone"></i>
+                </div>
+                <p><?= set_value('telefono_jefe', @$telefono_jefe); ?></p>
+            </div>
+        </div>
+        
+         <div class="form-group">
+             <label>Celular Jefe</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-phone"></i>
+                </div>
+                <p><?= set_value('celular_jefe', @$celular_jefe); ?></p>
+            </div>
+        </div>
+        
+         <div class="form-group">
+             <label>Direcci&oacute;n</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-phone"></i>
+                </div>
+                <p><?= set_value('direccion_practica', @$direccion_practica); ?></p>
+            </div>
+        </div>
+        
     </div>
+   
 </div><!-- /.box-body -->

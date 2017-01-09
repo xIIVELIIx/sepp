@@ -84,45 +84,94 @@ class Estudiante_model extends User_model {
         return $result;
     }
     
-    public function crearEstudiante($data){
+    public function obtenerRegistroEstudiante($operator,$condition){
+        
+        if($operator == "where"){
+            $this->db->where($condition);
+        }else{
+            $this->db->like($condition);
+        }
+        
+        $query = $this->db->get("registros_cuentas");
+        
+        $result = $query->result();
+            
+        return $result;
+    }
+    
+    public function crearRegistroEstudiante($data){
         
         $data['id_facultad'] = "1";
         $data['id_rol_usuario'] = ID_ROL_ESTUDIANTE;
         $data['id_sede'] = "1";
-        $data['id_estado'] = "7";
+        $data['id_estado'] = "15";  // crear estudiante con estado sin_perfil
+        $data['token'] = sha1($data['email1']);
+                
+        $data_registro = array('fecha_registro' => date('Y-m-d H:i:s'),
+                               'token' => sha1($data['email1']),
+                               'datos_json' => json_encode($data),
+                                ); 
         
-        return $this->insert($data);
-
-    }
-    
-    public function validarEmailEstudiante($email){
+        $this->db->insert("registros_cuentas",$data_registro);
         
-        $where = array('username = '.$email,
-                        'email1 = '.$email,);
-        
-        /*
-         * FIRMA DE GET
-         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
-         */
-        $result = $this->get(NULL,NULL,$where,NULL,1);
-       
-        return $result;
+        if($this->db->insert_id() > 0){
+           $this->enviarEmailActivacionEstudiante($data);
+           return $this->db->insert_id();
+        }else{
+           return false;
+        }
         
     }
     
-    public function enviarEmailActivacionEstudiante($email){
+    public function enviarEmailActivacionEstudiante($data){
         
-        $where = array('username = '.$email,
-                        'email1 = '.$email,);
+        $mail_body_html = "Hola <b>".$data['nombre']."</b><br/><br/>";
+        $mail_body_html .= "Para activar tu cuenta debes hacer clic en el siguiente enlace. ";
+        $mail_body_html .= "Recibir&aacute;s tus credenciales de acceso una vez hayamos confirmado tu identidad.<br/><br/>";
+        $mail_body_html .= "Activa tu cuenta: ".  base_url() . "user/activate/".$data['token']."<br/><br/>";
+        $mail_body_html .= "UNIMINUTO<br/>";
         
-        /*
-         * FIRMA DE GET
-         * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
-         */
-        $result = $this->get(NULL,NULL,$where,NULL,1);
-       
-        return $result;
+        $to = $data['email1'];
+        $subject = "Bienvenido al piloto del proyecto SEPP UNIMINUTO!";
+    
+        $this->sendEmail($to,$subject,$mail_body_html,NULL);
+      
+    }
+    
+    public function enviarEmailCredenciales($data,$password){
         
+        $mail_body_html = "Bienvenido <b>".$data['nombre']."</b><br/><br/>";
+        $mail_body_html .= "Tu cuenta de practicante ha sido exitosamente activada. &Eacute;stas son tus credenciales:<br/><br/>";
+        $mail_body_html .= "Usuario: <b>". $data['email1']."</b><br/>";
+        $mail_body_html .= "Password: <b>". $password."</b><br/><br/>";
+        $mail_body_html .= "Inicia sesi&oacute;n <a href=\"".base_url()."user/login\">aqu&iacute;</a> y "
+                . "sigue los siguientes pasos para preinscribr tu Pr&aacute;ctica Profesional:<br/><br/>";
+        $mail_body_html .= "<ul>";
+        $mail_body_html .= "<li>Crea tu <b>perfil profesional</b> a partir de una lista de aptitudes profesionales disponibles.</li>";
+        $mail_body_html .= "<li>Ve a la opci&oacute; <b>Preinscribir Pr&aacute;ctica Profesional</b> y seleccionando"
+                . "la modalidad de pr&aacute;ctica que te interesa.</li>";
+        $mail_body_html .= "<li>&iexcl;Y eso es todo! Solo tienes que esperar al inicio de tu pr&aacutectica.</li>";
+        $mail_body_html .= "</ul><br/>";
+        $mail_body_html .= "Te deseamos una experiencia muy constructiva y enriquecedora. Cuenta con nosotros si tienes alguna inquietud.</br></br>";
+        $mail_body_html .= "UNIMINUTO";
+        
+        $to = $data['email1'];
+        $subject = "Tu cuenta en SEPP UNIMINUTO ha sido activada exitosamente!";
+        
+        $this->sendEmail($to,$subject,$mail_body_html,NULL);
+      
+    }
+    
+    public function actualizarRegistroUsuario($id_registro,$id_usuario){
+        
+        $data = array('activado' => "1",
+                        'fecha_activacion' => date('Y-m-d H:i:s'),
+                        'id_usuario_activado' => $id_usuario,);
+        
+        $this->db->where('id',$id_registro);
+        $this->db->update("registros_cuentas",$data);
+        
+        return $this->db->affected_rows();
     }
     
     public function getValidationRules($tipo = '') {
@@ -151,8 +200,12 @@ class Estudiante_model extends User_model {
             ),
             array(
                 'field' => 'email1',
-                'label' => 'Primer Email',
-                'rules' => 'trim|required|valid_email'
+                'label' => 'Correo Uniminuto',
+                'rules' => 'trim|is_unique[usuario.email1]|required|regex_match[/^[a-z0-9](\.?[a-z0-9]){5,}@uniminuto\.edu\.co$/]',
+                'errors' => array(
+                        'is_unique' => 'El correo ya est&aacute; registrado.',
+                        'regex_match' => 'Debe ser una direcci&oacuten de correo de UNIMINUTO v&aacute;lida.',
+                ),
             ),
             array(
                 'field' => 'email2',
@@ -172,7 +225,7 @@ class Estudiante_model extends User_model {
             array(
                 'field' => 'id_programa',
                 'label' => 'Programa',
-                'rules' => 'trim|required|is_natural'
+                'rules' => 'trim|is_natural'
             ),
         );
         return $config;
@@ -186,9 +239,22 @@ class Estudiante_model extends User_model {
         $this->db->join("aptitud_profesional", "aptitud_profesional.id = perfil_estudiante.id_aptitud");
         $this->db->join("categorias_aptitudes", "categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud");
         $this->db->where("perfil_estudiante.id_estudiante", $id_estudiante);
+        $this->db->where("perfil_estudiante.activo", "1");
         $query = $this->db->get();
 
         return $query->result();
     }
+    
+    
+    public function obtenerPerfilProfPersonalizado($id_estudiante) {
+        
+        $this->db->select("usuario.*,perfil_estudiante_personalizado.comentario");
+        $this->db->from("perfil_estudiante_personalizado");
+        $this->db->join("usuario", "usuario.id = perfil_estudiante_personalizado.id_estudiante");
+        $this->db->where("perfil_estudiante_personalizado.id_estudiante", $id_estudiante);
+        $query = $this->db->get();
 
+        return $query->result();
+    }
+    
 }

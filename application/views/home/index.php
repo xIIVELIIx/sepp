@@ -16,6 +16,7 @@
 
     <!-- Custom CSS -->
     <link href="<?= base_url() ?>css/landing-page.css" rel="stylesheet">
+    
 
     <!-- Custom Fonts -->
     <link href="<?= base_url() ?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -188,19 +189,31 @@
         <div class="container">
 
             <div class="row">
-                    
                 
-
-                <?= form_open("home/register") ?>
+                
                 <div class="col-lg-6">
                     
-                    <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
-                    </div>') ?>
+                    <div class="col-sm-8 col-sm-offset-2">
+                        
+                    <?= form_open("home/index") ?>
+                    
                     <?php $this->load->view("home/partes/form_registro_estudiante"); ?>
                     
+                    <?= form_close() ?>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    
+                    <!-- AREA DE NOTIFICACIONES -->
+                    
+                    <br/><br/>
+                    <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>&nbsp;', '</strong>
+                    </div>') ?>
+                    
+                    <?= show_notification(); ?>
                     
                 </div>
-                <?= form_close() ?>
                 
                 </form>
             </div>
@@ -245,6 +258,35 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="<?= base_url() ?>js/bootstrap.min.js"></script>
 
+    
+    <?php if(isset($go_to)){ ?>    
+    
+    <script>
+        $(function(){
+            location.href = "<?= $go_to ?>";
+        });
+    </script>
+    
+    <?php } elseif (isset($registration_data)) { ?>
+    
+    <?php $this->load->view("home/partes/modal_confirmacion_registro", $registration_data); ?>
+    <script>
+       $('#confirm_registration_modal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        }); 
+    </script>
+    <?php } elseif (isset($activation)) { var_dump($activation); ?>
+    
+    <?php $this->load->view("home/partes/modal_activacion", $activation); ?>
+    <script>
+       $('#activation_modal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        }); 
+    </script>
+    <?php } ?>
+    
 </body>
 
 </html>

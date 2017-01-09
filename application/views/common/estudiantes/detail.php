@@ -89,7 +89,38 @@ $this->load->view("plantilla/$nav");
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="panel box box-danger">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapsefour">
+                                            Empresa
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapsefour" class="panel-collapse collapse">
+                                    <div class="box-body">                 
+                                        <!-- ***   LOAD VIEW *** --> 
+                                        <?php $this->load->view("common/estudiantes/partes/info_empresa", $empresa, $estudiante); ?>
+                                        <!-- ***   END LOAD VIEW *** --> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel box box-primary">
+                                <div class="box-header with-border">
+                                    <h4 class="box-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapsefive">
+                                            Practica Profesional
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapsefive" class="panel-collapse collapse">
+                                    <div class="box-body">                 
+                                        <!-- ***   LOAD VIEW *** --> 
+                                        <?php $this->load->view("common/estudiantes/partes/info_practica_profesional", $modalidad,$estudiante); ?>
+                                        <!-- ***   END LOAD VIEW *** --> 
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
