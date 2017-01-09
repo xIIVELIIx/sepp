@@ -60,13 +60,16 @@ class Estudiante_model extends User_model {
             ['practica_profesional.id_estado_practica'],
             ['programas.nombre', 'programa'],
             ['estados_usuario.nombre', 'estado'],
-            ['sedes.nombre', 'sede']);
+            ['sedes.nombre', 'sede'],
+            ['estados_practica.descripcion', 'estado_practica']
+            );
 
         $join = array(['facultades', 'facultades.id = usuario.id_facultad'],
             ['programas', 'programas.id = usuario.id_programa'],
             ['sedes', 'sedes.id = usuario.id_sede'],
             ['estados_usuario', 'estados_usuario.id = usuario.id_estado'],
             ['practica_profesional', 'practica_profesional.id_estudiante = usuario.id'],
+            ['estados_practica', 'estados_practica.id = practica_profesional.id_estado_practica']
         );
 
         $where = $whereArray;
