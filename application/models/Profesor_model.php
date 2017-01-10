@@ -60,7 +60,7 @@ class Profesor_model extends User_model {
         return $result;
     }
     
-    public function listar(){
+    public function listar($whereArray = array('usuario.id_rol_usuario = '.ID_ROL_PROFESOR)){
         
         /*
             SELECT usuario.*, facultades.nombre AS facultad,programas.nombre  AS programa,sedes.nombre AS sede,estados_usuario.nombre AS estado 
@@ -83,7 +83,8 @@ class Profesor_model extends User_model {
                     ['sedes','sedes.id = usuario.id_sede'],
                     ['estados_usuario','estados_usuario.id = usuario.id_estado'],);
         
-        $where = array('usuario.id_rol_usuario = '.ID_ROL_PROFESOR,);
+        $where = $whereArray;
+        
         $order = "usuario,id ASC";
               
         /*

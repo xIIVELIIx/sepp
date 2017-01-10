@@ -281,13 +281,13 @@ if (!function_exists('common_usuario_list_table')) {
             $optionA_btn = "<button class=\"btn btn-success btn-xs vincular\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Vincular\" id = \"$id\" >
                                     <span class=\"glyphicon glyphicon-briefcase\"></span>
                                 </button>";
-            $optionB_btn = "<a class=\"btn btn-danger btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Descartar\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+            $optionB_btn = "<button class=\"btn btn-danger btn-xs descartar\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Descartar\" id = \"$id\" >
                                     <span class=\"glyphicon glyphicon-remove\"></span>
-                                </a>";
+                                </button>";
         } else if ($estado === "vinculado") {
-            $optionA_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Practica en curso\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+            $optionA_btn = "<button class=\"btn btn-success btn-xs en_curso\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Practica en curso\" id = \"$id\" >
                                     <span class=\"glyphicon glyphicon-ok\"></span>
-                                </a>";
+                                </button>";
         } else if ($estado === "en_curso") {
             $optionA_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Aprobado\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
                                     <span class=\"glyphicon glyphicon-ok\"></span>
