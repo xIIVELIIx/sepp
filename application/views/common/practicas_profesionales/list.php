@@ -40,7 +40,7 @@ $this->load->view("plantilla/".$nav);
                                     <th>Cargo Estudiante</th>
                                     <th>Nombre Jefe</th>
                                     <th>Empresa</th>
-                                    <th>&nbsp;</th>
+                                    
                                 </tr>
                             </thead>
                             <tfoot>
@@ -49,7 +49,7 @@ $this->load->view("plantilla/".$nav);
                                     <th>Cargo Estudiante</th>
                                     <th>Nombre Jefe</th>
                                     <th>Empresa</th>
-                                    <th>&nbsp;</th>
+                                    
                                 </tr>
                             </tfoot>
                             <tbody>

@@ -38,9 +38,9 @@
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
                     
-                    <?= form_open("profesor/visita/add") ?>
+                    <?= form_open("profesor/visita/visita_items") ?>
                         <!-- ////   LOAD FORM    ////////////////////--> 
-                        <?php $this->load->view("profesor/visita/partes/form_visita"); ?>
+                        <?php $this->load->view("profesor/visita/partes/view_visita", $visita); ?>
 
                     <?= form_close() ?>
 

@@ -47,10 +47,6 @@ class Estudiantes extends CI_Controller {
 
         $where_array = array("usuario.id = " . $id_estudiante);
         $estudiante = $this->estudiante_model->detalleEstudiantes($where_array);
-//        echo '<pre>';
-//        var_dump($estudiante);
-//        echo '</pre>';
-//        exit;
         $profesor = $this->profesor_model->obtener($estudiante[0]->id_profesor);
         $aptitud_profesional = $this->estudiante_model->obtenerAptitudEstudiante($id_estudiante);
         $empresa = $this->empresa_model->get($estudiante[0]->id_empresa);
@@ -63,7 +59,12 @@ class Estudiantes extends CI_Controller {
         $data["aptitud_profesional"] = $aptitud_profesional;
         $data["modalidad"] = get_object_vars($modalidad[0]);
         $data["practica"] = get_object_vars($practica[0]);
-        
+
+        //CARGAR LAS VISITAS
+        $lista_visitas = $this->visita_model->SelectVisitaByIdPractica($data["practica"]["id"]);
+        $html = visita_list_table($lista_visitas, 'profesor/visita');
+        $data["visitas"] = $html;
+
         $data ["titulo"] = "Detalle de estudiantes";
         $data ["nav"] = "nav_profesor";
         $this->load->view("common/estudiantes/detail", $data);

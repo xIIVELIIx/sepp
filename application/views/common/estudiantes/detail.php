@@ -116,7 +116,7 @@ $this->load->view("plantilla/$nav");
                                 <div id="collapsefive" class="panel-collapse collapse">
                                     <div class="box-body">                 
                                         <!-- ***   LOAD VIEW *** --> 
-                                        <?php $this->load->view("common/estudiantes/partes/info_practica_profesional", $modalidad,$estudiante); ?>
+                                        <?php $this->load->view("common/estudiantes/partes/info_practica_profesional", $modalidad,$estudiante,$visitas); ?>
                                         <!-- ***   END LOAD VIEW *** --> 
                                     </div>
                                 </div>

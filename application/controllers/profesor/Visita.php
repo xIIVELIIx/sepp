@@ -32,35 +32,58 @@ class Visita extends CI_Controller {
 
     public function view($id_visita) {
 
-        print("HOLA".$id_visita);
-    
+        $lista_items = $this->visita_model->SelectAllItems();
+        $visita = $this->visita_model->SelectVisitaById($id_visita);
+
+        $html = items_list_table($lista_items);
+        $data["nav"] = "nav_profesor";
+        $data["titulo"] = "Agregar una nueva Calificacion - SEPP";
+        $data["visita"] = get_object_vars($visita[0]);
+        $data["items"] = $html;
+
+        $this->load->view("profesor/visita/add_items", $data);
+
     }
 
-    public function add($id_practica) {
+    public function visita_items() {
+        $data = $this->input->post();
+        $id_visita = $data['id_visita'];
+        foreach ($data as $k => $v) {
+            if($k != "id_visita"){
+                $valores['id_visita'] = $id_visita;
+                $valores['id_item'] = $k;
+                $valores['valoracion'] = $v;
+                $this->visita_model->insert_valoracion($valores);
+            }
+        }
+        $this->session->set_flashdata('message', "Valoraci&oacute;n Agregada exitosamente.");
+        redirect(base_url()."profesor/estudiantes");
+    }
 
-        $lista_items = $this->visita_model->SelectAllItems();
-        $html = items_list_table($lista_items);
+    
+
+    public function add($id_practica) {
 
         $data["id_practica"] = $id_practica;
         $data["titulo"] = "Agregar una nueva Visita - SEPP";
         $data["id_practica"] = $id_practica;
         $data["nav"] = "nav_profesor";
-        $data["items"] = $html;
+        
 
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
             $this->load->view("profesor/visita/add", $data);
         }else {
-
             if ($this->visita_model->insert($this->input->post())) {
-                redirect(base_url()."profesor/");
+                $this->session->set_flashdata('message', "Visita Agregada exitosamente.");
+                redirect(base_url()."profesor/estudiantes");
             } else {
-                redirect(base_url()."profesor/");
+                $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
+                redirect(base_url()."profesor/estudiantes");
             }
         }
     }
 
     public function edit($id = "") {
-
         $datosVisita = $this->visita_model->SelectVisitaById($id);
         if ($datosVisita == NULL) {
             redirect(base_url());
@@ -72,12 +95,12 @@ class Visita extends CI_Controller {
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
             $this->load->view("profesor/visita/edit", $data);
         } else {
-            if ($this->empresa_model->update($this->input->post())) {
+            if ($this->visita_model->update($this->input->post())) {
                 $this->session->set_flashdata('message', "Visita actualizada exitosamente.");
-                redirect(base_url());
-                //redirect('admin/empresa');
+                redirect(base_url()."profesor/estudiantes");
             } else {
-                 $this->load->view("profesor/visita/edit", $data);
+                $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
+                $this->load->view("profesor/visita/edit", $data);
             }
         }
     }

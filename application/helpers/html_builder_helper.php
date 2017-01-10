@@ -3,65 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-
-if (!function_exists('items_list_table')) {
-
-    function items_list_table($data) {
-        $html = "";
-        foreach ($data as $a) {
-
-            $html .= "<tr>";
-            $html .= "<td>" . $a->descripcion . "</td>";
-            $html .= "<td>" . $a->rango_valoracion . "</td>";
-            $html .= "</tr>";
-        }
-
-        return $html;
-    }
-}
-
-
-if (!function_exists('visita_list_table')) {
-
-    function visita_list_table($data, $controller) {
-        $html = "";
-        foreach ($data as $a) {
-
-            $html .= "<tr>";
-            $html .= "<td>" . $a->fecha . "</td>";
-            $html .= "<td>" . $a->comentario . "</td>";
-            $html .= "<td> </td>";
-
-            $html .= "</tr>";
-        }
-
-        return $html;
-    }
-}
-
-if (!function_exists('practica_profesional_list_table')) {
-
-    function practica_profesional_list_table($data, $controller) {
-        $html = "";
-        foreach ($data as $a) {
-
-            $html .= "<tr>";
-            $html .= "<td> <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >
-                            " . $a->nombre . " " . $a->apellido . "
-                            </a></td>";
-            $html .= "<td>" . $a->cargo_practicante . "</td>";
-            $html .= "<td>" . $a->nombre_jefe . "</td>";
-            $html .= "<td>" . $a->empresa . "</td>";
-            $html .= "<td> </td>";
-
-            $html .= "</tr>";
-        }
-
-        return $html;
-    }
-
-}
-
 if (!function_exists('usuario_list_table')) {
     function usuario_list_table($data, $rol) {
         //setlocale(LC_MONETARY, 'en_US');
@@ -306,6 +247,73 @@ if (!function_exists('common_usuario_list_table')) {
                                 </a>";
         }
         return $optionA_btn . "&nbsp;" . $optionB_btn;
+    }
+    
+
+    if (!function_exists('items_list_table')) {
+
+        function items_list_table($data) {
+            $html = "";
+            foreach ($data as $a) {
+
+                $html .= "<tr>";
+                $html .= "<td>" . $a->descripcion . "</td>";
+                $html .= "<td>" . $a->rango_valoracion . "</td>";
+                $html .= "<td><select name='". $a->id ."'>";
+                $valores = explode(",",$a->rango_valoracion);
+                foreach ($valores as &$valor) {
+                   $html .= "<option class='form-control'>" . $valor . "</option>";
+                }
+                $html .= "</select></td>";
+                $html .= "</tr>";
+            }
+
+            return $html;
+        }
+    }
+
+
+    if (!function_exists('visita_list_table')) {
+
+        function visita_list_table($data, $controller) {
+            $html = "";
+            foreach ($data as $a) {
+
+                $html .= "<tr>";
+                $html .= "<td><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >" . $a->fecha . "</a></td>";
+                $html .= "<td>" . $a->comentario . "</td>";
+                $html .= "<td>" . $a->estado_visita . "</td>";
+
+                $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "$controller/edit/" . $a->id . "\" >
+                                <span class=\"glyphicon glyphicon-edit\"></span>
+                            </a>";
+                $html .= "<td>".$edit_btn."</td>";
+                $html .= "</tr>";
+            }
+
+            return $html;
+        }
+    }
+
+    if (!function_exists('practica_profesional_list_table')) {
+
+        function practica_profesional_list_table($data, $controller) {
+            $html = "";
+            foreach ($data as $a) {
+
+                $html .= "<tr>";
+                $html .= "<td> <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >
+                                " . $a->nombre . " " . $a->apellido . "
+                                </a></td>";
+                $html .= "<td>" . $a->cargo_practicante . "</td>";
+                $html .= "<td>" . $a->nombre_jefe . "</td>";
+                $html .= "<td>" . $a->empresa . "</td>";
+                $html .= "</tr>";
+            }
+
+            return $html;
+        }
+
     }
 
 }
