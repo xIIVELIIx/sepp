@@ -8,19 +8,10 @@
             <li class="header">Hola! <?= $this->session->userdata('nombre') ?></li>
             <li class="treeview active">
                 <a href="#">
-                    <i class="glyphicon glyphicon-cog"></i> <span>Informaci&oacute;n</span> <i class="fa fa-angle-left pull-right"></i>
+                    <i class="glyphicon glyphicon-info-sign"></i> <span>Informaci&oacute;n</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="<?= base_url("coordinador/estudiantes") ?>"><i class="fa fa-circle-o"></i> Estudiantes</a></li>
-                </ul>
-            </li>
-            <li class="treeview active">
-                <a href="#">
-                    <i class="glyphicon glyphicon-book"></i> <span>Otra opción</span> <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="<?= base_url("coordinador/") ?>"><i class="fa fa-circle-o"></i> Otro menú </a></li>
-                    <li><a href="<?= base_url("coordinador/") ?>"><i class="fa fa-circle-o"></i> Otro menú</a></li>
                 </ul>
             </li>
         </ul>

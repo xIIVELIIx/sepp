@@ -1,11 +1,16 @@
-<ul>
-    <?php foreach ($aptitud_profesional as $value): ?>
-        <li><a href="#aptitud<?= $value->id ?>" data-toggle="collapse"><?= $value->categoria ?></a></li><br>
-        <div id="aptitud<?= $value->id ?>" class="collapse">
-            <ul>
-                <li><strong>Nombre: </strong><?= $value->nombre ?><br></li>
-                <li><strong>Descripci&oacute;n: </strong><?= $value->descripcion ?></li>
-            </ul>
-        </div><br>
-    <?php endforeach; ?>
-</ul>
+<?php foreach ($aptitud_profesional as $key_categoria => $value) { ?>
+
+    <h5 class="text-info"><?= $key_categoria ?></h5>
+
+    <ul>
+        <table class="table table-striped">
+            <?php foreach ($value as $aptitudes) { ?>
+                <tr>
+                    <td><b><?= $aptitudes->nombre ?>: </b><?= $aptitudes->descripcion ?></td>
+                </tr>
+
+            <?php } ?>
+        </table>
+    </ul>
+
+<?php } ?>

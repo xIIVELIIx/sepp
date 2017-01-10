@@ -39,6 +39,7 @@ $this->load->view("plantilla/$nav");
                                     <th>Programa</th>
                                     <th>Facultad</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -47,6 +48,7 @@ $this->load->view("plantilla/$nav");
                                     <th>Programa</th>
                                     <th>Facultad</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -67,18 +69,26 @@ $this->load->view("plantilla/$nav");
 </div><!-- /.content-wrapper -->
 
 <!-- Modal -->
-<div class="modal fade" id="remove_modal" role="dialog">
+<div class="modal fade" id="vincular_modal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-body" style="padding:40px 50px;">
+                <div id="msj" class="alert alert-warning" role="alert" hidden></div>
                 <div class="row" align="center">
-                    <h3>&iquest;Confirma deshabilitar al usuario?</h3>
-                    <div id="msj" class="alert alert-danger hide" role="alert"></div>
+                    <h3>Vinculaci&oacute;n de alumno con empresa</h3>
                     <div class="form-group">
-                        <input type="hidden" id="remove_id" value="" />
+                        <select id="empresas_id" class="form-control select2" style="width: 50%;">
+                            <option value="">Seleccione la Empresa</option>
+                            <?php foreach ($empresas as $value): ?>
+                                <option value="<?= $value->id ?>"><?= $value->nombre ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div><br>
+                    <div class="form-group">
+                        <input type="hidden" id="vincular_id" value="" />
                         <button id="btn_cancelar_remove" class="btn btn-default"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
-                        <button id="btn_borrar" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle">&nbsp</span>Deshabilitar</button>
+                        <button id="btn_vincular" class="btn btn-success"><span class="glyphicon glyphicon-ok-circle">&nbsp</span>Vincular</button>
                     </div>
                 </div>
             </div>
@@ -94,7 +104,6 @@ $this->load->view("plantilla/$nav");
             <div class="modal-body" style="padding:40px 50px;">
                 <div class="row" align="center">
                     <h3>&iquest;Confirma habilitar nuevamente al usuario?</h3>
-                    <div id="msj" class="alert alert-danger hide" role="alert"></div>
                     <div class="form-group">
                         <input type="hidden" id="enable_id" value="" />
                         <button id="btn_cancelar_enable" class="btn btn-default"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
@@ -110,14 +119,14 @@ $this->load->view("plantilla/$nav");
 
 
 <script>
-    $(".remove").click(function() {
+    $(".vincular").click(function() {
 
-        $('#remove_modal').modal({
+        $('#vincular_modal').modal({
             keyboard: false,
             backdrop: 'static'
         });
 
-        document.getElementById("remove_id").value = this.id;
+        document.getElementById("vincular_id").value = this.id;
 
     });
 
@@ -136,22 +145,28 @@ $this->load->view("plantilla/$nav");
 
 <script>
 
-    $('#btn_borrar').click(function(e) {
+    $('#btn_vincular').click(function(e) {
 
-        var id_usuario = document.getElementById("remove_id").value;
-
-        $.ajax({
-            type: 'POST',
-            url: "<?= base_url("admin/profesor/remove/") ?>" + id_usuario,
-            dataType: 'json',
-            success: function(data) {
-                window.location.href = "<?= base_url("admin/profesor") ?>";
-            }
-        });
+        var id_usuario = document.getElementById("vincular_id").value;
+        var id_empresa = document.getElementById("empresas_id").value;
+        $("#msj").hide().empty();
+        if (id_empresa !== "") {
+            $.ajax({
+                type: 'POST',
+                url: "<?= base_url("coordinador/estudiantes/vincular/") ?>"+id_usuario+"/"+id_empresa,
+                dataType: 'json',
+                success: function(data) {
+                    window.location.href = "<?= base_url("coordinador/estudiantes") ?>";
+                }
+            });
+        } else {
+            $("#msj").append("<p>Debes seleccionar alguna empresa.</p>").show();
+            $("#empresas_id").focus();
+        }
     });
 
     $('#btn_cancelar_remove').click(function() {
-        $('#remove_modal').modal('hide');
+        $('#vincular_modal').modal('hide');
     });
 
 </script>

@@ -13,13 +13,13 @@ if (!function_exists('usuario_list_table')) {
 
             $html .= "<tr>";
             $html .= "<td>" . $a->nombre . " " . $a->apellido . "</td>";
-            
+
             //  Si es usuario empresa, mostrar unos campos, si es UNIMINUTO mostrar otros
-            
-            if($rol != "usuario_empresa"){
+
+            if ($rol != "usuario_empresa") {
                 $html .= "<td>" . $a->programa . "</td>";
                 $html .= "<td>" . $a->facultad . "</td>";
-            }else{
+            } else {
                 $html .= "<td>" . $a->email1 . "</td>";
                 $html .= "<td>" . $a->telefono_fijo . "</td>";
                 $html .= "<td>" . $a->empresa . "</td>";
@@ -149,13 +149,12 @@ if (!function_exists('show_notification')) {
         if ($CI->session->flashdata('error') !== FALSE && $CI->session->flashdata('error') != "") {
 
             $html = "<div class=\"alert alert-danger alert-dismissible\">"
-                . "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>"
-                . "<strong><i class=\"icon fa fa-check\"></i>&nbsp;" . $CI->session->flashdata('error') . "</strong></div>";
-
+                    . "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>"
+                    . "<strong><i class=\"icon fa fa-check\"></i>&nbsp;" . $CI->session->flashdata('error') . "</strong></div>";
         } elseif ($CI->session->flashdata('message') !== FALSE && $CI->session->flashdata('message') != "") {
             $html = "<div class=\"alert alert-info alert-dismissible\">"
-                . "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>"
-                . "<strong><i class=\"icon fa fa-check\"></i>&nbsp;" . $CI->session->flashdata('message') . "</strong></div>";
+                    . "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>"
+                    . "<strong><i class=\"icon fa fa-check\"></i>&nbsp;" . $CI->session->flashdata('message') . "</strong></div>";
         }
 
         return $html;
@@ -252,7 +251,6 @@ if (!function_exists('common_usuario_list_table')) {
     function common_usuario_list_table($data, $controller) {
         $html = "";
         foreach ($data as $a) {
-
             $html .= "<tr>";
             $html .= "<td> <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >
                             " . $a->nombre . " " . $a->apellido . "
@@ -260,29 +258,45 @@ if (!function_exists('common_usuario_list_table')) {
             $html .= "<td>" . $a->programa . "</td>";
             $html .= "<td>" . $a->facultad . "</td>";
 
-            if ($a->estado !== "preinscrito") {
+            if ($a->estado === "descartado" || $a->estado === "reprobado") {
                 $html .= "<td class=\"text-danger\">" . $a->estado . "</td>";
+            } else if ($a->estado === "preinscrito") {
+                $html .= "<td class=\"text-warning\">" . $a->estado . "</td>";
             } else {
                 $html .= "<td class=\"text-success\">" . $a->estado . "</td>";
             }
 
-            $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "$controller/edit/" . $a->id . "\" >
-                                <span class=\"glyphicon glyphicon-edit\"></span>
-                            </a>";
-            if ($a->estado !== "no_disponible" && $a->estado !== "inactivo") {
-                $option_btn = "<button class=\"btn btn-danger btn-xs remove\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Deshabilitar\" id=\"$a->id\" >
-                                <span class=\"glyphicon glyphicon-remove\"></span>
-                            </button>";
-            } else {
-                $option_btn = "<button class=\"btn btn-success btn-xs enable\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Habilitar\" id=\"$a->id\" >
-                                <span class=\"glyphicon glyphicon-check\"></span>
-                            </button>";
-            }
-//            $html .= "<td>$edit_btn&nbsp;$option_btn</td>";
+            $buttons = buttons($a->id, $a->estado, $controller);
+
+            $html .= "<td>$buttons</td>";
             $html .= "</tr>";
         }
 
         return $html;
+    }
+
+    function buttons($id, $estado, $controller) {
+        $optionA_btn = $optionB_btn = "";
+        if ($estado === "preinscrito") {
+            $optionA_btn = "<button class=\"btn btn-success btn-xs vincular\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Vincular\" id = \"$id\" >
+                                    <span class=\"glyphicon glyphicon-briefcase\"></span>
+                                </button>";
+            $optionB_btn = "<a class=\"btn btn-danger btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Descartar\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+                                    <span class=\"glyphicon glyphicon-remove\"></span>
+                                </a>";
+        } else if ($estado === "vinculado") {
+            $optionA_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Practica en curso\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+                                    <span class=\"glyphicon glyphicon-ok\"></span>
+                                </a>";
+        } else if ($estado === "en_curso") {
+            $optionA_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Aprobado\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+                                    <span class=\"glyphicon glyphicon-ok\"></span>
+                                </a>";
+            $optionB_btn = "<a class=\"btn btn-danger btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Reprobado\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+                                    <span class=\"glyphicon glyphicon-remove\"></span>
+                                </a>";
+        }
+        return $optionA_btn . "&nbsp;" . $optionB_btn;
     }
 
 }
