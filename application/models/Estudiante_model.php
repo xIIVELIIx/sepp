@@ -1,35 +1,28 @@
 <?php
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  * Description of Estudiante_model
  *
  * @author Camilo
  */
 class Estudiante_model extends User_model {
-
     //put your code here
-
     public function listEstudiantes($whereArray) {
         $select = array(['usuario.*'],
             ['facultades.nombre', 'facultad'],
             ['programas.nombre', 'programa'],
             ['estados_usuario.nombre', 'estado'],
             ['sedes.nombre', 'sede']);
-
         $join = array(['facultades', 'facultades.id = usuario.id_facultad'],
             ['programas', 'programas.id = usuario.id_programa'],
             ['sedes', 'sedes.id = usuario.id_sede'],
             ['estados_usuario', 'estados_usuario.id = usuario.id_estado']
         );
-
         $where = $whereArray;
-
         /*
          * FIRMA DE GET
          * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
@@ -39,7 +32,6 @@ class Estudiante_model extends User_model {
 //        exit;
         return $result;
     }
-
     public function detalleEstudiantes($whereArray) {
         $select = array(['usuario.*'],
             ['facultades.nombre', 'facultad'],
@@ -63,7 +55,10 @@ class Estudiante_model extends User_model {
             ['sedes.nombre', 'sede'],
             ['estados_practica.descripcion', 'estado_practica']
         );
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/dev
         $join = array(['facultades', 'facultades.id = usuario.id_facultad'],
             ['programas', 'programas.id = usuario.id_programa'],
             ['sedes', 'sedes.id = usuario.id_sede'],
@@ -71,9 +66,7 @@ class Estudiante_model extends User_model {
             ['practica_profesional', 'practica_profesional.id_estudiante = usuario.id'],
             ['estados_practica', 'estados_practica.id = practica_profesional.id_estado_practica']
         );
-
         $where = $whereArray;
-
         /*
          * FIRMA DE GET
          * getList($select = array(), $join = array(), $where = array(), $order = "", $limit = "" )
@@ -83,14 +76,25 @@ class Estudiante_model extends User_model {
 //        exit;
         return $result;
     }
+<<<<<<< HEAD
+    public function obtenerRegistroEstudiante($operator, $condition) {
+=======
 
     public function obtenerRegistroEstudiante($operator, $condition) {
 
+>>>>>>> origin/dev
         if ($operator == "where") {
             $this->db->where($condition);
         } else {
             $this->db->like($condition);
         }
+<<<<<<< HEAD
+        $query = $this->db->get("registros_cuentas");
+        $result = $query->result();
+        return $result;
+    }
+    public function crearRegistroEstudiante($data) {
+=======
 
         $query = $this->db->get("registros_cuentas");
 
@@ -101,19 +105,27 @@ class Estudiante_model extends User_model {
 
     public function crearRegistroEstudiante($data) {
 
+>>>>>>> origin/dev
         $data['id_facultad'] = "1";
         $data['id_rol_usuario'] = ID_ROL_ESTUDIANTE;
         $data['id_sede'] = "1";
         $data['id_estado'] = "15";  // crear estudiante con estado sin_perfil
         $data['token'] = sha1($data['email1']);
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/dev
         $data_registro = array('fecha_registro' => date('Y-m-d H:i:s'),
             'token' => sha1($data['email1']),
             'datos_json' => json_encode($data),
         );
+<<<<<<< HEAD
+        $this->db->insert("registros_cuentas", $data_registro);
+=======
 
         $this->db->insert("registros_cuentas", $data_registro);
 
+>>>>>>> origin/dev
         if ($this->db->insert_id() > 0) {
             $this->enviarEmailActivacionEstudiante($data);
             return $this->db->insert_id();
@@ -121,14 +133,25 @@ class Estudiante_model extends User_model {
             return false;
         }
     }
+<<<<<<< HEAD
+    public function enviarEmailActivacionEstudiante($data) {
+=======
 
     public function enviarEmailActivacionEstudiante($data) {
 
+>>>>>>> origin/dev
         $mail_body_html = "Hola <b>" . $data['nombre'] . "</b><br/><br/>";
         $mail_body_html .= "Para activar tu cuenta debes hacer clic en el siguiente enlace. ";
         $mail_body_html .= "Recibir&aacute;s tus credenciales de acceso una vez hayamos confirmado tu identidad.<br/><br/>";
         $mail_body_html .= "Activa tu cuenta: " . base_url() . "user/activate/" . $data['token'] . "<br/><br/>";
         $mail_body_html .= "UNIMINUTO<br/>";
+<<<<<<< HEAD
+        $to = $data['email1'];
+        $subject = "Bienvenido al piloto del proyecto SEPP UNIMINUTO!";
+        $this->sendEmail($to, $subject, $mail_body_html, NULL);
+    }
+    public function enviarEmailCredenciales($data, $password) {
+=======
 
         $to = $data['email1'];
         $subject = "Bienvenido al piloto del proyecto SEPP UNIMINUTO!";
@@ -138,6 +161,7 @@ class Estudiante_model extends User_model {
 
     public function enviarEmailCredenciales($data, $password) {
 
+>>>>>>> origin/dev
         $mail_body_html = "Bienvenido <b>" . $data['nombre'] . "</b><br/><br/>";
         $mail_body_html .= "Tu cuenta de practicante ha sido exitosamente activada. &Eacute;stas son tus credenciales:<br/><br/>";
         $mail_body_html .= "Usuario: <b>" . $data['email1'] . "</b><br/>";
@@ -152,6 +176,20 @@ class Estudiante_model extends User_model {
         $mail_body_html .= "</ul><br/>";
         $mail_body_html .= "Te deseamos una experiencia muy constructiva y enriquecedora. Cuenta con nosotros si tienes alguna inquietud.</br></br>";
         $mail_body_html .= "UNIMINUTO";
+<<<<<<< HEAD
+        $to = $data['email1'];
+        $subject = "Tu cuenta en SEPP UNIMINUTO ha sido activada exitosamente!";
+        $this->sendEmail($to, $subject, $mail_body_html, NULL);
+    }
+    public function actualizarRegistroUsuario($id_registro, $id_usuario) {
+        $data = array('activado' => "1",
+            'fecha_activacion' => date('Y-m-d H:i:s'),
+            'id_usuario_activado' => $id_usuario,);
+        $this->db->where('id', $id_registro);
+        $this->db->update("registros_cuentas", $data);
+        return $this->db->affected_rows();
+    }
+=======
 
         $to = $data['email1'];
         $subject = "Tu cuenta en SEPP UNIMINUTO ha sido activada exitosamente!";
@@ -171,6 +209,7 @@ class Estudiante_model extends User_model {
         return $this->db->affected_rows();
     }
 
+>>>>>>> origin/dev
     public function getValidationRules($tipo = '') {
         $reglaCc = ($tipo === "update") ? '' : '|is_unique[usuario.cedula]';
         $reglaCodigo = ($tipo === "update") ? '' : '|is_unique[usuario.codigo_uniminuto]';
@@ -227,7 +266,10 @@ class Estudiante_model extends User_model {
         );
         return $config;
     }
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/dev
     public function obtenerAptitudEstudiante($id_estudiante) {
         $this->db->select("aptitud_profesional.*,categorias_aptitudes.nombre AS categoria");
         $this->db->from("perfil_estudiante");
@@ -236,6 +278,14 @@ class Estudiante_model extends User_model {
         $this->db->where("perfil_estudiante.id_estudiante", $id_estudiante);
         $this->db->where("perfil_estudiante.activo", "1");
         $query = $this->db->get();
+<<<<<<< HEAD
+        $perfil_prof = $query->result();
+        if (count($perfil_prof) > 0) {
+            // Agrupar las aptitudes por categoria en el array $perfil_profesional_agrupado
+            $templevel = $perfil_prof[0]->categoria;
+            $newkey = 0;
+            $perfil_profesional_agrupado[$templevel] = "";
+=======
 
         $perfil_prof = $query->result();
 
@@ -246,6 +296,7 @@ class Estudiante_model extends User_model {
             $newkey = 0;
             $perfil_profesional_agrupado[$templevel] = "";
 
+>>>>>>> origin/dev
             foreach ($perfil_prof as $key => $val) {
                 if ($templevel == $val->categoria) {
                     $perfil_profesional_agrupado[$templevel][$newkey] = $val;
@@ -254,22 +305,32 @@ class Estudiante_model extends User_model {
                 }
                 $newkey++;
             }
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/dev
             return $perfil_profesional_agrupado;
         } else {
             return false;
         }
     }
+<<<<<<< HEAD
+    public function obtenerPerfilProfPersonalizado($id_estudiante) {
+=======
 
     public function obtenerPerfilProfPersonalizado($id_estudiante) {
 
+>>>>>>> origin/dev
         $this->db->select("usuario.*,perfil_estudiante_personalizado.comentario");
         $this->db->from("perfil_estudiante_personalizado");
         $this->db->join("usuario", "usuario.id = perfil_estudiante_personalizado.id_estudiante");
         $this->db->where("perfil_estudiante_personalizado.id_estudiante", $id_estudiante);
         $query = $this->db->get();
-
         return $query->result();
     }
+<<<<<<< HEAD
+}
+=======
 
 }
+>>>>>>> origin/dev

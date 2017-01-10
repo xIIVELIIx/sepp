@@ -120,33 +120,39 @@ $this->load->view("plantilla/$nav");
 
 <script>
     $(".vincular").click(function() {
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/dev
         $('#vincular_modal').modal({
             keyboard: false,
             backdrop: 'static'
         });
+<<<<<<< HEAD
+        document.getElementById("vincular_id").value = this.id;
+=======
 
         document.getElementById("vincular_id").value = this.id;
 
+>>>>>>> origin/dev
     });
-
     $(".enable").click(function() {
-
         $('#enable_modal').modal({
             keyboard: false,
             backdrop: 'static'
         });
-
         document.getElementById("enable_id").value = this.id;
-
     });
-
 </script>
 
 <script>
+<<<<<<< HEAD
+    $('#btn_vincular').click(function(e) {
+=======
 
     $('#btn_vincular').click(function(e) {
 
+>>>>>>> origin/dev
         var id_usuario = document.getElementById("vincular_id").value;
         var id_empresa = document.getElementById("empresas_id").value;
         $("#msj").hide().empty();
@@ -164,19 +170,14 @@ $this->load->view("plantilla/$nav");
             $("#empresas_id").focus();
         }
     });
-
     $('#btn_cancelar_remove').click(function() {
         $('#vincular_modal').modal('hide');
     });
-
 </script>
 
 <script>
-
     $('#btn_enable').click(function(e) {
-
         var id_usuario = document.getElementById("enable_id").value;
-
         $.ajax({
             type: 'POST',
             url: "<?= base_url("admin/profesor/enable/") ?>" + id_usuario,
@@ -186,9 +187,7 @@ $this->load->view("plantilla/$nav");
             }
         });
     });
-
     $('#btn_cancelar_enable').click(function() {
         $('#enable_modal').modal('hide');
     });
-
 </script>
