@@ -32,9 +32,7 @@ class User extends CI_Controller {
         $where = array('usuario.id = '.$id_user,);
 
         $data_user = $this->user_model->get($select,$join,$where,NULL,1);
-
-        //$datosProfesor = $this->profesor_model->obtener($id);
-        
+                
         $data["sedes"] = $this->sedes_model->SelectAllSedes();
         $data["facultades"] = $this->facultades_model->SelectAllFacultades();
         $data["titulo"] = "Editar Perfil";
@@ -186,6 +184,10 @@ class User extends CI_Controller {
             }
             
         }
+    }
+    
+    public function home(){
+        $this->menu($this->session->userdata('id_rol_usuario'));
     }
     
     private function menu($rol) {

@@ -104,6 +104,7 @@ class Estudiante_model extends User_model {
         $data['id_facultad'] = "1";
         $data['id_rol_usuario'] = ID_ROL_ESTUDIANTE;
         $data['id_sede'] = "1";
+        $data['id_programa'] = "1";
         $data['id_estado'] = "15";  // crear estudiante con estado sin_perfil
         $data['token'] = sha1($data['email1']);
                 

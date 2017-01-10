@@ -70,13 +70,9 @@ if (!function_exists('usuario_list_table')) {
         foreach ($data as $a) {
             $html .= "<tr>";
             $html .= "<td>" . $a->nombre . " " . $a->apellido . "</td>";
-<<<<<<< HEAD
-            //  Si es usuario empresa, mostrar unos campos, si es UNIMINUTO mostrar otros
-=======
 
             //  Si es usuario empresa, mostrar unos campos, si es UNIMINUTO mostrar otros
 
->>>>>>> origin/dev
             if ($rol != "usuario_empresa") {
                 $html .= "<td>" . $a->programa . "</td>";
                 $html .= "<td>" . $a->facultad . "</td>";
@@ -271,10 +267,7 @@ if (!function_exists('common_usuario_list_table')) {
                             </a></td>";
             $html .= "<td>" . $a->programa . "</td>";
             $html .= "<td>" . $a->facultad . "</td>";
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
             if ($a->estado === "descartado" || $a->estado === "reprobado") {
                 $html .= "<td class=\"text-danger\">" . $a->estado . "</td>";
             } else if ($a->estado === "preinscrito") {
@@ -282,22 +275,15 @@ if (!function_exists('common_usuario_list_table')) {
             } else {
                 $html .= "<td class=\"text-success\">" . $a->estado . "</td>";
             }
-<<<<<<< HEAD
-            $buttons = buttons($a->id, $a->estado, $controller);
-=======
 
             $buttons = buttons($a->id, $a->estado, $controller);
 
->>>>>>> origin/dev
             $html .= "<td>$buttons</td>";
             $html .= "</tr>";
         }
         return $html;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
     function buttons($id, $estado, $controller) {
         $optionA_btn = $optionB_btn = "";
         if ($estado === "preinscrito") {
@@ -321,9 +307,6 @@ if (!function_exists('common_usuario_list_table')) {
         }
         return $optionA_btn . "&nbsp;" . $optionB_btn;
     }
-<<<<<<< HEAD
-}
-=======
 
 }
->>>>>>> origin/dev
+

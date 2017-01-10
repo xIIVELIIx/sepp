@@ -27,9 +27,12 @@ class Home extends CI_Controller {
             $this->load->helper('html_builder_helper');
             
             if ($_SERVER['REQUEST_METHOD'] !== "POST") {
+                if ($this->user_model->isLoggedIn() === FALSE) {
+                    $this->load->view("home/index");
+                }else{
+                    redirect('user/home');
+                }
                 
-                $this->load->view("home/index");
-            
             } else {
                 
                 $this->load->model("estudiante_model");
