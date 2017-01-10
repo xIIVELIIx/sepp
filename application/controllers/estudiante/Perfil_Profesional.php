@@ -39,121 +39,126 @@ class Perfil_Profesional extends CI_Controller {
         $perfil_prof_personalizado = $this->estudiante_model->obtenerPerfilProfPersonalizado($this->session->userdata("id"));
         
         // Verificar si tiene perfil profesional creado
-        if(empty($perfil_prof) && empty($perfil_prof_personalizado)){
-            $estado_perfil = "No tienes informaci&oacute;n de perfil profesional actualizada.";
+        if(empty($perfil_prof)){
+            $estado_aptitudes = "<p><b>No tienes aptitudes profesionales asociadas a tu perfil profesional.</b></p>"
+                    . "Agregar aptitudes profesionales a tu perfil te permite ofrecer una mejor descripci&oacute;n "
+                    . "sobre tus conocimientos, aumentando las posibilidades de acercarte a las vacantes laborales "
+                    . "m&aacute;s afines a tus capacidades. Te recomendamos agregar las que creas que son afines a tu perfil.";
+            
         }else{
-            $estado_perfil = "Actualiza tu infromaci&oacute de perfil profesional..";
+            $estado_aptitudes = "&Eacute;stas son las aptitudes que definen tu perfil profesional.";
         }
         
-        $lista_categorias = $this->categoria_aptidud_model->getAll(['activo' => '1']);
-        $lista_aptitudes = $this->categoria_aptidud_model->getAll(['activo' => '1']);
-        //die(print_r($lista_profesores,true));
+        if (empty($perfil_prof_personalizado)){    
+            $estado_perfil_personalizado = "Agrega una descripci&oacute;n personalizada sobre tus conocimientos y/o aptitudes.";
+        }else{
+            $estado_perfil_personalizado = "Edita la descripci&oacute;n personalizada de tu perfil profesional.";
+        }
+        
+        
+        $lista_categorias = $this->categoria_aptitud_model->getAll(['activo' => '1']);
         
         $data ["titulo"] = "Tu Perfil Profesional";
-        $data ["estado_perfil"] = $estado_perfil;
+        $data ["estado_aptitudes"] = $estado_aptitudes;
+        $data ["estado_perfil_personalizado"] = $estado_perfil_personalizado;
         $data ["listado_categorias"] = $lista_categorias;
-        $data ["listado_aptitudes"] = $lista_aptitudes;
         $data ["aptitudes_estudiante"] = $perfil_prof;
         $data ["perfil_personalizado"] = $perfil_prof_personalizado;
         
-        $this->load->view("admin/aptitud_profesional/view", $data);
+        $this->load->view("estudiante/perfil_profesional/edit", $data);
     }
 
-    public function add() {
-        $this->load->model("categoria_aptitud_model");
-        $data["categorias"] = $this->categoria_aptitud_model->getAll(['activo' => "1"]);
-        $data ["titulo"] = "Agregar una nueva aptitud profesional";
-
+    public function add_aptitud() {
+        
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 
-            $this->load->view("admin/aptitud_profesional/add", $data);
+            redirect('estudiante/perfil_profesional');
+            
         } else {
 
-            $this->form_validation->set_rules($this->aptitud_profesional_model->getValidationRules());
+            $aptitud_profesional = array('id_aptitud' => $this->input->post('id_aptitud'),
+                                        'id_estudiante' => $this->session->userdata('id'),);
+            
+            if ($this->estudiante_model->insertarAptitudProfesional($aptitud_profesional) === FALSE) {
 
-            if ($this->form_validation->run() === FALSE) {
-
-                $this->load->view("admin/aptitud_profesional/add", $data);
-            } else {
-
-                if ($this->aptitud_profesional_model->insert($this->input->post())) {
-
-                    $this->session->set_flashdata('message', "Aptitud <b>" . $this->input->post('nombre') . "</b> creada exitosamente.");
-                    redirect('admin/aptitud_profesional');
-                } else {
-                    $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
-                    redirect('admin/aptitud_profesional');
-                }
+                $this->session->set_flashdata('error', "Ocurrio un error, intenta nuevamente.");
+                redirect('estudiante/perfil_profesional');
             }
+            
+            // Verificar si tiene estado "registrado_sin_perfil" para cambiarlo
+            if($this->session->userdata('id_estado') == "15"){
+                $this->user_model->update(['id_estado' => '7'],['id' => $this->session->userdata('id')]);
+                $this->session->set_userdata('id_estado', '7');
+            }
+            
+            $this->session->set_flashdata('message', "Aptitud agregada exitosamente.");
+            redirect('estudiante/perfil_profesional');
+            
         }
     }
+    
+    public function delete_aptitud($id_registro_aptitud) {
+        
+        if ($_SERVER['REQUEST_METHOD'] !== "GET") {
 
-    public function edit($id = "") {
-        $datosAptitud = $this->aptitud_profesional_model->get($id);
-
-        if ($datosAptitud == NULL) {
-            redirect('admin/aptitud_profesional', 'refresh');
+            redirect('estudiante/perfil_profesional');
+            
+        } else {
+            
+            $this->estudiante_model->eliminarAptitudProfesional(['id_aptitud' => $id_registro_aptitud,
+                                        'id_estudiante' => $this->session->userdata('id')]);
+            
+            $this->session->set_flashdata('message', "Aptitud eliminada exitosamente.");
+            redirect('estudiante/perfil_profesional');
+            
         }
-
-        $this->load->model("categoria_aptitud_model");
-        $data["categorias"] = $this->categoria_aptitud_model->getAll(['activo' => "1"]);
-        $data["titulo"] = "Editar una aptitud profesional";
-        $data["aptitud_profesional"] = get_object_vars($datosAptitud[0]);
-
+    }
+    
+    public function edit_profile_description(){
+        
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 
-            $this->load->view("admin/aptitud_profesional/edit", $data);
+            redirect('estudiante/perfil_profesional');
+            
         } else {
-
-            $regla = "update";
-            $this->form_validation->set_rules($this->aptitud_profesional_model->getValidationRules($regla));
-
-            if ($this->form_validation->run() === FALSE) {
-
-                $this->load->view("admin/aptitud_profesional/edit", $data);
-            } else {
-
-                if ($this->aptitud_profesional_model->update($this->input->post())) {
-
-                    $this->session->set_flashdata('message', "Aptitud profesional actualizada exitosamente.");
-                    redirect('admin/aptitud_profesional');
-                } else {
-                    $this->load->view("admin/aptitud_profesional/edit", $data);
-                }
+            
+            $this->estudiante_model->insertarDescripcionPerfil($this->input->post());
+            
+            // Verificar si tiene estado "registrado_sin_perfil" para cambiarlo
+            if($this->session->userdata('id_estado') == "15"){
+                $this->user_model->update(['id_estado' => '7'],['id' => $this->session->userdata('id')]);
+                $this->session->set_userdata('id_estado', '7');
             }
+            
+            $this->session->set_flashdata('message', "Descripci&oacute;n actualizada exitosamente.");
+            redirect('estudiante/perfil_profesional');
+            
         }
     }
 
-    public function remove($id) {
-        if ($this->input->is_ajax_request()) {
-            $this->aptitud_profesional_model->delete(['id' => $id]);
-            $this->session->set_flashdata('error', "Aptitud profesional deshabilitada exitosamente.");
-            echo json_encode("correcto");
+    public function get_aptitudes_by_categoria($id_categoria) {
+        if ($id_categoria !== "" && $this->input->is_ajax_request()) {
+            
+            $aptitudes = $this->aptitud_profesional_model->getAll(['id_categoria_aptitud' => $id_categoria]);
+            
+            echo json_encode($aptitudes);
+            
         } else {
-            $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
-            redirect('admin/profesor');
+            echo "";
         }
     }
-
-    public function enable($id) {
-        if ($this->input->is_ajax_request()) {
-            $this->aptitud_profesional_model->enable(['id' => $id]);
-            $this->session->set_flashdata('message', "Aptitud profesional habilitada exitosamente.");
-            echo json_encode("correcto");
+    
+    public function get_detalle_aptitud($id_aptitud) {
+        if ($id_aptitud !== "" && $this->input->is_ajax_request()) {
+            
+            $detalle = $this->aptitud_profesional_model->getAll(['aptitud_profesional.id' => $id_aptitud]);
+            
+            echo json_encode($detalle[0]);
+            
         } else {
-            $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
-            redirect('admin/profesor');
+            echo "";
         }
     }
-
-    public function traerPrograma($idFacultad = "") {
-        if ($idFacultad !== "" && $this->input->is_ajax_request()) {
-            $this->load->model("programas_model");
-            $programas = $this->programas_model->SelectProgramasByFacultad($idFacultad);
-            echo json_encode($programas->result());
-        } else {
-            redirect("preinscripcion", "refresh");
-        }
-    }
+    
 
 }

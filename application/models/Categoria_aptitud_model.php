@@ -27,20 +27,22 @@ class Categoria_aptitud_model extends CI_Model {
     
     public function getAll($where = array()){
         
-        $sql = "SELECT categorias_aptitudes.*, programas.nombre  AS programa  
-                FROM categorias_aptitudes
-                JOIN programas ON programas.id = categorias_aptitudes.id_programa
-                ORDER BY categorias_aptitudes.id ASC";
+        // select
+        $this->db->select("categorias_aptitudes.*", "programas.nombre  AS programa");
+        $this->db->join('programas', 'programas.id = categorias_aptitudes.id_programa');
         
         foreach($where as $key => $value){
             $this->db->where($key, $value);
-            //$sql .= "";
         }
         
-        $query = $this->db->query($sql);
+        $this->db->order_by("categorias_aptitudes.nombre ASC");
+        
+        $query = $this->db->get($this->tabla);
         $result = $query->result();
        
         return $result;
+        
+        
     }
     
     public function get($id_categoria_aptitud){

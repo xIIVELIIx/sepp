@@ -174,6 +174,47 @@ class Estudiante_model extends User_model {
         return $this->db->affected_rows();
     }
     
+    public function insertarAptitudProfesional($data){
+        
+        // Verificar que n tenga esta aptitud previamente 
+        $query = $this->db->get_where('perfil_estudiante', $data);
+        //var_dump($query->result());die($this->db->last_query());
+        
+        if(count($query->result()) > 0){
+            
+            return false;
+        }
+            
+        $this->db->insert("perfil_estudiante",$data);
+        
+        return $this->db->insert_id();
+        
+    }
+    
+    public function eliminarAptitudProfesional($data){
+        $this->db->delete('perfil_estudiante', array('id_aptitud' => $data['id_aptitud'],'id_estudiante' => $data['id_estudiante'],));
+        
+    }
+    
+    public function insertarDescripcionPerfil($data){
+        
+        // Verificar que n tenga esta aptitud previamente 
+        $query = $this->db->get_where('perfil_estudiante_personalizado', ['id_estudiante' => $data['id_estudiante']]);
+        
+        if(count($query->result()) > 0){
+            
+            $this->db->where(['id_estudiante' => $data['id_estudiante']]);
+            unset($data['id_estudiante']);
+            $this->db->update("perfil_estudiante_personalizado", $data);
+            
+        }else{
+            $this->db->insert("perfil_estudiante_personalizado",$data);
+        }
+        //die($this->db->last_query());
+        return $this->db->affected_rows();
+        
+    }
+    
     public function getValidationRules($tipo = '') {
         $reglaCc = ($tipo === "update") ? '' : '|is_unique[usuario.cedula]';
         $reglaCodigo = ($tipo === "update") ? '' : '|is_unique[usuario.codigo_uniminuto]';
@@ -241,16 +282,38 @@ class Estudiante_model extends User_model {
         $this->db->where("perfil_estudiante.id_estudiante", $id_estudiante);
         $this->db->where("perfil_estudiante.activo", "1");
         $query = $this->db->get();
+        
+        $perfil_prof = $query->result();
+        
+        if(count($perfil_prof) > 0){
+            // Agrupar las aptitudes por categoria en el array $perfil_profesional_agrupado
+        
+            $templevel = $perfil_prof[0]->categoria;   
+            $newkey=0;
+            $perfil_profesional_agrupado[$templevel]="";
 
-        return $query->result();
+            foreach ($perfil_prof as $key => $val) {
+                if ($templevel == $val->categoria){
+                  $perfil_profesional_agrupado[$templevel][$newkey]=$val;
+                } else {
+                  $perfil_profesional_agrupado[$val->categoria][$newkey]=$val;
+                }
+                $newkey++;       
+            }
+            
+            return $perfil_profesional_agrupado;
+            
+        }else{
+            return false;
+        }
+        
     }
     
     
     public function obtenerPerfilProfPersonalizado($id_estudiante) {
         
-        $this->db->select("usuario.*,perfil_estudiante_personalizado.comentario");
+        $this->db->select("perfil_estudiante_personalizado.comentario");
         $this->db->from("perfil_estudiante_personalizado");
-        $this->db->join("usuario", "usuario.id = perfil_estudiante_personalizado.id_estudiante");
         $this->db->where("perfil_estudiante_personalizado.id_estudiante", $id_estudiante);
         $query = $this->db->get();
 

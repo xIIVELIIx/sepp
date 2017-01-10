@@ -11,7 +11,16 @@
                 <input type="text" id="nombre" name="nombre" value="<?= set_value("nombre", @$nombre) ?>" required="required" class="form-control" >
             </div>
         </div>
-
+        <div class="form-group">
+            <label>Descripci&oacute;n<span class="required">*</span>
+            </label>
+            <div class="input-group">
+                <div class="input-group-addon"> 
+                    <i class="glyphicon glyphicon-edit"></i> 
+                </div>
+                <textarea rows="5" id="descripcion" name="descripcion" value="<?= set_value("descripcion", @$descripcion) ?>" required="required" class="form-control" ><?= @$descripcion ?></textarea>
+            </div>
+        </div>
         <div class="form-group">
             <label>Número de Visitas<span class="required">*</span>
             </label>

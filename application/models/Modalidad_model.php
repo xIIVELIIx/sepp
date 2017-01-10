@@ -72,6 +72,11 @@ class Modalidad_model extends CI_Model {
                 'field' => 'numero_visitas',
                 'label' => 'Número de Visitas',
                 'rules' => 'trim|required|is_natural'
+            ),
+            array(
+                'field' => 'descripcion',
+                'label' => 'Descripci&oacute;n',
+                'rules' => 'required'
             )
         );
         return $config;
