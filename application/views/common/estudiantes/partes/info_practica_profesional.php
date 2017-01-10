@@ -1,5 +1,15 @@
 
 <div class="row">
+    <div class="col-md-10">
+        <?= show_notification(); ?>
+    </div>
+    <div class="col-md-2 text-center">
+        <a href="<?= base_url()."profesor/visita/add/".$practica['id']; ?>">
+            <button id="back" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus-sign">&nbsp;</span>Nueva Visita</button>
+        </a>
+    </div>
+</div>
+<div class="row">
     <div class="col-md-4">
         <div class="box box-solid">
             <div class="box-body">

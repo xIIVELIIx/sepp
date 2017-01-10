@@ -57,45 +57,6 @@ class Profesor extends CI_Controller {
         
     }
 
-    public function add() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
-        $this->load->model("facultades_model");
-        $this->load->model("sedes_model");
-
-        $data["sedes"] = $this->sedes_model->SelectAllSedes();
-        $data["facultades"] = $this->facultades_model->SelectAllFacultades();
-        $data ["titulo"] = "Agregar un nuevo profesor";
-
-
-        if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-
-            $this->load->view("admin/profesor/add", $data);
-        } else {
-
-            $this->form_validation->set_rules($this->user_model->getValidationRules());
-
-            if ($this->form_validation->run() === FALSE) {
-
-                $this->load->view("admin/profesor/add", $data);
-            } else {
-
-                if ($this->profesor_model->insert($this->input->post())) {
-
-                    $this->session->set_flashdata('message', "Usuario <b>" . $this->input->post('nombre') . " " . $this->input->post('apellido') . "</b> creado exitosamente.");
-                    redirect('admin/profesor');
-                } else {
-                    $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
-                    redirect('admin/profesor');
-                }
-            }
-        }
-    }
-
     public function edit($id = "") {
 
         if ($this->user_model->isLoggedIn() !== TRUE) {
@@ -134,22 +95,6 @@ class Profesor extends CI_Controller {
                     $this->load->view("admin/profesor/edit", $data);
                 }
             }
-        }
-    }
-
-    public function remove($id) {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-        if ($this->input->is_ajax_request()) {
-            $this->profesor_model->delete(['id' => $id]);
-            $this->session->set_flashdata('message', "Usuario deshabilitado exitosamente.");
-            echo json_encode("correcto");
-        } else {
-            $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
-            redirect('admin/profesor');
         }
     }
     

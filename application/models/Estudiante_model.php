@@ -309,7 +309,6 @@ class Estudiante_model extends User_model {
         
     }
     
-    
     public function obtenerPerfilProfPersonalizado($id_estudiante) {
         
         $this->db->select("perfil_estudiante_personalizado.comentario");
