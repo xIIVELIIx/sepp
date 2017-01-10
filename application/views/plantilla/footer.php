@@ -209,7 +209,7 @@
     <script src="<?= base_url() ?>dashboard/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="<?= base_url() ?>dashboard/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="<?= base_url() ?>dashboard/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
+    <script src="<?= base_url() ?>assets/bootstrap-select-1.10.0/dist/js/bootstrap-select.min.js"></script>
     <script>
       $(function () {
         //DATATABLES

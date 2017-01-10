@@ -8,6 +8,60 @@ class User extends CI_Controller {
         parent::__construct();
     }
 
+    public function edit() {
+
+        $this->load->model("facultades_model");
+        $this->load->model("sedes_model");
+
+        $id_user = $this->session->userdata('id');
+
+        $data["sedes"] = $this->sedes_model->SelectAllSedes();
+        $data["facultades"] = $this->facultades_model->SelectAllFacultades();
+
+        // $where_array = array("usuario.id" => $id_estudiante);
+        $select = array(['usuario.*'],
+                    ['facultades.nombre','facultad'],
+                    ['programas.nombre','programa'],
+                    ['estados_usuario.nombre','estado'],);
+        
+        $join = array(['facultades','facultades.id = usuario.id_facultad'],
+                    ['programas','programas.id = usuario.id_programa'],
+                    ['sedes','sedes.id = usuario.id_sede'],
+                    ['estados_usuario','estados_usuario.id = usuario.id_estado'],);
+        
+        $where = array('usuario.id = '.$id_user,);
+
+        $data_user = $this->user_model->get($select,$join,$where,NULL,1);
+                
+        $data["sedes"] = $this->sedes_model->SelectAllSedes();
+        $data["facultades"] = $this->facultades_model->SelectAllFacultades();
+        $data["titulo"] = "Editar Perfil";
+        $data["data_user"] =  get_object_vars($data_user[0]);
+        $data["nav"] = "nav_profesor";
+
+        $this->load->view("common/user/edit", $data);
+        
+        if ($_SERVER['REQUEST_METHOD'] !== "POST") {
+            //$this->load->view("common/user/edit", $data);
+        } else {
+            $where = array('usuario.id = '.$id_user,);
+            if ($this->user_model->update($this->input->post(), $where )) {
+                redirect(base_url()."user/login");
+            }
+        }
+        
+    }
+
+    public function traerPrograma($idFacultad = "") {
+        if ($idFacultad !== "" && $this->input->is_ajax_request()) {
+            $this->load->model("programas_model");
+            $programas = $this->programas_model->SelectProgramasByFacultad($idFacultad);
+            echo json_encode($programas->result());
+        } else {
+            redirect("preinscripcion", "refresh");
+        }
+    }
+
     public function login() {
 
         if ($this->user_model->isLoggedIn() === FALSE) {
@@ -132,6 +186,10 @@ class User extends CI_Controller {
         }
     }
     
+    public function home(){
+        $this->menu($this->session->userdata('id_rol_usuario'));
+    }
+    
     private function menu($rol) {
         switch ($rol) {
             case ID_ROL_ADMINISTRADOR:
@@ -139,6 +197,9 @@ class User extends CI_Controller {
                 break;
             case ID_ROL_COORDINADOR:
                 redirect('coordinador/home');
+                break;
+            case ID_ROL_PROFESOR:
+                redirect('profesor/home');
                 break;
             case ID_ROL_ESTUDIANTE:
                 redirect('estudiante/home');

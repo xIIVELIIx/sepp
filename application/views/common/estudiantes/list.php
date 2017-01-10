@@ -179,7 +179,7 @@ $this->load->view("plantilla/$nav");
         document.getElementById("en_curso_id").value = this.id;
 
     });
-
+    
 </script>
 
 <script>
@@ -203,7 +203,7 @@ $this->load->view("plantilla/$nav");
             $("#empresas_id").focus();
         }
     });
-
+    
 </script>
 
 <script>

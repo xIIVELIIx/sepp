@@ -77,7 +77,7 @@ class Estudiantes extends CI_Controller {
         if ($this->input->is_ajax_request()) {
 
             $this->load->model("practica_profesional_model");
-            $wherePractica = array("id_estudiante" => $id_estudiante , "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso*/
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
             $datosPractica = array("id_empresa" => $id_empresa);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
@@ -104,12 +104,12 @@ class Estudiantes extends CI_Controller {
             redirect("coordinador/estudiantes");
         }
     }
-    
+
     public function en_curso($id_estudiante, $id_profesor) {
         if ($this->input->is_ajax_request()) {
 
             $this->load->model("practica_profesional_model");
-            $wherePractica = array("id_estudiante" => $id_estudiante , "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso*/
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
             $datosPractica = array("id_profesor" => $id_profesor);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
