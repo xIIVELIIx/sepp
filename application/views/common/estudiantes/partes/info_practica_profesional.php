@@ -35,3 +35,16 @@
         </div>
     </div>
 </div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Comentario</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?= $visitas ?>
+    </tbody>
+</table>

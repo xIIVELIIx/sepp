@@ -6,11 +6,11 @@
 
         <div class="form-group">
             <label>Fecha<span class="required">*</span></label>
-            <div class="input-group">
-                <div class="input-group-addon">
-                    <i class="fa fa-barcode"></i>
-                </div>
-                <input type="date" id="fecha" name="fecha" value="<?= set_value('fecha', @$fecha); ?>" class="form-control" required="required" >
+            <div class="input-group date">
+                <input type="date" id="fecha" name="fecha" value="<?= set_value('fecha', @$fecha); ?>" class="form-control" required="required" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
             </div>
         </div>
 
@@ -40,18 +40,6 @@
                 <textarea id="comentario" name="comentario" class="form-control" > <?= set_value("comentario", @$comentario) ?> </textarea>
             </div>
         </div>
-
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>item</th>
-                    <th>Valoracion</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?= $items ?>
-            </tbody>
-        </table>
 
         <div class="form-group">
             <label>&nbsp;</label>

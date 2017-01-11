@@ -46,11 +46,9 @@ class User extends CI_Controller {
 
         $this->load->view("common/user/edit", $data);
         
-        if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-            //$this->load->view("common/user/edit", $data);
-        } else {
-            $where = array('usuario.id = '.$id_user,);
-            if ($this->user_model->update($this->input->post(), $where )) {
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            $where_update = array("usuario.id" => $id_user,);
+            if ($this->user_model->update($this->input->post(), $where_update)) {
                 redirect(base_url()."user/login");
             }
         }

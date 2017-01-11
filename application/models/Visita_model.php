@@ -66,4 +66,15 @@ class Visita_model extends CI_Model {
     
     }
 
+    public function SelectVisitaById($id) {
+        $sql = "SELECT * FROM ".$this->tabla." where id = ".$id;
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function insert_valoracion($data) {
+        $this->db->insert("valoracion_visita",$data);
+        return $this->db->affected_rows();
+    }
+
 }
