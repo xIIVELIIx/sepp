@@ -31,7 +31,7 @@ class Coordinador extends CI_Controller {
 
     public function index() {
         $lista_coordinadores = $this->coordinador_model->listar();
-        //die(print_r($lista_coordinadores,true));
+        //die($this->db->last_query());
         $html = usuario_list_table($lista_coordinadores, 'coordinador');
 
         $data ["titulo"] = "Lista de Coordinadores";
@@ -71,7 +71,7 @@ class Coordinador extends CI_Controller {
             } else {
 
                 if ($this->user_model->insert($this->input->post())) {
-
+                    
                     $this->session->set_flashdata('message', "Usuario <b>" . $this->input->post('nombre') . " " . $this->input->post('apellido') . "</b> creado exitosamente.");
                     redirect('admin/coordinador');
                 } else {

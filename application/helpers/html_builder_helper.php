@@ -15,8 +15,8 @@ if (!function_exists('usuario_list_table')) {
             //  Si es usuario empresa, mostrar unos campos, si es UNIMINUTO mostrar otros
 
             if ($rol != "usuario_empresa") {
-                $html .= "<td>" . $a->programa . "</td>";
-                $html .= "<td>" . $a->facultad . "</td>";
+                $html .= (isset($a->programa)) ? "<td>" . $a->programa . "</td>" : "";
+                $html .= (isset($a->facultad)) ? "<td>" . $a->facultad . "</td>" : "";
             } else {
                 $html .= "<td>" . $a->email1 . "</td>";
                 $html .= "<td>" . $a->telefono_fijo . "</td>";
@@ -92,9 +92,9 @@ if (!function_exists('aptitud_profesional_list_table')) {
             $html .= "<td>" . $a->descripcion . "</td>";
             $html .= "<td>" . $a->categoria . "</td>";
             if ($a->activo !== "1") {
-                $html .= "<td class=\"text-danger\">no</td>";
+                $html .= "<td style=\"min-width:80px;\" class=\"text-danger\">no</td>";
             } else {
-                $html .= "<td class=\"text-success\">si</td>";
+                $html .= "<td style=\"min-width:80px;\" class=\"text-success\">si</td>";
             }
             $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "admin/aptitud_profesional/edit/" . $a->id . "\" >
                                 <span class=\"glyphicon glyphicon-edit\"></span>

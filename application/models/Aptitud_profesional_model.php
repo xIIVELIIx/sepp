@@ -28,7 +28,7 @@ class Aptitud_profesional_model extends CI_Model {
     public function getAll($where = array()){
         
         // select
-        $this->db->select("aptitud_profesional.*", "categorias_aptitudes.nombre  AS categoria");
+        $this->db->select(["aptitud_profesional.*", "categorias_aptitudes.nombre  AS categoria"]);
         $this->db->join('categorias_aptitudes', 'categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud');
         
         foreach($where as $key => $value){

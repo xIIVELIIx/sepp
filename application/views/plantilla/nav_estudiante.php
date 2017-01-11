@@ -13,9 +13,7 @@
                 <ul class="treeview-menu">
                     <li><a href="<?= base_url("user/edit") ?>"><i class="fa fa-id-card"></i> Mis datos personales</a></li>
                     <li><a href="<?= base_url("estudiante/perfil_profesional") ?>"><i class="fa fa-suitcase"></i> Mi perfil profesional</a></li>
-                    <li><a href="<?= base_url("estudiante/cambiar_password") ?>"><i class="fa fa-key"></i> Cambiar mi contrase&ntilde;a</a></li>
-                    
-                    
+                    <li><a disabled href="<?= base_url("estudiante/cambiar_password") ?>"><i class="fa fa-key"></i> Cambiar mi contrase&ntilde;a</a></li>
                     
                 </ul>
                 <?php if($this->session->userdata('id_estado') == "7"){ ?>

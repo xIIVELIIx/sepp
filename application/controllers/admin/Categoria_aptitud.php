@@ -31,7 +31,7 @@ class Categoria_Aptitud extends CI_Controller {
 
     public function index() {
         $lista_categorias = $this->categoria_aptitud_model->getAll();
-        //die(print_r($lista_profesores,true));
+        //die($this->db->last_query());
         $html = categoria_aptitud_list_table($lista_categorias);
 
         $data ["titulo"] = "Lista de Categor&iacute;as de Aptitudes Profesionales";
