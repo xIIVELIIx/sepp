@@ -1,4 +1,3 @@
-<input type="hidden" id="id" name="id" value="<?= @$id ?>" >
 <div class="box-body">
     <div class="col-md-6">
         <div class="form-group">
@@ -31,13 +30,13 @@
                     <div class="input-group-addon">  
                         <i class="fa fa-user"></i>    
                     </div>
-                    <input type="text" id="nombre" name="nombre" value="<?= set_value("nombre", @$nombre) ?>" required="required" class="form-control" >
+                    <input type="text" id="nombre_jefe" name="nombre_jefe" value="<?= set_value("nombre", @$nombre) ?>" class="form-control" >
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-small btn-success">
-                <span class="glyphicon glyphicon-save">&nbsp;</span>Guardar
+            <button  class="btn btn-small btn-success">
+                <span class="fa fa-handshake-o">&nbsp;</span>Confirmar preinscripci&oacute;n
             </button>
         </div>
         
@@ -64,12 +63,13 @@
                     }
                 }
             });
-        
+        /*
         if($(this).val() == 1 || $(this).val() == 3){
             $("#datos_empresa").removeClass("hidden");
         }else{
             $("#datos_empresa").addClass("hidden");
         }
+        */
     });
     
 </script>

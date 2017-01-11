@@ -40,11 +40,29 @@ class Practica_Profesional extends CI_Controller {
         $data['periodo'] = $this->periodo_practica_model->get_actual()[0]->codigo;
         $data ["titulo"] = "Preinscripci&oacute;n de Pr&aacute;ctica Profesional - ".$data['periodo'];
         
+        if($this->session->userdata('id_estado') != '7'){
+            redirect('user/home');
+        }
+        
+        
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
-
-            $this->load->view('estudiante/practica_profesional/preinscripcion',$data    );
-            
+            $this->load->view('estudiante/practica_profesional/preinscripcion',$data);
         } else {
+            
+            $data_practica = $this->input->post();
+            $data_practica['id_estudiante'] = $this->session->userdata('id');
+            $data_practica['id_periodo'] = $this->periodo_practica_model->get_actual()[0]->id;
+            $data_practica['id_estado_practica'] = 1;
+            
+            $this->practica_profesional_model->insert($data_practica);
+            
+            // Actualizar estado usuario a preinscrito
+            $this->user_model->update(['id_estado' => '3'],['id' => $this->session->userdata('id')]);
+            $this->session->set_userdata('id_estado', '3');
+            
+            $data['preinscripcion_exitosa'] = true;
+            
+            $this->load->view('estudiante/practica_profesional/preinscripcion',$data);
             
         }
     }

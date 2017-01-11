@@ -1,7 +1,24 @@
 <?php
 $this->load->view("plantilla/head", ['titulo' => $titulo]);
 $this->load->view("plantilla/header");
-$this->load->view("plantilla/".$nav);
+
+switch ($this->session->userdata('id_rol_usuario')) {
+    case ID_ROL_ADMINISTRADOR:
+        $this->load->view("plantilla/nav");
+        break;
+    case ID_ROL_COORDINADOR:
+        $this->load->view("plantilla/nav_coordinador");
+        break;
+    case ID_ROL_PROFESOR:
+        $this->load->view("plantilla/nav_profesor");
+        break;
+    case ID_ROL_ESTUDIANTE:
+        $this->load->view("plantilla/nav_estudiante");
+        break;
+    default:
+        break;
+}
+
 ?>
 
 <div class="content-wrapper">

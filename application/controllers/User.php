@@ -32,7 +32,12 @@ class User extends CI_Controller {
         $where = array('usuario.id = '.$id_user,);
 
         $data_user = $this->user_model->get($select,$join,$where,NULL,1);
-                
+        
+        if(count($data_user) == 0){
+            $this->session->set_flashdata('error', "Debe estar logueado para ingresar a &eacute;sta opci&oacute;n.");
+            redirect('user/login');
+        }
+        
         $data["sedes"] = $this->sedes_model->SelectAllSedes();
         $data["facultades"] = $this->facultades_model->SelectAllFacultades();
         $data["titulo"] = "Editar Perfil";

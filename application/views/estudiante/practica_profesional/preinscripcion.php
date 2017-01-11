@@ -47,5 +47,21 @@
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-
 <?php $this->load->view("plantilla/footer"); ?>
+
+<?php if(@$preinscripcion_exitosa === TRUE) { ?>
+
+<?php $this->load->view("estudiante/practica_profesional/partes/modal_confirmacion_preinscripcion"); ?>
+
+<script>
+
+    $('#preinscripcion_confirmation_modal').modal({
+        keyboard: false,
+        backdrop: 'static'
+    });
+    
+</script>
+
+<?php } ?>
+
+
