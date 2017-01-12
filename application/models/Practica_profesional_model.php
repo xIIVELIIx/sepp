@@ -54,7 +54,7 @@ class Practica_profesional_model extends CI_Model {
         FROM practica_profesional 
         JOIN usuario ON usuario.id = practica_profesional.id_estudiante
         JOIN modalidad_practica ON modalidad_practica.id = practica_profesional.id_modalidad
-        JOIN empresas ON empresas.id = practica_profesional.id_empresa
+        LEFT JOIN empresas ON empresas.id = practica_profesional.id_empresa
         WHERE practica_profesional.id_estudiante = $id_estudiante";
         $query = $this->db->query($sql);
         $result = $query->result();

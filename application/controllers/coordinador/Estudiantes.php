@@ -25,6 +25,7 @@ class Estudiantes extends CI_Controller {
         $this->load->model("estudiante_model");
         $this->load->model("profesor_model");
         $this->load->model("empresa_model");
+        $this->load->model("practica_profesional_model");
     }
 
     public function index() {
@@ -49,9 +50,8 @@ class Estudiantes extends CI_Controller {
     }
 
     public function view($id_estudiante) {
-        $this->load->model("profesor_model");
-        $this->load->model("empresa_model");
         $this->load->model("modalidad_model");
+        $this->load->model("visita_model");
 
         $where_array = array("usuario.id = " . $id_estudiante);
         $estudiante = $this->estudiante_model->detalleEstudiantes($where_array);
@@ -60,13 +60,18 @@ class Estudiantes extends CI_Controller {
         $empresa = $this->empresa_model->get($estudiante[0]->id_empresa);
         $modalidad = $this->modalidad_model->get($estudiante[0]->id_modalidad);
         $practica = $this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante);
-
-        $data["empresa"] = get_object_vars($empresa[0]);
+        $empresasList = $this->empresa_model->getAll();
+        $whereArray = array("usuario.id_rol_usuario = " . ID_ROL_PROFESOR, "usuario.id_estado = " . $this->estados["activo"]);
+        $profesoresList = $this->profesor_model->listar($whereArray);
+        
+        $data["empresa"] = $empresa != NULL ? get_object_vars($empresa[0]) : '';
         $data["estudiante"] = get_object_vars($estudiante[0]);
-        $data["profesor"] = get_object_vars($profesor[0]);
+        $data["profesor"] = $profesor != NULL ? get_object_vars($profesor[0]) : '';
         $data["aptitud_profesional"] = $aptitud_profesional;
         $data["modalidad"] = get_object_vars($modalidad[0]);
         $data["practica"] = get_object_vars($practica[0]);
+        $data["empresasList"] = $empresasList;
+        $data["profesoresList"] = $profesoresList;
 
         //CARGAR LAS VISITAS
         $lista_visitas = $this->visita_model->SelectVisitaByIdPractica($data["practica"]["id"]);
@@ -80,8 +85,6 @@ class Estudiantes extends CI_Controller {
 
     public function vincular($id_estudiante, $id_empresa) {
         if ($this->input->is_ajax_request()) {
-
-            $this->load->model("practica_profesional_model");
             $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
             $datosPractica = array("id_empresa" => $id_empresa);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
@@ -112,8 +115,6 @@ class Estudiantes extends CI_Controller {
 
     public function en_curso($id_estudiante, $id_profesor) {
         if ($this->input->is_ajax_request()) {
-
-            $this->load->model("practica_profesional_model");
             $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
             $datosPractica = array("id_profesor" => $id_profesor);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
