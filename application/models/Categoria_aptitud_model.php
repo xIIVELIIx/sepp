@@ -28,7 +28,7 @@ class Categoria_aptitud_model extends CI_Model {
     public function getAll($where = array()){
         
         // select
-        $this->db->select("categorias_aptitudes.*", "programas.nombre  AS programa");
+        $this->db->select(["categorias_aptitudes.*", "programas.nombre  AS programa"]);
         $this->db->join('programas', 'programas.id = categorias_aptitudes.id_programa');
         
         foreach($where as $key => $value){

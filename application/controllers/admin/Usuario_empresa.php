@@ -31,6 +31,7 @@ class Usuario_Empresa extends CI_Controller {
 
     public function index() {
         $lista_usuarios = $this->empresa_user_model->listar();
+        
         //die(print_r($lista_usuarios,true));
         $html = usuario_list_table($lista_usuarios, 'usuario_empresa');
 
@@ -70,8 +71,9 @@ class Usuario_Empresa extends CI_Controller {
 
                 $this->load->view("admin/usuario_empresa/add", $data);
             } else {
-
-                if ($this->empresa_user_model->insert($this->input->post())) {
+                $data_empresa = $this->input->post();
+                $data_empresa['id_estado'] = "13";
+                if ($this->empresa_user_model->insert()) {
 
                     $this->session->set_flashdata('message', "Usuario <b>" . $this->input->post('nombre') . " " . $this->input->post('apellido') . "</b> creado exitosamente.");
                     redirect('admin/usuario_empresa');
