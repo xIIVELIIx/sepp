@@ -160,5 +160,20 @@ class Perfil_Profesional extends CI_Controller {
         }
     }
     
+    public function load_cv(){
+        $this->load->helper('file_helper');
+        
+        $upload = upload_file();
+                
+        if(isset($upload['error'])){
+            $this->session->set_flashdata('error', $upload['error']);
+            redirect('estudiante/perfil_profesional');
+        }
+        
+        $this->session->set_flashdata('message', "Tu hoja de vida ha sido subida exitosamente.");
+        redirect('estudiante/perfil_profesional');
+        
+    }
+    
 
 }

@@ -89,7 +89,7 @@ $this->load->view("plantilla/nav_estudiante");
                         <?= form_open("estudiante/perfil_profesional/edit_profile_description") ?>
                             
                             <div class="form-group">
-                                <textarea rows="10" id="comentario" name="comentario" required="required" class="form-control" ><?= @$perfil_personalizado[0]->comentario ?></textarea>
+                                <textarea rows="5" id="comentario" name="comentario" required="required" class="form-control" ><?= @$perfil_personalizado[0]->comentario ?></textarea>
                             </div>
                             <div class="form-group">
                                 <input type="hidden" name="id_estudiante" value="<?= $this->session->userdata('id') ?>">
@@ -98,6 +98,42 @@ $this->load->view("plantilla/nav_estudiante");
                                 </button>
                             </div>                                
                         <?= form_close() ?>
+                        
+                    </div>
+                </div>
+                
+            </section>
+            
+            <section class="col-lg-6 connectedSortable">
+                <div class="box">
+                    <div class="box-header">
+                        <h4 class="text-primary">Sube tu Hoja de Vida</h4>
+                    </div>
+                    <div class="box-body chat" id="chat-box" style="overflow: auto">
+                        
+                        <form method="POST" enctype="multipart/form-data" action="<?= base_url()."estudiante/perfil_profesional/load_cv" ?>">
+                
+                            <div class="form-group">
+                                <label>Selecciona un archivo en formato <b>PDF</b> &oacute; <b>Documento Word</b>.</label>
+                            </div>
+                            <div class="form-group">
+                                
+                                <div class="col-sm-3">
+                                    <label class="input-group-btn col-sm-4">
+                                        <span class="btn btn-default">
+                                            Seleccionar&hellip; <input name="archivo" id="archivo" type="file" style="display:none;" multiple/>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="200000000" />
+                                    <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-upload">&nbsp;</span>Subir</button>
+                                </div> 
+                            </div>
+                        </form>
                         
                     </div>
                 </div>
