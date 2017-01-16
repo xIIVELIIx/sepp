@@ -110,8 +110,18 @@ $this->load->view("plantilla/nav_estudiante");
                         <h4 class="text-primary">Sube tu Hoja de Vida</h4>
                     </div>
                     <div class="box-body chat" id="chat-box" style="overflow: auto">
-                        
-                        <form method="POST" enctype="multipart/form-data" action="<?= base_url()."estudiante/perfil_profesional/load_cv" ?>">
+                        <?php if($this->session->userdata('hoja_vida')) { ?>
+                        <div class="well well-sm col-sm-10">
+                            <span class="glyphicon glyphicon-file">&nbsp;</span>
+                            <a target="_blank" href="<?= $this->session->userdata('hoja_vida') ?>">Ver mi Hoja de Vida</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="<?= base_url() ?>estudiante/perfil_profesional/delete_cv">
+                                <span class="glyphicon glyphicon-remove text-danger">&nbsp;</span>
+                            </a>
+                        </div>
+                        <?php }else{ ?>
+                        <form method="POST" enctype="multipart/form-data" action="<?= base_url() ?>estudiante/perfil_profesional/load_cv">
                 
                             <div class="form-group">
                                 <label>Selecciona un archivo en formato <b>PDF</b> &oacute; <b>Documento Word</b>.</label>
@@ -126,14 +136,15 @@ $this->load->view("plantilla/nav_estudiante");
                                     </label>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" readonly>
+                                    <input id="file_sel" type="text" class="form-control" readonly>
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="hidden" name="MAX_FILE_SIZE" value="200000000" />
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="500000000" />
                                     <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-upload">&nbsp;</span>Subir</button>
                                 </div> 
                             </div>
                         </form>
+                        <?php } ?>
                         
                     </div>
                 </div>
@@ -148,3 +159,31 @@ $this->load->view("plantilla/nav_estudiante");
 <?php $this->load->view("estudiante/perfil_profesional/partes/modal_agregar_aptitud",['categorias' => $listado_categorias]); ?>
 
 <?php $this->load->view("plantilla/footer"); ?>
+
+<script>
+    
+  // We can attach the `fileselect` event to all file inputs on the page
+  $(document).on('change', ':file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  $(document).ready( function() {
+      $(':file').on('fileselect', function(event, numFiles, label) {
+
+          //var input = $(this).parents('.col-sm-6').find(':text');
+          var input = document.getElementById('file_sel');
+          var log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+          if( input.length ) {
+              input.val(log);
+          } else {
+              if( log )  document.getElementById('file_sel').value = log; //console.log(log);
+          }
+
+      });
+  });
+
+</script>

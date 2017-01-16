@@ -6,7 +6,7 @@ if ( ! function_exists('upload_file'))
     function upload_file()
     {
         $CI = & get_instance();  //get instance, access the CI superobject
-        $extension = substr($_FILES['archivo']['name'], -3);
+        $extension = (strpos($_FILES['archivo']['name'], ".docx")) ? "docx" : substr($_FILES['archivo']['name'], -3);
         $filename = "HV-".$CI->session->userdata('cedula').".$extension";
         $uploaded_file = $_SERVER['DOCUMENT_ROOT']."/sepp/uploads/$filename";
         
@@ -25,7 +25,7 @@ if ( ! function_exists('upload_file'))
                     throw new Exception("El archivo ".$_FILES['archivo']['name']." no pudo ser subido");
                 }
                 
-                return array('filepath' => $uploaded_file);
+                return array('filepath' => $uploaded_file, 'hoja_vida_link' => base_url()."uploads/".$filename);
                 
         }  catch (Exception $e){
             return array('error' => $e->getMessage());

@@ -35,6 +35,8 @@ class Perfil_Profesional extends CI_Controller {
 
     public function index() {
         
+        //print_r($this->session->userdata());die();
+        
         $perfil_prof = $this->estudiante_model->obtenerAptitudEstudiante($this->session->userdata("id"));
         $perfil_prof_personalizado = $this->estudiante_model->obtenerPerfilProfPersonalizado($this->session->userdata("id"));
         
@@ -161,16 +163,39 @@ class Perfil_Profesional extends CI_Controller {
     }
     
     public function load_cv(){
-        $this->load->helper('file_helper');
         
+        $this->load->helper('file_helper');
         $upload = upload_file();
-                
+        
         if(isset($upload['error'])){
             $this->session->set_flashdata('error', $upload['error']);
             redirect('estudiante/perfil_profesional');
         }
         
+        if($this->session->userdata('hoja_vida')){
+            unlink($this->session->userdata('hoja_vida'));
+            $this->session->unset_userdata(['hoja_vida']);
+        }
+        
+        $data_estudiante = ['hoja_vida' => $upload['hoja_vida_link']];
+        $where = ['id' => $this->session->userdata('id')];
+        $this->user_model->update($data_estudiante,$where);
+        $this->session->set_userdata('hoja_vida', $upload['hoja_vida_link']);
+        
         $this->session->set_flashdata('message', "Tu hoja de vida ha sido subida exitosamente.");
+        redirect('estudiante/perfil_profesional');
+        
+    }
+    
+    public function delete_cv(){
+        
+        unlink($this->session->userdata('hoja_vida'));
+        $data_estudiante = ['hoja_vida' => ''];
+        $where = ['id' => $this->session->userdata('id')];
+        $this->user_model->update($data_estudiante,$where);
+        $this->session->unset_userdata(['hoja_vida']);
+        
+        $this->session->set_flashdata('message', "Tu hoja de vida fue eliminada.");
         redirect('estudiante/perfil_profesional');
         
     }
