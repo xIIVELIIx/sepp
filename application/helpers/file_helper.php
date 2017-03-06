@@ -19,7 +19,7 @@ if ( ! function_exists('upload_file'))
                 if(!in_array($_FILES['archivo']['type'], $file_types)){
                     throw new Exception("El archivo ".$_FILES['archivo']['name']." no es va&aacute;lido.");
                 }
-
+                
                 //  Proceder con la subida
                 if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $uploaded_file)) {
                     throw new Exception("El archivo ".$_FILES['archivo']['name']." no pudo ser subido");

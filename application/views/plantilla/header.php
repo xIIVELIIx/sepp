@@ -3,11 +3,13 @@
 
         <header class="main-header">
             <!-- Logo -->
-            <a href="<?= base_url() ?>" class="logo">
+            <a href="<?= base_url() ?>" class="logo" style="background-color:#fff;">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>SE</b>PP</span>
+                <img class="logo logo-mini" style="max-height:20px; margin-top:15px; background-color:#fff;" src="<?= base_url() ?>images/logo-mobile.png" />
+                <!--<span class="logo-mini"><b>SE</b>PP</span>-->
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>SE</b>PP</span>
+                <img class="logo logo-lg" style="width:170px; height:38px; margin-top:5px; background-color:#fff;" src="<?= base_url() ?>images/logo.png" />
+                <!--<span class="logo-lg"><b>SE</b>PP</span>-->
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top" role="navigation">

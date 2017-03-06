@@ -14,8 +14,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="<?= base_url("dashboard/") ?>dist/css/AdminLTE.min.css">
-
-
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -25,13 +23,19 @@
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">
-            <div class="login-logo">
-                <a href="<?= base_url("dashboard/") ?>index2.html"><b>SE</b>PP</a>
+            <div class="login-logo text-center">
+                <a href="<?= base_url() ?>">
+                    <img class="logo logo-block" src="<?= base_url() ?>images/logo.png" />
+                </a>
+                <h4 class="text-info text-center">
+                    SEPP - Seguimiento a Estudiantes en Pr&aacute;cticas Profesionales
+                </h4>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
-                <p class="login-box-msg">Ingresa con tus credeciales para iniciar sesión</p>
-
+                <p class="login-box-msg text-center">
+                    Ingresa con tus credeciales para iniciar sesión
+                </p>
                 <?= validation_errors('<div class="well alert-danger">', '</div>') ?>
                 <?= form_open("user/login", "id='login' data-parsley-validate class='form-signin'") ?>
                 <div class="form-group has-feedback">
@@ -51,8 +55,8 @@
                 </div><br>
                 <?= form_close() ?>
 
-                <a href="#">Olvidé mi contraseña.</a><br>
-                <a href="register.html" class="text-center">Registrate!</a>
+                <a href="<?= base_url() ?>user/pass-recovery">Olvidé mi contraseña.</a><br>
+                <a href="<?= base_url() ?>#aplicar" class="text-center">Registrate!</a>
 
             </div>
             <!-- /.login-box-body -->
