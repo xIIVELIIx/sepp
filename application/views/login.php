@@ -25,7 +25,7 @@
         <div class="login-box">
             <div class="login-logo text-center">
                 <a href="<?= base_url() ?>">
-                    <img class="logo logo-block" src="<?= base_url() ?>images/logo.png" />
+                    <img class="logo logo-block" style="max-width:360px;" src="<?= base_url() ?>images/logo-sepp.png" />
                 </a>
                 <h4 class="text-info text-center">
                     SEPP - Seguimiento a Estudiantes en Pr&aacute;cticas Profesionales
@@ -60,6 +60,11 @@
 
             </div>
             <!-- /.login-box-body -->
+            <div class="login-logo text-center">
+                <p>&nbsp;</p>
+                    <img class="logo logo-block" src="<?= base_url() ?>images/logo.png" />
+                
+            </div>
         </div>
         <!-- /.login-box -->
     </body>
