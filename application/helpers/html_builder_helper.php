@@ -259,6 +259,7 @@ if (!function_exists('common_usuario_list_table')) {
                 $html .= "<tr>";
                 $html .= "<td>" . $a->descripcion . "</td>";
                 $html .= "<td>" . $a->rango_valoracion . "</td>";
+                $html .= "<td></td>";
                 $html .= "<td><select name='". $a->id ."'>";
                 $valores = explode(",",$a->rango_valoracion);
                 foreach ($valores as &$valor) {

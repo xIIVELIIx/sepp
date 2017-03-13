@@ -6,6 +6,7 @@ class User extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->helper("html_builder_helper");
     }
 
     public function edit() {
@@ -49,7 +50,8 @@ class User extends CI_Controller {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $where_update = array("usuario.id" => $id_user,);
             if ($this->user_model->update($this->input->post(), $where_update)) {
-                redirect(base_url()."user/login");
+                $this->session->set_flashdata('message', "Informaci&oacute;n Actualizada Correctamente");
+                redirect(base_url()."user/edit");
             }
         }
         
@@ -209,6 +211,42 @@ class User extends CI_Controller {
                 break;
             default:
                 break;
+        }
+    }
+
+    public function pass(){
+
+        $id_user = $this->session->userdata('id');
+        $select = array(['usuario.password'],);
+        $where = array('usuario.id = '.$id_user,);
+
+        $data_user = $this->user_model->get($select,NULL,$where,NULL,1);
+
+        $pass = get_object_vars($data_user[0]);
+
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+
+            if($this->input->post('password') == $this->input->post('repassword')){
+
+                if($pass['password'] == md5($this->input->post('old_password'))){
+
+                    $where_update = array("usuario.id" => $id_user,);
+                    $update_array = array("usuario.password" => md5($this->input->post('password')),);
+                    
+                    if ($this->user_model->update($update_array, $where_update)) {
+                        $this->session->set_flashdata('message', "Contrase&ntilde;a actualizada correctamente");
+                        redirect(base_url()."user/edit");
+                    }  
+                }
+                else{
+                    $this->session->set_flashdata('error', "error en la Contrase&ntilde;a Antigua");
+                    redirect(base_url()."user/edit");
+                }
+
+            }else{
+                $this->session->set_flashdata('error', "Las nueva Contrase&ntilde;a debe ser confirmada correctamente");
+                redirect(base_url()."user/edit");
+            }
         }
     }
 

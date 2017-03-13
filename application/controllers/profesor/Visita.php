@@ -25,7 +25,7 @@ class Visita extends CI_Controller {
             $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
             redirect('user/login');
         }
-
+        
         $this->load->model('visita_model');
         $this->load->helper('html_builder_helper');
     }
@@ -40,7 +40,7 @@ class Visita extends CI_Controller {
         $data["titulo"] = "Agregar una nueva Calificacion - SEPP";
         $data["visita"] = get_object_vars($visita[0]);
         $data["items"] = $html;
-
+        
         $this->load->view("profesor/visita/add_items", $data);
 
     }

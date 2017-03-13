@@ -41,29 +41,23 @@ class Visita_model extends CI_Model {
     }
 
     public function insert($data) {
-
         $this->db->insert($this->tabla,$data);
         return $this->db->affected_rows();
-
     }
 
 
     public function update($data) {
-
         extract($data);
         $this->db->where('id', $id);
         $this->db->update($this->tabla, $data);
         return true;
-    
     }
     
 
     public function getFields(){
-
         $sql = "SHOW COLUMNS FROM ".$this->tabla.";";
         $query = $this->db->query($sql);
         return $query->result();
-    
     }
 
     public function SelectVisitaById($id) {
@@ -75,6 +69,12 @@ class Visita_model extends CI_Model {
     public function insert_valoracion($data) {
         $this->db->insert("valoracion_visita",$data);
         return $this->db->affected_rows();
+    }
+
+    public function valoracion($id_visita) {
+         $sql = "SELECT * FROM valoracion_visita where id_visita = ".$id_visita;
+        $query = $this->db->query($sql);
+        return $query->result();
     }
 
 }

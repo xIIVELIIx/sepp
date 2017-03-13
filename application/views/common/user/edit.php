@@ -39,20 +39,24 @@ switch ($this->session->userdata('id_rol_usuario')) {
         <!-- Main row -->
         <div class="row">
 
+            <div class="col-md-10">
+                <?= show_notification(); ?>
+            </div>
+
             <!-- Left col -->
             <section class="col-lg-12 connectedSortable">
 
                 <div class="box box-success">
-
                     <div class="box-header">
-                        <div class="col-md-2 col-md-offset-10 text-center">
+                        <div class="col-md-6">
+                            <h4>Editar informaci&oacute;n personal</h4>
+                        </div>
+                        <div class="col-md-2 col-md-offset-4 text-center">
                             <a href="<?= base_url() ?>">
                                 <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                             </a>
                         </div>
                     </div>
-
-
 
                     <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong>
                         </div>') ?>
@@ -63,6 +67,22 @@ switch ($this->session->userdata('id_rol_usuario')) {
 
                     <?= form_close() ?>
 
+
+                </div><!-- /.box -->
+                
+                <div class="box box-danger">
+                    <div class="box-header">
+                        <div class="col-md-6">
+                            <h4>Cambiar Contraseña</h4>
+                        </div>
+                    </div>
+
+                    <?= form_open("user/pass") ?>
+
+                    <!-- ////   LOAD FORM    ////////////////////--> 
+                    <?php $this->load->view("common/user/partes/form_pass", $data_user); ?>
+
+                    <?= form_close() ?>
 
                 </div><!-- /.box -->
 

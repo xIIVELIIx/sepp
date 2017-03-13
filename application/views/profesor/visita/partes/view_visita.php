@@ -36,9 +36,10 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>item</th>
+                    <th>Item de Calificaci&oacute;n</th>
                     <th>Posibles Valores</th>
-                    <th>Calificacion</th>
+                    <th>Calificaci&oacute;n Guardada</th>
+                    <th>Cambiar Calificaci&oacute;n</th>
                 </tr>
             </thead>
             <tbody>

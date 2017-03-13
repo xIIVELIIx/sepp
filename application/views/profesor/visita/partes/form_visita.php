@@ -5,9 +5,10 @@
     <div class="col-md-6">
 
         <div class="form-group">
-            <label>Fecha<span class="required">*</span></label>
+            <label>Fecha<br>
+            Actualmente: <?= set_value('fecha', @$fecha); ?><span class="required">*</span></label>
             <div class="input-group date">
-                <input type="date" id="fecha" name="fecha" value="<?= set_value('fecha', @$fecha); ?>" class="form-control" required="required" />
+                <input type="datetime-local" id="fecha" name="fecha" value="<?= set_value('fecha', @$fecha); ?>" class="form-control" required="required" />
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -15,14 +16,12 @@
         </div>
 
         <div class="form-group">
-            <label>Estado
-            </label>
+            <label>Estado<br>Actualmente: <?= set_value("estado_visita", @$estado_visita) ?></label>
             <div class="input-group">         
                 <div class="input-group-addon">  
                     <i class="fa fa-date"></i>   
                 </div>
                 <select name="estado_visita" id="estado_visita" class="form-control">
-                    <option value="<?= set_value("estado_visita", @$estado_visita) ?>" selected><?= set_value("estado_visita", @$estado_visita) ?></option>
                     <option>agendada</option>
                     <option>realizada</option>
                     <option>cancelada</option>
