@@ -259,13 +259,16 @@ if (!function_exists('common_usuario_list_table')) {
                 $html .= "<tr>";
                 $html .= "<td>" . $a->descripcion . "</td>";
                 $html .= "<td>" . $a->rango_valoracion . "</td>";
-                $html .= "<td></td>";
+                $html .= "<td>" . $a->valoracion . "</td>";
+
                 $html .= "<td><select name='". $a->id ."'>";
+                $html .= "<option class='form-control' value=''>Seleccione una..</option>";
                 $valores = explode(",",$a->rango_valoracion);
                 foreach ($valores as &$valor) {
                    $html .= "<option class='form-control'>" . $valor . "</option>";
                 }
                 $html .= "</select></td>";
+                
                 $html .= "</tr>";
             }
 
@@ -281,14 +284,20 @@ if (!function_exists('common_usuario_list_table')) {
             foreach ($data as $a) {
 
                 $html .= "<tr>";
-                $html .= "<td><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Ver\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >" . $a->fecha . "</a></td>";
+                $html .= "<td>" . $a->fecha . "</td>";
                 $html .= "<td>" . $a->comentario . "</td>";
                 $html .= "<td>" . $a->estado_visita . "</td>";
 
-                $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar\" href = \"" . base_url() . "$controller/edit/" . $a->id . "\" >
+                $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar Visita\" href = \"" . base_url() . "$controller/edit/" . $a->id . "\" >
                                 <span class=\"glyphicon glyphicon-edit\"></span>
                             </a>";
-                $html .= "<td>".$edit_btn."</td>";
+                $success_btn = "";
+                if($a->estado_visita == "realizada"){
+                     $success_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Calificar Visita\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >
+                                <span class=\"glyphicon glyphicon-ok\"></span>
+                            </a>";
+                }                            
+                $html .= "<td>$edit_btn&nbsp;$success_btn</td>";
                 $html .= "</tr>";
             }
 

@@ -8,12 +8,10 @@ $this->load->view("plantilla/".$nav);
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Dashboard
-            <small>Control panel</small>
+            <?= $titulo ?>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Dashboard</li>
+            <li><a href="<?= base_url() ?>"><i class="fa fa-dashboard"></i> Inicio</a></li>
         </ol>
     </section>
 
@@ -28,9 +26,7 @@ $this->load->view("plantilla/".$nav);
 
                     <div class="box-header">
                         <div class="col-md-2 col-md-offset-10 text-center">
-                            <a href="<?= base_url() ?>">
-                                <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
-                            </a>
+                            <button id="btn_back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                         </div>
                     </div>
 

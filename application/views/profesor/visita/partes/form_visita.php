@@ -1,30 +1,29 @@
 
 <input type="hidden" id="id" name="id" value="<?= @$id ?>" >
-<input type="hidden" id="id_practica" name="id_practica" value="<?= @$id_practica ?>" >
+<input type="hidden" id="id_practica" name="id_practica" value="<?= @$id_practica ?>" >                    
+
 <div class="box-body">
     <div class="col-md-6">
-
         <div class="form-group">
-            <label>Fecha<br>
-            Actualmente: <?= set_value('fecha', @$fecha); ?><span class="required">*</span></label>
+            <label>Fecha <span class="required">*</span>
             <div class="input-group date">
-                <input type="datetime-local" id="fecha" name="fecha" value="<?= set_value('fecha', @$fecha); ?>" class="form-control" required="required" />
+            <input type="text" class="form-control datepicker" id="fecha" name="fecha" value="<?= set_value('fecha', @$fecha); ?>" required="required">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
             </div>
-        </div>
+        </div>          
 
         <div class="form-group">
-            <label>Estado<br>Actualmente: <?= set_value("estado_visita", @$estado_visita) ?></label>
+            <label>Estado</label>
             <div class="input-group">         
                 <div class="input-group-addon">  
                     <i class="fa fa-date"></i>   
                 </div>
                 <select name="estado_visita" id="estado_visita" class="form-control">
-                    <option>agendada</option>
-                    <option>realizada</option>
-                    <option>cancelada</option>
+                    <option <?php if(@$estado_visita == "agendada"){ print("selected");} ?>>agendada</option>
+                    <option <?php if(@$estado_visita == "realizada"){ print("selected");} ?>>realizada</option>
+                    <option <?php if(@$estado_visita == "cancelada"){ print("selected");} ?>>cancelada</option>
                 </select>
             </div>
         </div>
@@ -36,7 +35,7 @@
                 <div class="input-group-addon"> 
                     <i class="fa fa-text"></i>       
                 </div>
-                <textarea id="comentario" name="comentario" class="form-control" > <?= set_value("comentario", @$comentario) ?> </textarea>
+                <textarea id="comentario" name="comentario" class="form-control"><?= set_value("comentario", @$comentario) ?></textarea>
             </div>
         </div>
 

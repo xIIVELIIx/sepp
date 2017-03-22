@@ -28,8 +28,8 @@ switch ($this->session->userdata('id_rol_usuario')) {
             <?= $titulo ?>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Dashboard</li>
+            <li><a href="<?= base_url() ?>"><i class="fa fa-dashboard"></i> Inicio</a></li>
+            <li class="active">Usuario</li>
         </ol>
     </section>
 
@@ -52,9 +52,7 @@ switch ($this->session->userdata('id_rol_usuario')) {
                             <h4>Editar informaci&oacute;n personal</h4>
                         </div>
                         <div class="col-md-2 col-md-offset-4 text-center">
-                            <a href="<?= base_url() ?>">
-                                <button id="back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
-                            </a>
+                            <button id="btn_back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
                         </div>
                     </div>
 

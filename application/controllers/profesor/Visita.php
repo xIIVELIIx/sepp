@@ -31,10 +31,9 @@ class Visita extends CI_Controller {
     }
 
     public function view($id_visita) {
-
-        $lista_items = $this->visita_model->SelectAllItems();
+        $lista_items = $this->visita_model->SelectAllItems($id_visita);
         $visita = $this->visita_model->SelectVisitaById($id_visita);
-
+        
         $html = items_list_table($lista_items);
         $data["nav"] = "nav_profesor";
         $data["titulo"] = "Agregar una nueva Calificacion - SEPP";

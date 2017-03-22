@@ -8,11 +8,10 @@ $this->load->view("plantilla/$nav");
     <section class="content-header">
         <h1>
             <?= $titulo ?>
-            <small>M&oacute;dulo de Coordinador</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="<?= base_url("test") ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Profesores</li>
+            <li><a href="<?= base_url() ?>"><i class="fa fa-dashboard"></i> Inicio</a></li>
+            <li class="active">Estudiantes</li>
         </ol>
     </section>
 

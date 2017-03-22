@@ -37,8 +37,8 @@
             <thead>
                 <tr>
                     <th>Item de Calificaci&oacute;n</th>
-                    <th>Posibles Valores</th>
-                    <th>Calificaci&oacute;n Guardada</th>
+                    <th>Rango de Calificaci&oacute;n</th>
+                    <th>Calificaci&oacute;n</th>
                     <th>Cambiar Calificaci&oacute;n</th>
                 </tr>
             </thead>
