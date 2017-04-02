@@ -8,7 +8,7 @@ $this->load->view("plantilla/$nav");
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-           <?= $titulo ?>
+            <?= $titulo ?>
         </h1>
         <ol class="breadcrumb">
             <li><a href="<?= base_url() ?>"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -68,7 +68,14 @@ $this->load->view("plantilla/$nav");
                                         <?php if ($profesor !== ''): ?>
                                             <?php $this->load->view("common/estudiantes/partes/info_profesor", $profesor); ?>
                                         <?php else: ?>
-                                            <?php $this->load->view("common/estudiantes/partes/asignar_docente", $profesoresList); ?>
+                                            <?php if ($empresa !== ''): ?>
+                                                <?php $this->load->view("common/estudiantes/partes/asignar_docente", $profesoresList); ?>
+                                            <?php else: ?>
+                                                <div class="alert alert-danger alert-dismissible">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                    <strong><i class="icon fa fa-check"></i>&nbsp;Debe agregar una empresa para poder asignar un docente.</strong>
+                                                </div>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                         <!-- ***   END LOAD VIEW *** --> 
                                     </div>
@@ -163,9 +170,9 @@ $this->load->view("plantilla/$nav");
 //        }
 //
 //    });
-    $('.btn_cancelar').click(function() {
-        $('.modal').modal('hide');
-    });
+//    $('.btn_cancelar').click(function() {
+//        $('.modal').modal('hide');
+//    });
 
 </script>
 

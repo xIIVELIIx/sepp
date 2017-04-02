@@ -239,12 +239,12 @@ if (!function_exists('common_usuario_list_table')) {
                                     <span class=\"glyphicon glyphicon-ok\"></span>
                                 </button>";
         } else if ($estado === "en_curso") {
-            $optionA_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Aprobado\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+            $optionA_btn = "<button class=\"btn btn-success btn-xs aprobar\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Aprobado\" id =  \"$id\" >
                                     <span class=\"glyphicon glyphicon-ok\"></span>
-                                </a>";
-            $optionB_btn = "<a class=\"btn btn-danger btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Reprobado\" href = \"" . base_url() . "$controller/edit/" . $id . "\" >
+                                </button>";
+            $optionB_btn = "<button class=\"btn btn-danger btn-xs reprobar\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Reprobado\" id =  \"$id\" >
                                     <span class=\"glyphicon glyphicon-remove\"></span>
-                                </a>";
+                                </button>";
         }
         return $optionA_btn . "&nbsp;" . $optionB_btn;
     }

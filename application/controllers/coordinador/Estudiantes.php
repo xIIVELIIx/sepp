@@ -63,7 +63,7 @@ class Estudiantes extends CI_Controller {
         $empresasList = $this->empresa_model->getAll();
         $whereArray = array("usuario.id_rol_usuario = " . ID_ROL_PROFESOR, "usuario.id_estado = " . $this->estados["activo"]);
         $profesoresList = $this->profesor_model->listar($whereArray);
-        
+
         $data["empresa"] = $empresa != NULL ? get_object_vars($empresa[0]) : '';
         $data["estudiante"] = get_object_vars($estudiante[0]);
         $data["profesor"] = $profesor != NULL ? get_object_vars($profesor[0]) : '';
@@ -116,7 +116,7 @@ class Estudiantes extends CI_Controller {
     public function en_curso($id_estudiante, $id_profesor) {
         if ($this->input->is_ajax_request()) {
             $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
-            $datosPractica = array("id_profesor" => $id_profesor);
+            $datosPractica = array("id_profesor" => $id_profesor, "id_estado_practica" => 3);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
             $whereEstudiante = array("id" => $id_estudiante);
@@ -124,6 +124,40 @@ class Estudiantes extends CI_Controller {
             $this->estudiante_model->update($datosEstudiante, $whereEstudiante);
 
             $this->session->set_flashdata('message', "Docente asignado exitosamente.");
+            echo json_encode("correcto");
+        } else {
+            redirect("coordinador/estudiantes");
+        }
+    }
+
+    public function aprobar($id_estudiante, $nota) {
+        if ($this->input->is_ajax_request()) {
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 3); /* 1 = practica_preinscrita 3 = practica_en_curso 4 = practica_aprobada */
+            $datosPractica = array("calificacion_final" => $nota, "id_estado_practica" => 4);
+            $this->practica_profesional_model->update($datosPractica, $wherePractica);
+
+            $where = array("id" => $id_estudiante);
+            $datos = array("id_estado" => $this->estados["aprobado"]); /* estado aprobado */
+            $this->estudiante_model->update($datos, $where);
+
+            $this->session->set_flashdata('message', "Usuario aprobado exitosamente.");
+            echo json_encode("correcto");
+        } else {
+            redirect("coordinador/estudiantes");
+        }
+    }
+
+    public function reprobar($id_estudiante, $nota) {
+        if ($this->input->is_ajax_request()) {
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 3); /* 1 = practica_preinscrita 3 = practica_en_curso 5 = practica_reprobada */
+            $datosPractica = array("calificacion_final" => $nota, "id_estado_practica" => 5);
+            $this->practica_profesional_model->update($datosPractica, $wherePractica);
+
+            $where = array("id" => $id_estudiante);
+            $datos = array("id_estado" => $this->estados["reprobado"]); /* estado reprobado */
+            $this->estudiante_model->update($datos, $where);
+
+            $this->session->set_flashdata('error', "Usuario reprobado exitosamente.");
             echo json_encode("correcto");
         } else {
             redirect("coordinador/estudiantes");

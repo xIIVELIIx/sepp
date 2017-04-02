@@ -68,6 +68,52 @@ $this->load->view("plantilla/$nav");
 </div><!-- /.content-wrapper -->
 
 <!-- Modal -->
+<div class="modal fade" id="aprobar_modal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="padding:40px 50px;">
+                <div id="msj4" class="alert alert-warning" role="alert" hidden></div>
+                <div class="row" align="center">
+                    <h3>Aprobar Alumno</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="valAprobar">
+                    </div><br>
+                    <div class="form-group">
+                        <input type="hidden" id="aprobar_id" value="" />
+                        <button class="btn btn-default btn_cancelar"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
+                        <button id="btn_aprobar" class="btn btn-success"><span class="glyphicon glyphicon-ok-circle">&nbsp</span>Aprobar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="reprobar_modal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="padding:40px 50px;">
+                <div id="msj3" class="alert alert-warning" role="alert" hidden></div>
+                <div class="row" align="center">
+                    <h3>Reaprobar Alumno</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="valReprobar">
+                    </div><br>
+                    <div class="form-group">
+                        <input type="hidden" id="reprobar_id" value="" />
+                        <button class="btn btn-default btn_cancelar"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
+                        <button id="btn_reprobar" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle">&nbsp</span>Reprobar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" id="vincular_modal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -146,6 +192,26 @@ $this->load->view("plantilla/$nav");
 
 
 <script>
+    $(".aprobar").click(function() {
+
+        $('#aprobar_modal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        });
+
+        document.getElementById("aprobar_id").value = this.id;
+
+    });
+    $(".reprobar").click(function() {
+
+        $('#reprobar_modal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        });
+
+        document.getElementById("reprobar_id").value = this.id;
+
+    });
     $(".vincular").click(function() {
 
         $('#vincular_modal').modal({
@@ -178,7 +244,7 @@ $this->load->view("plantilla/$nav");
         document.getElementById("en_curso_id").value = this.id;
 
     });
-    
+
 </script>
 
 <script>
@@ -202,7 +268,7 @@ $this->load->view("plantilla/$nav");
             $("#empresas_id").focus();
         }
     });
-    
+
 </script>
 
 <script>
@@ -232,7 +298,7 @@ $this->load->view("plantilla/$nav");
         if (id_profesor !== "") {
             $.ajax({
                 type: 'POST',
-                url: "<?= base_url("coordinador/estudiantes/en_curso/") ?>" + id_usuario +"/"+ id_profesor,
+                url: "<?= base_url("coordinador/estudiantes/en_curso/") ?>" + id_usuario + "/" + id_profesor,
                 dataType: 'json',
                 success: function(data) {
                     window.location.href = "<?= base_url("coordinador/estudiantes") ?>";
@@ -240,6 +306,54 @@ $this->load->view("plantilla/$nav");
             });
         } else {
             $("#msj2").append("<p>Debes seleccionar algun Docente.</p>").show();
+            $("#profesor_id").focus();
+        }
+    });
+
+</script>
+
+<script>
+
+    $('#btn_aprobar').click(function(e) {
+        var id_usuario = document.getElementById("aprobar_id").value;
+        var val_nota = parseFloat(document.getElementById("valAprobar").value);
+        alert(val_nota);
+        $("#msj4").hide().empty();
+        if (val_nota >= 3 && val_nota <= 5) {
+            $.ajax({
+                type: 'POST',
+                url: "<?= base_url("coordinador/estudiantes/aprobar/") ?>" + id_usuario + "/" + val_nota,
+                dataType: 'json',
+                success: function(data) {
+                    window.location.href = "<?= base_url("coordinador/estudiantes") ?>";
+                }
+            });
+        } else {
+            $("#msj4").append("<p>La nota debe estar dada entre 3 y 5</p>").show();
+            $("#profesor_id").focus();
+        }
+    });
+
+</script>
+
+<script>
+
+    $('#btn_reprobar').click(function(e) {
+        var id_usuario = document.getElementById("reprobar_id").value;
+        var val_nota = parseFloat(document.getElementById("valReprobar").value);
+        $("#msj3").hide().empty();
+        alert(val_nota);
+        if (val_nota >= 0 && val_nota < 3) {
+            $.ajax({
+                type: 'POST',
+                url: "<?= base_url("coordinador/estudiantes/reprobar/") ?>" + id_usuario + "/" + val_nota,
+                dataType: 'json',
+                success: function(data) {
+                    window.location.href = "<?= base_url("coordinador/estudiantes") ?>";
+                }
+            });
+        } else {
+            $("#msj3").append("<p>La nota debe estar dada entre 0 y 2.9</p>").show();
             $("#profesor_id").focus();
         }
     });
