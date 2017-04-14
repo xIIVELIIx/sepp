@@ -107,20 +107,6 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" id="id_programaDiv" hidden>
-            <label>Programa<span class="required">*</span>
-            </label>
-            <div class="input-group">            
-                <div class="input-group-addon">  
-                    <i class="fa fa-graduation-cap"></i> 
-                </div>
-                <select name="id_programa" id="id_programa" required="required" class="form-control">
-                    <option value="">Seleccione el programa</option>
-                </select>
-            </div>
-        </div>
-
-
         <div class="form-group">
             <label>Sede<span class="required">*</span>
             </label>

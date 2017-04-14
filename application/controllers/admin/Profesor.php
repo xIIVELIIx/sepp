@@ -21,20 +21,18 @@ class Profesor extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
+        if ($this->session->userdata("id_rol_usuario") != ID_ROL_ADMINISTRADOR || $this->user_model->isLoggedIn() !== TRUE) {
+            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
+            redirect('user/login');
+        }
         $this->load->model('profesor_model');
         $this->load->helper('html_builder_helper');
     }
 
     public function index() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
-        $lista_profesores = $this->profesor_model->getAll();
+        $lista_profesores = $this->profesor_model->listar();
         //die(print_r($lista_profesores,true));
-        $html = usuario_list_table($lista_profesores,'profesor');
+        $html = usuario_list_table($lista_profesores, 'profesor');
 
         $data ["titulo"] = "Lista de profesores";
         $data ["html"] = $html;
@@ -42,28 +40,16 @@ class Profesor extends CI_Controller {
     }
 
     public function view($id) {
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-        
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
-        
-        $data["profesor"] = get_object_vars($this->profesor_model->get($id)[0]);
+
+        $data["profesor"] = get_object_vars($this->profesor_model->obtener($id)[0]);
         $data ["titulo"] = "Detalles de un profesor - SEPP";
-        
+
         $this->load->view("admin/profesor/view", $data);
-        
     }
 
     public function add() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
 
@@ -75,9 +61,10 @@ class Profesor extends CI_Controller {
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
 
             $this->load->view("admin/profesor/add", $data);
+            
         } else {
 
-            $this->form_validation->set_rules($this->user_model->getValidationRules());
+            $this->form_validation->set_rules($this->profesor_model->getValidationRules());
 
             if ($this->form_validation->run() === FALSE) {
 
@@ -97,16 +84,10 @@ class Profesor extends CI_Controller {
     }
 
     public function edit($id = "") {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $this->load->model("facultades_model");
         $this->load->model("sedes_model");
-        $datosProfesor = $this->profesor_model->get($id);
-        if($datosProfesor == NULL){
+        $datosProfesor = $this->profesor_model->obtener($id);
+        if ($datosProfesor == NULL) {
             redirect('admin/profesor', 'refresh');
         }
         $data["sedes"] = $this->sedes_model->SelectAllSedes();
@@ -119,14 +100,14 @@ class Profesor extends CI_Controller {
             $this->load->view("admin/profesor/edit", $data);
         } else {
             $regla = "update";
-            $this->form_validation->set_rules($this->user_model->getValidationRules($regla));
+            $this->form_validation->set_rules($this->profesor_model->getValidationRules($regla));
 
             if ($this->form_validation->run() === FALSE) {
 
                 $this->load->view("admin/profesor/edit", $data);
             } else {
 
-                if ($this->profesor_model->update($this->input->post())) {
+                if ($this->profesor_model->update($this->input->post(),["id" => $this->input->post('id')])) {
 
                     $this->session->set_flashdata('message', "Usuario actualizado exitosamente.");
                     redirect('admin/profesor');
@@ -138,13 +119,8 @@ class Profesor extends CI_Controller {
     }
 
     public function remove($id) {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         if ($this->input->is_ajax_request()) {
-            $this->profesor_model->delete(['id' => $id]);
+            $this->profesor_model->actualizarEstado(['id' => $id],"inactivo");
             $this->session->set_flashdata('message', "Usuario deshabilitado exitosamente.");
             echo json_encode("correcto");
         } else {
@@ -154,13 +130,8 @@ class Profesor extends CI_Controller {
     }
     
     public function enable($id) {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         if ($this->input->is_ajax_request()) {
-            $this->profesor_model->enable(['id' => $id]);
+            $this->profesor_model->actualizarEstado(['id' => $id],"activo");
             $this->session->set_flashdata('error', "Usuario habilitado exitosamente.");
             echo json_encode("correcto");
         } else {

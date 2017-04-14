@@ -25,18 +25,26 @@ class Aptitud_profesional_model extends CI_Model {
     }
     
     
-    public function getAll(){
+    public function getAll($where = array()){
         
-        $sql = "SELECT aptitud_profesional.*, categorias_aptitudes.nombre  AS categoria  
-                FROM aptitud_profesional
-                JOIN categorias_aptitudes ON categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud
-                ORDER BY aptitud_profesional.id ASC";
+        // select
+        $this->db->select(["aptitud_profesional.*", "categorias_aptitudes.nombre  AS categoria"]);
+        $this->db->join('categorias_aptitudes', 'categorias_aptitudes.id = aptitud_profesional.id_categoria_aptitud');
         
-        $query = $this->db->query($sql);
+        foreach($where as $key => $value){
+            $this->db->where($key, $value);
+        }
+        
+        $this->db->order_by("aptitud_profesional.nombre ASC");
+        
+        $query = $this->db->get($this->tabla);
         $result = $query->result();
        
         return $result;
+        
+        
     }
+    
     
     public function get($id_aptitud){
         

@@ -9,7 +9,7 @@ $this->load->view("plantilla/nav");
     <section class="content-header">
         <h1>
             <?= $titulo ?>
-            <small>M&oacute;dulo de Administrador</small>
+            
         </h1>
         <ol class="breadcrumb">
             <li><a href="<?= base_url("test") ?>"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -45,7 +45,6 @@ $this->load->view("plantilla/nav");
                                     <th>Direcci&oacute;n</th>
                                     <th>Ciudad</th>
                                     <th>Telefono</th>
-                                    <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -55,7 +54,6 @@ $this->load->view("plantilla/nav");
                                     <th>Direcci&oacute;n</th>
                                     <th>Ciudad</th>
                                     <th>Telefono</th>
-                                    <th>Estado</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </tfoot>

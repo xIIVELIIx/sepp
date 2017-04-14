@@ -95,3 +95,4 @@ define('ID_ROL_ADMINISTRADOR',1);
 define('ID_ROL_COORDINADOR',2);
 define('ID_ROL_PROFESOR',3);
 define('ID_ROL_ESTUDIANTE',4);
+define('ID_ROL_EMPRESA',5);

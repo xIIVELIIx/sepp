@@ -15,15 +15,15 @@ class Modalidad extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        if ($this->session->userdata("id_rol_usuario") != ID_ROL_ADMINISTRADOR || $this->user_model->isLoggedIn() !== TRUE) {
+            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
+            redirect('user/login');
+        }
         $this->load->model("modalidad_model");
         $this->load->helper('html_builder_helper');
     }
 
     public function index() {
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         $lista_modalidades = $this->modalidad_model->getAll();
         $html = modalidad_list_table($lista_modalidades);
         $data ["titulo"] = "Lista de modalidades - SEPP";
@@ -32,12 +32,6 @@ class Modalidad extends CI_Controller {
     }
 
     public function add() {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $data ["titulo"] = "Agregar una nueva modalidad - SEPP";
 
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
@@ -64,12 +58,6 @@ class Modalidad extends CI_Controller {
     }
 
     public function edit($id = "") {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
-
         $datosModalidad = $this->modalidad_model->get($id);
         if ($datosModalidad == NULL) {
             redirect('admin/modalidad', 'refresh');
@@ -100,17 +88,23 @@ class Modalidad extends CI_Controller {
     }
 
     public function remove($id = '') {
-
-        if ($this->user_model->isLoggedIn() !== TRUE) {
-            $this->session->set_flashdata('error', "Debe autenticarse para ingresar a &eacute;sta opci&oacute;n.");
-            redirect('user/login');
-        }
         if ($id !== '' && $this->input->is_ajax_request()) {
             $this->modalidad_model->delete(['id' => $id]);
             $this->session->set_flashdata('error', "Modalidad deshabilitada exitosamente.");
             echo json_encode("correcto");
         } else {
             $this->session->set_flashdata('error', "Petici&oacute; no permitida.");
+            redirect('admin/profesor');
+        }
+    }
+    
+    public function enable($id) {
+        if ($this->input->is_ajax_request()) {
+            $this->modalidad_model->enable(['id' => $id]);
+            $this->session->set_flashdata('message', "Modalidad habilitada exitosamente.");
+            echo json_encode("correcto");
+        } else {
+            $this->session->set_flashdata('error', "Petici&oacute;n no permitida.");
             redirect('admin/profesor');
         }
     }

@@ -72,6 +72,8 @@ $this->load->view("plantilla/nav");
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
+
+
 <!-- Modal -->
 <div class="modal fade" id="remove_modal" role="dialog">
     <div class="modal-dialog">
@@ -92,7 +94,25 @@ $this->load->view("plantilla/nav");
     </div>
 </div>
 
-
+<!-- Modal -->
+<div class="modal fade" id="enable_modal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="padding:40px 50px;">
+                <div class="row" align="center">
+                    <h3>&iquest;Confirma habilitar nuevamente la modalidad?</h3>
+                    <div id="msj" class="alert alert-danger hide" role="alert"></div>
+                    <div class="form-group">
+                        <input type="hidden" id="enable_id" value="" />
+                        <button id="btn_cancelar_enable" class="btn btn-default"><span class="glyphicon glyphicon-repeat">&nbsp</span>Cancelar</button>
+                        <button id="btn_enable" class="btn btn-info"><span class="glyphicon glyphicon-check">&nbsp</span>Habilitar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php $this->load->view("plantilla/footer"); ?>
 
@@ -108,6 +128,18 @@ $this->load->view("plantilla/nav");
         document.getElementById("remove_id").value = this.id;
 
     });
+    
+     $(".enable").click(function() {
+
+        $('#enable_modal').modal({
+            keyboard: false,
+            backdrop: 'static'
+        });
+
+        document.getElementById("enable_id").value = this.id;
+
+    });
+    
 </script>
 
 <script>
@@ -128,6 +160,29 @@ $this->load->view("plantilla/nav");
 
     $('#btn_cancelar').click(function() {
         $('#remove_modal').modal('hide');
+    });
+
+</script>
+
+
+<script>
+
+    $('#btn_enable').click(function(e) {
+
+        var id_usuario = document.getElementById("enable_id").value;
+
+        $.ajax({
+            type: 'POST',
+            url: "<?= base_url("admin/modalidad/enable/") ?>" + id_usuario,
+            dataType: 'json',
+            success: function(data) {
+                window.location.href = "<?= base_url("admin/categoria_aptitud") ?>";
+            }
+        });
+    });
+
+    $('#btn_cancelar_enable').click(function() {
+        $('#enable_modal').modal('hide');
     });
 
 </script>
