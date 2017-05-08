@@ -18,11 +18,9 @@ $this->load->view("plantilla/$nav");
 
     <!-- Main content -->
     <section class="content">
-
+        
         <!-- Main row -->
         <div class="row">
-
-            <div class="col-md-12">
                 <div class="box box-solid">
                     <?= show_notification(); ?>
                     <div class="box-header">
@@ -32,28 +30,44 @@ $this->load->view("plantilla/$nav");
                     </div>
 
                     <div class="box-body">
+                        
+                        <div class="row">
+                
+                            <input type="hidden" id="estudiante_id" value="<?= $estudiante["id"] ?>">
+                            
+                            <!-- INFORMACION GENERAL -->
+                            
+                            <?php $this->load->view("common/estudiantes/partes/info_general", $estudiante); ?>
+                            
+                            
+                            <!-- INFROMACION DE PERFIL PROFESIONAL -->
+                            
+                            <div class="col-md-12">
+                                <hr>
+                                <h2>Perfil Profesional</h2>
+                            </div>
+                            
+                            <div class="row-md">
+                            
+                            <?php $this->load->view("common/estudiantes/partes/info_aptitud_profesional", $aptitud_profesional); ?>
+                            <?php $this->load->view("common/estudiantes/partes/info_perfil_profesional", $estudiante , $perfil_personalizado ); ?>
+                                
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <hr>
+                                <h2>Pr&aacute;ctica Profesional</h2>
+                                <?php var_dump($practica); ?>
+                                <?php $this->load->view("common/estudiantes/partes/info_practica", $practica, $profesor, $estudiante , $perfil_personalizado ); ?>
+                                
+                            </div>
+                        
+                        </div>
+                        
+                        
                         <div class="box-group" id="accordion">
                             <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                            <div class="panel box box-primary">
-                                <div class="box-header with-border">
-                                    <h4 class="box-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                            Información General - <?= $estudiante["nombre"] . ' ' . $estudiante["apellido"] ?>
-                                            <input type="hidden" id="estudiante_id" value="<?= $estudiante["id"] ?>">
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapseOne" class="panel-collapse collapse in">
-                                    <div class="box-body">
-                                        <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong><i class="icon fa fa-check"></i>', '</strong></div>') ?>
-                                        <?= form_open("coordinador/estudiantes/edit/" . $estudiante["id"]) ?>                    
-                                        <!-- ***   LOAD VIEW *** --> 
-                                        <?php $this->load->view("common/estudiantes/partes/info_general", $estudiante); ?>
-                                        <!-- ***   END LOAD VIEW *** --> 
-                                        <?= form_close() ?>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="panel box box-danger">
                                 <div class="box-header with-border">
                                     <h4 class="box-title">
@@ -134,6 +148,9 @@ $this->load->view("plantilla/$nav");
                                 </div>
                             </div>
                         </div>
+                    
+                    
+                    
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div><!-- /.col -->

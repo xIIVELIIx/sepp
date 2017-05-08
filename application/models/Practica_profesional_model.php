@@ -50,10 +50,11 @@ class Practica_profesional_model extends CI_Model {
        
 
     public function SelectPracticaByIdEstudiante($id_estudiante) {
-        $sql = "SELECT practica_profesional.*, modalidad_practica.nombre AS modalidad_practica , empresas.nombre AS empresa
+        $sql = "SELECT practica_profesional.*, modalidad_practica.nombre AS modalidad_practica , empresas.nombre AS empresa, estados_practica.descripcion as estado 
         FROM practica_profesional 
         JOIN usuario ON usuario.id = practica_profesional.id_estudiante
         JOIN modalidad_practica ON modalidad_practica.id = practica_profesional.id_modalidad
+        JOIN estados_practica ON estados_practica.id = practica_profesional.id_estado_practica
         LEFT JOIN empresas ON empresas.id = practica_profesional.id_empresa
         WHERE practica_profesional.id_estudiante = $id_estudiante";
         $query = $this->db->query($sql);

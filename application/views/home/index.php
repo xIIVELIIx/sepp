@@ -56,7 +56,7 @@
                         <a href="#ventajas">Ventajas</a>
                     </li>
                     <li>
-                        <a href="#quien">&iquest;Qu&iacute;enes  aplicar?</a>
+                        <a href="#quien">&iquest;Qu&iacute;enes  aplican?</a>
                     </li>
                     <li>
                         <a href="#aplicar">Reg&iacute;strate</a>
