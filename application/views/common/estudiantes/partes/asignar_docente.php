@@ -33,7 +33,7 @@
             backdrop: 'static'
         });
 
-        document.getElementById("en_curso_id").value = this.id;
+        //document.getElementById("en_curso_id").value = this.id;
 
     });
 </script>

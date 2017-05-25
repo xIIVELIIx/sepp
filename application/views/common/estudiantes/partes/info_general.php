@@ -2,16 +2,22 @@
     <img class="img-responsive" src="<?= @$url_foto ?>">
 </div>
 <div class="col-md-8">
-    <h1 class="text-primary"><?= @$nombre . ' ' . @$apellido ?></h1>
     <table class="table table-responsive">
+        <tr>
+            <td class="text-info">Nombre:</td><td><?= @$nombre . ' ' . @$apellido ?></td>
+        </tr>
         <tr>
             <td class="text-info">C&eacute;dula:</td><td><?= @$cedula ?></td>
         </tr>
         <tr>
-            <td class="text-info">E-mail Uniminuto:</td><td><?= @$email1 ?></td>
+            <td class="text-info">E-mail Uniminuto:</td><td><?= @$email1 ?>
+                &nbsp;
+                <button class="btn btn-warning"><span id="email_student" class="glyphicon glyphicon-envelope"></span></button>
+            </td>
         </tr>
         <tr>
-            <td class="text-info">E-mail personal:</td><td><?= @$email2 ?></td>
+            <td class="text-info">E-mail personal:</td>
+            <td><?= @$email2 ?></td>
         </tr>
         <tr>
             <td class="text-info">Tel&eacute;fono:</td><td><?= @$telefono ?></td>

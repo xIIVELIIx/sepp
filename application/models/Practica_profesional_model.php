@@ -30,7 +30,8 @@ class Practica_profesional_model extends CI_Model {
     public function insert($data) {
         
         $this->db->insert($this->tabla,$data);
-        return $this->db->affected_rows();
+        return $insert_id = $this->db->insert_id();
+        //return $this->db->affected_rows();
         
     }
     
@@ -50,13 +51,18 @@ class Practica_profesional_model extends CI_Model {
        
 
     public function SelectPracticaByIdEstudiante($id_estudiante) {
-        $sql = "SELECT practica_profesional.*, modalidad_practica.nombre AS modalidad_practica , empresas.nombre AS empresa, estados_practica.descripcion as estado 
-        FROM practica_profesional 
-        JOIN usuario ON usuario.id = practica_profesional.id_estudiante
-        JOIN modalidad_practica ON modalidad_practica.id = practica_profesional.id_modalidad
-        JOIN estados_practica ON estados_practica.id = practica_profesional.id_estado_practica
-        LEFT JOIN empresas ON empresas.id = practica_profesional.id_empresa
-        WHERE practica_profesional.id_estudiante = $id_estudiante";
+        $periodo_actual = $this->session->userdata('periodo_vigente');
+        $sql = "SELECT practica_profesional.*, estados_usuario.descripcion AS estado_usuario, 
+            modalidad_practica.nombre AS modalidad_practica, 
+            empresas.nombre AS empresa, estados_practica.descripcion as estado 
+            FROM practica_profesional 
+            JOIN usuario ON usuario.id = practica_profesional.id_estudiante 
+            JOIN modalidad_practica ON modalidad_practica.id = practica_profesional.id_modalidad 
+            JOIN estados_practica ON estados_practica.id = practica_profesional.id_estado_practica 
+            JOIN estados_usuario ON estados_usuario.id = usuario.id_estado 
+            LEFT JOIN empresas ON empresas.id = practica_profesional.id_empresa
+        WHERE practica_profesional.id_estudiante = $id_estudiante AND id_periodo = $periodo_actual";
+        
         $query = $this->db->query($sql);
         $result = $query->result();
        
@@ -64,12 +70,13 @@ class Practica_profesional_model extends CI_Model {
     }
 
     public function SelectPracticaByIdProfesor($id_profesor) {
+        $periodo_actual = $this->session->userdata('periodo_vigente');
         $sql = "SELECT practica_profesional.*, usuario.*, modalidad_practica.nombre AS modalidad_practica, empresas.nombre AS empresa  
         FROM practica_profesional 
         JOIN usuario ON usuario.id = practica_profesional.id_estudiante
         JOIN modalidad_practica ON modalidad_practica.id = practica_profesional.id_modalidad
         JOIN empresas ON empresas.id = practica_profesional.id_empresa
-        WHERE practica_profesional.id_profesor = $id_profesor";
+        WHERE practica_profesional.id_profesor = $id_profesor AND id_periodo = $periodo_actual";
         $query = $this->db->query($sql);
         $result = $query->result();
        

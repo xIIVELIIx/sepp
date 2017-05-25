@@ -10,6 +10,12 @@
         <br />
         <br />
         <br />
-        <a class="btn btn-info" target="_blank" href="<?= @$estudiante['hoja_vida'] ?>">Ver Hoja de Vida</a>
+        <h4>Hoja de Vida</h4>
+        <?php if($estudiante['hoja_vida'] != ""): ?>
+            <a class="btn btn-info" target="_blank" href="<?= @$estudiante['hoja_vida'] ?>">Ver Hoja de Vida</a>
+        <?php else: ?>
+            <p class="text-info">El estudiante a&uacute;n no ha subido su Hoja de Vida.</p>
+        <?php endif; ?>
+        
     </div>
 </div>

@@ -112,7 +112,7 @@ class User_model extends CI_Model {
 
         // Cabeceras adicionales
         $cabeceras .= 'From: SEPP Uniminuto <no_reply@uniminuto.com>' . "\r\n";
-        $cabeceras .= 'Bcc: fabianortiz87@gmail.com' . "\r\n";
+        $cabeceras .= 'Bcc: fabianortiz87@gmail.com,ctorresbast@uniminuto.edu.co,jmalave6@uniminuto.edu.co,cvelas13@uniminuto.edu.co,ades3674@gmail.com' . "\r\n";
         
         mail($to,$subject,$body,$cabeceras);
     }

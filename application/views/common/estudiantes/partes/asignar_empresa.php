@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-block btn-warning btn-lg" id="vincular">Asignar Empresa</button>
+<button type="button" class="btn  btn-warning" id="vincular">Asignar Empresa</button>
 <!-- Modal -->
 <div class="modal fade" id="vincular_modal" role="dialog">
     <div class="modal-dialog">
@@ -33,7 +33,7 @@
             backdrop: 'static'
         });
 
-        document.getElementById("vincular_id").value = this.id;
+        //document.getElementById("vincular_id").value = this.id;
 
     });
 </script>

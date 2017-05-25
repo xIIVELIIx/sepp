@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of User_Model
+ * Description of Novedad_Model
  *
  * @author fabianortiz
  */
@@ -25,10 +25,11 @@ class Novedad_model extends CI_Model {
         return $this->db->get($this->tabla)->result();
     }
 
-    public function get($id_modalidad) {
-        $this->db->select();
+    public function getByPractica($id_practica) {
+        $this->db->select("novedad.*,CONCAT(usuario.nombre,' ',usuario.apellido) AS nombre_usuario");
         $this->db->from($this->tabla);
-        $this->db->where("id", $id_modalidad);
+        $this->db->join("usuario","usuario.id = novedad.id_practica");
+        $this->db->where("id_practica", $id_practica);
         $query = $this->db->get();
         return $query->result();
     }
@@ -42,15 +43,10 @@ class Novedad_model extends CI_Model {
     public function getValidationRules() {
         $config = array(
             array(
-                'field' => 'id_practica',
-                'label' => 'Pr&aacute;ctica profesional',
-                'rules' => 'is_natural|required'
-            ),
-            array(
                 'field' => 'comentario',
-                'label' => 'Comentario',
+                'label' => 'Comentario/Novedad',
                 'rules' => 'required'
-            )
+            ),
         );
         return $config;
     }

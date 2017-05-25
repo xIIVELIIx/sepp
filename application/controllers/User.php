@@ -79,7 +79,10 @@ class User extends CI_Controller {
 
                     $user_info = get_object_vars($result);
                     $user_info['logged_in'] = TRUE;
-
+                    
+                    //  Periodo de Practica Profesional actual 
+                    $user_info['periodo_vigente'] = $this->periodo_practica_model->get_actual()[0]->id;
+                    
                     $this->session->set_userdata($user_info);
                     $rol = $this->session->userdata("id_rol_usuario");
                     $this->menu($rol);
@@ -176,13 +179,12 @@ class User extends CI_Controller {
 
 
                     $boton = "<button id=\"btn_close\" onclick=\"location.href='". base_url()."user/login'\" class=\"btn btn-info\"><span class=\"glyphicon glyphicon-log-in\">&nbsp</span>Iniciar sesi&oacute;n</button>";
-
-
+                    
                     $this->load->view("home/index",['activation' => compact("resultado","mensaje","boton")]);
                     
                     
                 }else{
-                    die("Shite!.. $id_usuario");
+                    die("Error!.. $id_usuario");
                 }
                 
                 $this->load->view("home/index",['activation' => compact("resultado","mensaje","boton")]);

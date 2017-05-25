@@ -241,15 +241,6 @@ class Estudiante_model extends User_model {
                 'rules' => 'trim|required'
             ),
             array(
-                'field' => 'email1',
-                'label' => 'Correo Uniminuto',
-                'rules' => 'trim|is_unique[usuario.email1]|required|regex_match[/^[a-z0-9](\.?[a-z0-9]){5,}@uniminuto\.edu\.co$/]',
-                'errors' => array(
-                        'is_unique' => 'El correo ya est&aacute; registrado.',
-                        'regex_match' => 'Debe ser una direcci&oacuten de correo de UNIMINUTO v&aacute;lida.',
-                ),
-            ),
-            array(
                 'field' => 'email2',
                 'label' => 'Segundo Email',
                 'rules' => 'trim|valid_email'
@@ -270,6 +261,20 @@ class Estudiante_model extends User_model {
                 'rules' => 'trim|is_natural'
             ),
         );
+        
+        
+        if($tipo !== "update"){
+            array_push($config, array(
+                                    'field' => 'email1',
+                                    'label' => 'Correo Uniminuto',
+                                    'rules' => 'trim|is_unique[usuario.email1]|required|regex_match[/^[a-z0-9](\.?[a-z0-9]){5,}@uniminuto\.edu\.co$/]',
+                                    'errors' => array(
+                                            'is_unique' => 'El correo ya est&aacute; registrado.',
+                                            'regex_match' => 'Debe ser una direcci&oacuten de correo de UNIMINUTO v&aacute;lida.',
+                                    ),
+                                ));
+        }
+        
         return $config;
     }
     

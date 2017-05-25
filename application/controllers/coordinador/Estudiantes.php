@@ -25,6 +25,7 @@ class Estudiantes extends CI_Controller {
         $this->load->model("estudiante_model");
         $this->load->model("profesor_model");
         $this->load->model("empresa_model");
+        $this->load->model("novedad_model");
         $this->load->model("practica_profesional_model");
     }
 
@@ -52,7 +53,8 @@ class Estudiantes extends CI_Controller {
     public function view($id_estudiante) {
         $this->load->model("modalidad_model");
         $this->load->model("visita_model");
-
+        $this->load->model("novedad_model");
+        
         $where_array = array("usuario.id = " . $id_estudiante);
         $estudiante = $this->estudiante_model->detalleEstudiantes($where_array);
         $profesor = $this->profesor_model->obtener($estudiante[0]->id_profesor);
@@ -61,6 +63,8 @@ class Estudiantes extends CI_Controller {
         $modalidad = $this->modalidad_model->get($estudiante[0]->id_modalidad);
         $practica = $this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante);
         $empresasList = $this->empresa_model->getAll();
+        $novedades = $this->novedad_model->getByPractica($practica[0]->id);
+        
         $whereArray = array("usuario.id_rol_usuario = " . ID_ROL_PROFESOR, "usuario.id_estado = " . $this->estados["activo"]);
         $profesoresList = $this->profesor_model->listar($whereArray);
 
@@ -70,6 +74,7 @@ class Estudiantes extends CI_Controller {
         $data["aptitud_profesional"] = $aptitud_profesional;
         $data["modalidad"] = get_object_vars($modalidad[0]);
         $data["practica"] = get_object_vars($practica[0]);
+        $data["novedades"] = $novedades;
         $data["empresasList"] = $empresasList;
         $data["profesoresList"] = $profesoresList;
 
@@ -85,7 +90,11 @@ class Estudiantes extends CI_Controller {
 
     public function vincular($id_estudiante, $id_empresa) {
         if ($this->input->is_ajax_request()) {
-            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
+            $practica = get_object_vars($this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante)[0]);
+            
+            $wherePractica = array("id_estudiante" => $id_estudiante, 
+                                    "id_estado_practica" => 1, /* 1 = practica_preinscrita 3 = practica_en_curso */
+                                    "id_periodo" => $this->session->userdata('periodo_vigente')); 
             $datosPractica = array("id_empresa" => $id_empresa);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
@@ -94,18 +103,32 @@ class Estudiantes extends CI_Controller {
             $this->estudiante_model->update($datosEstudiante, $whereEstudiante);
 
             $this->session->set_flashdata('message', "Usuario vinculado exitosamente.");
+            
+            $empresa = strtoupper($this->empresa_model->get($id_empresa)[0]->nombre);
+            
+            // Ingresar novedad
+            $this->novedad_model->insert(['comentario' => "El estudiante ha sido vinculado con la empresa $empresa para el ejercicio de la práctica profesional.",
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $practica['id']]);
+            
             echo json_encode("correcto");
         } else {
             redirect("coordinador/estudiantes");
         }
     }
 
-    public function descartar($id_estudiante) {
+    public function descartar($id_estudiante, $comentario = "") {
+        $practica = get_object_vars($this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante)[0]);
         if ($this->input->is_ajax_request()) {
             $where = array("id" => $id_estudiante);
             $datos = array("id_estado" => $this->estados["descartado"]); /* estado Descartado */
             $this->estudiante_model->update($datos, $where);
-
+            // Ingresar novedad
+            $this->novedad_model->insert(['comentario' => "USUARIO DESCARTADO PARA CURSAR PRACTICA PROFESIONAL: $comentario",
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $practica['id']]);
+            
+            
             $this->session->set_flashdata('error', "Usuario descartado exitosamente.");
             echo json_encode("correcto");
         } else {
@@ -114,8 +137,11 @@ class Estudiantes extends CI_Controller {
     }
 
     public function en_curso($id_estudiante, $id_profesor) {
+        
         if ($this->input->is_ajax_request()) {
-            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1); /* 1 = practica_preinscrita 3 = practica_en_curso */
+            $practica = get_object_vars($this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante)[0]);
+            
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 1, "id_periodo" => $this->session->userdata('periodo_vigente')); /* 1 = practica_preinscrita 3 = practica_en_curso */
             $datosPractica = array("id_profesor" => $id_profesor, "id_estado_practica" => 3);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
@@ -124,6 +150,16 @@ class Estudiantes extends CI_Controller {
             $this->estudiante_model->update($datosEstudiante, $whereEstudiante);
 
             $this->session->set_flashdata('message', "Docente asignado exitosamente.");
+            
+            $datos_profesor = $this->profesor_model->obtener($id_profesor)[0];
+            $profesor = strtoupper($datos_profesor->nombre." ".$datos_profesor->apellido);
+
+            // Ingresar novedad
+            $this->novedad_model->insert(['comentario' => "El profesor $profesor ha sido asignado como tutor de la Práctica Profesional.",
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $practica['id']]);
+
+
             echo json_encode("correcto");
         } else {
             redirect("coordinador/estudiantes");
@@ -131,8 +167,9 @@ class Estudiantes extends CI_Controller {
     }
 
     public function aprobar($id_estudiante, $nota) {
+        $practica = get_object_vars($this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante));
         if ($this->input->is_ajax_request()) {
-            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 3); /* 1 = practica_preinscrita 3 = practica_en_curso 4 = practica_aprobada */
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 3,"id_periodo" => $this->session->userdata('periodo_vigente')[0]); /* 1 = practica_preinscrita 3 = practica_en_curso 4 = practica_aprobada */
             $datosPractica = array("calificacion_final" => $nota, "id_estado_practica" => 4);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
@@ -141,6 +178,11 @@ class Estudiantes extends CI_Controller {
             $this->estudiante_model->update($datos, $where);
 
             $this->session->set_flashdata('message', "Usuario aprobado exitosamente.");
+            // Ingresar novedad
+            $this->novedad_model->insert(['comentario' => "El estudiante ha APROBADO la práctica profesional.",
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $practica['id']]);
+            
             echo json_encode("correcto");
         } else {
             redirect("coordinador/estudiantes");
@@ -148,8 +190,9 @@ class Estudiantes extends CI_Controller {
     }
 
     public function reprobar($id_estudiante, $nota) {
+        $practica = get_object_vars($this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante));
         if ($this->input->is_ajax_request()) {
-            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 3); /* 1 = practica_preinscrita 3 = practica_en_curso 5 = practica_reprobada */
+            $wherePractica = array("id_estudiante" => $id_estudiante, "id_estado_practica" => 3,"id_periodo" => $this->session->userdata('periodo_vigente')[0]); /* 1 = practica_preinscrita 3 = practica_en_curso 5 = practica_reprobada */
             $datosPractica = array("calificacion_final" => $nota, "id_estado_practica" => 5);
             $this->practica_profesional_model->update($datosPractica, $wherePractica);
 
@@ -158,6 +201,11 @@ class Estudiantes extends CI_Controller {
             $this->estudiante_model->update($datos, $where);
 
             $this->session->set_flashdata('error', "Usuario reprobado exitosamente.");
+            // Ingresar novedad
+            $this->novedad_model->insert(['comentario' => "El estudiante ha APROBADO la práctca profesional.",
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $practica['id']]);
+            
             echo json_encode("correcto");
         } else {
             redirect("coordinador/estudiantes");
