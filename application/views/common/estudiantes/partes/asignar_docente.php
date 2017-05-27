@@ -1,4 +1,5 @@
-<button type="button" class="btn btn-block btn-warning btn-lg" id="en_curso">Asignar Docente</button>
+<span class="text-info">No hay un profesor asignado</span>&nbsp;
+<button type="button" class="btn btn-warning btn-sm" id="en_curso">Asignar Docente</button>
 <!-- Modal -->
 <div class="modal fade" id="en_curso_modal" role="dialog">
     <div class="modal-dialog">

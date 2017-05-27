@@ -25,6 +25,7 @@ class Estudiantes extends CI_Controller {
         $this->load->model("visita_model");
         $this->load->model("estudiante_model");
         $this->load->model("empresa_model");
+        $this->load->model("novedad_model");
     }
 
     public function index() {
@@ -54,6 +55,7 @@ class Estudiantes extends CI_Controller {
         $modalidad = $this->modalidad_model->get($estudiante[0]->id_modalidad);
         $practica = $this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante);
         $perfil_personalizado = $this->estudiante_model->obtenerPerfilProfPersonalizado($id_estudiante);
+        $novedades = $this->novedad_model->getByPractica($practica[0]->id);
         
         $data["empresa"] = get_object_vars($empresa[0]);
         $data["estudiante"] = get_object_vars($estudiante[0]);
@@ -61,7 +63,8 @@ class Estudiantes extends CI_Controller {
         $data["aptitud_profesional"] = $aptitud_profesional;
         $data["modalidad"] = get_object_vars($modalidad[0]);
         $data["practica"] = get_object_vars($practica[0]);
-        $data["perfil_personalizado"] = get_object_vars($perfil_personalizado[0]);
+        $data["perfil_personalizado"] = (!empty($perfil_personalizado[0])) ? get_object_vars($perfil_personalizado[0]) : "";
+        $data["novedades"] = $novedades;
         
         
         //CARGAR LAS VISITAS

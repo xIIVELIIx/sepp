@@ -28,6 +28,8 @@ class Visita extends CI_Controller {
         
         $this->load->model('visita_model');
         $this->load->helper('html_builder_helper');
+        $this->load->model("novedad_model");
+        $this->load->model("practica_profesional_model");
     }
 
     public function view($id_visita) {
@@ -61,20 +63,31 @@ class Visita extends CI_Controller {
 
     
 
-    public function add($id_practica) {
+    public function add() {
 
-        $data["id_practica"] = $id_practica;
+        $data["id_practica"] = $this->input->post('id_practica');
         $data["titulo"] = "Agregar una nueva Visita - SEPP";
-        $data["id_practica"] = $id_practica;
         $data["nav"] = "nav_profesor";
         
-
         if ($_SERVER['REQUEST_METHOD'] !== "POST") {
             $this->load->view("profesor/visita/add", $data);
         }else {
             if ($this->visita_model->insert($this->input->post())) {
+                
+                $practica = $this->practica_profesional_model->getAll(['id' => $this->input->post('id_practica')])[0];
+                
                 $this->session->set_flashdata('message', "Visita Agregada exitosamente.");
-                redirect(base_url()."profesor/estudiantes");
+                
+                $comentario = "Visita agendada para ".$this->input->post('fecha');
+                
+                // Ingresar novedad
+                $this->novedad_model->insert(['comentario' => $comentario,
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $this->input->post('id_practica')]);
+                
+                
+                redirect(base_url()."profesor/estudiantes/view/".$practica->id_estudiante);
+                
             } else {
                 $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
                 redirect(base_url()."profesor/estudiantes");
@@ -96,7 +109,22 @@ class Visita extends CI_Controller {
         } else {
             if ($this->visita_model->update($this->input->post())) {
                 $this->session->set_flashdata('message', "Visita actualizada exitosamente.");
-                redirect(base_url()."profesor/estudiantes");
+                $practica = $this->practica_profesional_model->getAll(['id' => $this->input->post('id_practica')])[0];
+                
+                $comentario = "";
+                if($this->input->post('estado_visita')=="agendada"){
+                    $comentario = "Visita re-agendada para ".$this->input->post('fecha');
+                }else if($this->input->post('cancelada')==""){
+                    $comentario = "Visita cancelada";
+                }else{
+                    $comentario = "Visita realizada";
+                }
+                // Ingresar novedad
+                $this->novedad_model->insert(['comentario' => $comentario,
+                                            'id_usuario' => $this->session->userdata('id'),
+                                            'id_practica' => $this->input->post('id_practica')]);
+                
+                redirect(base_url()."profesor/estudiantes/view/".$practica->id_estudiante);
             } else {
                 $this->session->set_flashdata('error', "Ocurrio un error, intente nuevamente.");
                 $this->load->view("profesor/visita/edit", $data);

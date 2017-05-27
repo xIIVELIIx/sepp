@@ -290,4 +290,11 @@ $this->load->view("plantilla/$nav");
 
 </script>
 
+<script>
+    
+$('.btn_cancelar').click(function() {
+    $('.modal').modal('hide');
+});
+
+</script>
 <?php $this->load->view("plantilla/footer"); ?>
