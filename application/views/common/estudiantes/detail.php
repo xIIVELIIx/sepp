@@ -25,7 +25,11 @@ $this->load->view("plantilla/$nav");
                     <?= show_notification(); ?>
                     <div class="box-header">
                         <div class="col-md-2 col-md-offset-10 text-center">
-                            <button id="btn_back" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</button>
+                            <?php if($this->session->userdata("id_rol_usuario") == ID_ROL_PROFESOR): ?>
+                                <a href="<?= base_url()."profesor/estudiantes" ?>" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</a>
+                            <?php else: ?>
+                                <a href="<?= base_url()."coordinador/estudiantes" ?>" class="btn btn-small btn-default"><span class="glyphicon glyphicon-arrow-left">&nbsp;</span>Volver</a>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -63,7 +67,7 @@ $this->load->view("plantilla/$nav");
                                             
                                         <!-- INFROMACION DE PERFIL PROFESIONAL -->
                                         <?php $this->load->view("common/estudiantes/partes/info_aptitud_profesional", $aptitud_profesional); ?>
-                                        <?php $this->load->view("common/estudiantes/partes/info_perfil_profesional", $estudiante , $perfil_personalizado ); ?>
+                                        <?php $this->load->view("common/estudiantes/partes/info_perfil_profesional", @$estudiante , @$perfil_personalizado ); ?>
 
                                         </div>
                                     </div>
@@ -81,11 +85,15 @@ $this->load->view("plantilla/$nav");
                                     <div class="box-body">                 
                                         <div class="col-md-12">
                                             <ul class="nav nav-pills">
-                                                <li class="active"><a data-toggle="tab" href="#home">Resumen de la Pr&aacute;ctica</a></li>
-                                                <li><a data-toggle="pill" href="#menu1">Informaci&oacute;n Laboral</a></li>
-                                                <li><a data-toggle="pill" href="#menu2">Historial de Pr&aacute;ctica</a></li>
-                                                <li><a data-toggle="pill" href="#menu3">Seguimiento</a></li>
-                                                <li><a data-toggle="pill" href="#menu4">Evaluaci&oacute;n</a></li>
+                                                <li class="active"><a data-toggle="tab" href="#home">RESUMEN</a></li>
+                                                <li><a data-toggle="pill" href="#menu1"><b>INFORMACI&Oacute;N LABORAL</b></a></li>
+                                                <?php if ($estudiante['id_estado'] != '3'): ?>
+                                                <li><a data-toggle="pill" href="#menu3"><b>SEGUIMIENTO</b></a></li>
+                                                <?php endif; ?>
+                                                <li><a data-toggle="pill" href="#menu2"><b>HISTORIAL</b></a></li>
+                                                <?php if ($visitas_realizadas == @$modalidad['numero_visitas'] && $this->session->userdata("id_rol_usuario") == ID_ROL_COORDINADOR): ?>
+                                                <!--<li><a data-toggle="pill" href="#menu4"><b>EVALUAR PR&Aacute;CTICA</b></a></li>-->
+                                                <?php endif; ?>
                                             </ul>
 
                                             <div class="tab-content">
@@ -100,10 +108,10 @@ $this->load->view("plantilla/$nav");
                                                 <?php $this->load->view("common/estudiantes/partes/info_practica_historial", $novedades); ?>
                                                 
                                                 <!--    PRACTICA PROFESIONAL TAB VISITAS    -->
-                                                <?php $this->load->view("common/estudiantes/partes/info_practica_visitas", $visitas, $practica ); ?>
+                                                <?php $this->load->view("common/estudiantes/partes/info_practica_visitas", $visitas, $practica, $visitas_realizadas ); ?>
                                                 
                                                 <!--    PRACTICA PROFESIONAL TAB EVALUACION    -->
-                                                <?php $this->load->view("common/estudiantes/partes/info_practica_evaluacion", $practica); ?>
+                                                <?php //$this->load->view("common/estudiantes/partes/info_practica_evaluacion", $practica); ?>
                                                 
                                             </div>
                                         </div>
@@ -114,140 +122,7 @@ $this->load->view("plantilla/$nav");
                         
                         
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        <!--
-                        
-                        
-                        
-                        <div class="row">
-                
-                            <input type="hidden" id="estudiante_id" value="<?= $estudiante["id"] ?>">
-                            
-                            
-                            
-                            
-                            
-                            
-                            <div class="col-md-12">
-                                <hr>
-                                <h2>Perfil Profesional</h2>
-                            </div>
-                            
-                            
-                            
-                            <div class="col-md-12">
-                                <hr>
-                                <h2>Informaci&oacute;n General</h2>
-                                <?php //var_dump($modalidad); ?>
-                                <?php //$this->load->view("common/estudiantes/partes/info_practica", $practica, $profesor, $estudiante , $perfil_personalizado ); ?>
-                                
-                            </div>
-                        
-                        </div>
-                        
-                        
-                        <div class="box-group" id="accordion">
-                            
-                            <div class="panel box box-danger">
-                                <div class="box-header with-border">
-                                    <h4 class="box-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                            Profesor Asignado
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapseTwo" class="panel-collapse collapse">
-                                    <div class="box-body">
-                                        
-                                        <?php if ($profesor !== ''): ?>
-                                            <?php //$this->load->view("common/estudiantes/partes/info_profesor", $profesor); ?>
-                                        <?php else: ?>
-                                            <?php if ($empresa !== ''): ?>
-                                                <?php //$this->load->view("common/estudiantes/partes/asignar_docente", $profesoresList); ?>
-                                            <?php else: ?>
-                                                <div class="alert alert-danger alert-dismissible">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                                    <strong><i class="icon fa fa-check"></i>&nbsp;Debe agregar una empresa para poder asignar un docente.</strong>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box box-primary">
-                                <div class="box-header with-border">
-                                    <h4 class="box-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapsethree">
-                                            Aptitud Profesional
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapsethree" class="panel-collapse collapse">
-                                    <div class="box-body">                 
-                                        
-                                        <?php //$this->load->view("common/estudiantes/partes/info_aptitud_profesional", $aptitud_profesional); ?>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box box-danger">
-                                <div class="box-header with-border">
-                                    <h4 class="box-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapsefour">
-                                            Empresa
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapsefour" class="panel-collapse collapse">
-                                    <div class="box-body">                 
-                                        
-                                        <?php if ($empresa !== ''): ?>
-                                            <?php //$this->load->view("common/estudiantes/partes/info_empresa", $empresa); ?>
-                                        <?php else: ?>
-                                            <?php //$this->load->view("common/estudiantes/partes/asignar_empresa", $empresasList); ?>
-                                        <?php endif; ?>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box box-primary">
-                                <div class="box-header with-border">
-                                    <h4 class="box-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapsefive">
-                                            Practica Profesional
-                                        </a>
-                                    </h4>
-                                </div>
-                                <div id="collapsefive" class="panel-collapse collapse">
-                                    <div class="box-body">
-                                        
-                                        
-                                        
-                                        
-                                        <?php //$this->load->view("common/estudiantes/partes/info_practica_profesional", $modalidad, $estudiante, $visitas); ?>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    -->
-                    
+              
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div><!-- /.col -->

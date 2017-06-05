@@ -51,6 +51,7 @@ class Estudiantes extends CI_Controller {
     }
 
     public function view($id_estudiante) {
+        
         $this->load->model("modalidad_model");
         $this->load->model("visita_model");
         $this->load->model("novedad_model");
@@ -64,10 +65,11 @@ class Estudiantes extends CI_Controller {
         $practica = $this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante);
         $empresasList = $this->empresa_model->getAll();
         $novedades = $this->novedad_model->getByPractica($practica[0]->id);
-        
         $whereArray = array("usuario.id_rol_usuario = " . ID_ROL_PROFESOR, "usuario.id_estado = " . $this->estados["activo"]);
         $profesoresList = $this->profesor_model->listar($whereArray);
-
+        $visitas_realizadas  = $this->visita_model->ContarVisitasRealizadasByIdPractica($practica[0]->id);
+        
+        $data['visitas_realizadas'] = $visitas_realizadas[0]->cantidad;
         $data["empresa"] = $empresa != NULL ? get_object_vars($empresa[0]) : '';
         $data["estudiante"] = get_object_vars($estudiante[0]);
         $data["profesor"] = $profesor != NULL ? get_object_vars($profesor[0]) : '';
@@ -77,7 +79,7 @@ class Estudiantes extends CI_Controller {
         $data["novedades"] = $novedades;
         $data["empresasList"] = $empresasList;
         $data["profesoresList"] = $profesoresList;
-
+        
         //CARGAR LAS VISITAS
         $lista_visitas = $this->visita_model->SelectVisitaByIdPractica($data["practica"]["id"]);
         $html = visita_list_table($lista_visitas, 'profesor/visita');

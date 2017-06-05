@@ -77,6 +77,7 @@ $this->load->view("plantilla/$nav");
                 <div class="row" align="center">
                     <h3>Aprobar Alumno</h3>
                     <div class="form-group">
+                        <label for="valAprobar">Ingrese una calificacion</label>
                         <input type="text" class="form-control" id="valAprobar">
                     </div><br>
                     <div class="form-group">
@@ -100,6 +101,7 @@ $this->load->view("plantilla/$nav");
                 <div class="row" align="center">
                     <h3>Reaprobar Alumno</h3>
                     <div class="form-group">
+                        <label for="valAprobar">Ingrese una calificacion</label>
                         <input type="text" class="form-control" id="valReprobar">
                     </div><br>
                     <div class="form-group">

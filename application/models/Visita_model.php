@@ -39,6 +39,12 @@ class Visita_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();
     }
+    
+    public function ContarVisitasRealizadasByIdPractica($id_practica) {
+        $sql = "SELECT COUNT(id) AS cantidad FROM ".$this->tabla." WHERE estado_visita = 'realizada' AND id_practica = ".$id_practica;
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
 
     public function insert($data) {
         $this->db->insert($this->tabla,$data);

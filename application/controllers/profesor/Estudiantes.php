@@ -56,7 +56,9 @@ class Estudiantes extends CI_Controller {
         $practica = $this->practica_profesional_model->SelectPracticaByIdEstudiante($id_estudiante);
         $perfil_personalizado = $this->estudiante_model->obtenerPerfilProfPersonalizado($id_estudiante);
         $novedades = $this->novedad_model->getByPractica($practica[0]->id);
+        $visitas_realizadas  = $this->visita_model->ContarVisitasRealizadasByIdPractica($practica[0]->id);
         
+        $data['visitas_realizadas'] = $visitas_realizadas[0]->cantidad;
         $data["empresa"] = get_object_vars($empresa[0]);
         $data["estudiante"] = get_object_vars($estudiante[0]);
         $data["profesor"] = get_object_vars($profesor[0]);

@@ -31,6 +31,9 @@
                     SEPP - Seguimiento a Estudiantes en Pr&aacute;cticas Profesionales
                 </h4>
             </div>
+            <div class="col-sm-12">
+                <?= show_notification(); ?>
+            </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
                 <p class="login-box-msg text-center">
@@ -67,6 +70,9 @@
             </div>
         </div>
         <!-- /.login-box -->
+        <!-- Bootstrap 3.3.5 -->
+        <script src="<?= base_url() ?>js/jquery.min.js"></script>
+        <script src="<?= base_url() ?>dashboard/bootstrap/js/bootstrap.min.js"></script>
     </body>
     
 </html>

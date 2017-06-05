@@ -1,5 +1,5 @@
 <div class="col-md-4">
-    <img class="img-responsive" src="<?= @$url_foto ?>">
+    <img class="img-responsive" src="<?= (!empty($url_foto)) ? $url_foto : base_url()."images/dummy_student.png"; ?>">
 </div>
 <div class="col-md-8">
     <table class="table table-responsive">

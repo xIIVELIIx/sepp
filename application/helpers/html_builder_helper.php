@@ -282,15 +282,27 @@ if (!function_exists('common_usuario_list_table')) {
         function visita_list_table($data, $controller) {
             $html = "";
             foreach ($data as $a) {
-
+                
+                
+                
+                http://localhost/sepp/profesor/visita/view/9
                 $html .= "<tr>";
-                $html .= "<td>" . $a->fecha . "</td>";
+                if($a->estado_visita=="realizada"){
+                    $html .= "<td><a href = \"" . base_url() . "$controller/view/" . $a->id . "\">" . $a->fecha . "</a></td>";
+                }else{
+                    $html .= "<td>" . $a->fecha . "</td>";
+                }
                 $html .= "<td>" . $a->comentario . "</td>";
+                
                 $html .= "<td>" . $a->estado_visita . "</td>";
-
-                $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar Visita\" href = \"" . base_url() . "$controller/edit/" . $a->id . "\" >
+                
+                $edit_btn = "";
+                if($a->estado_visita == "agendada"){
+                    $edit_btn = "<a class=\"btn btn-warning btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Editar Visita\" href = \"" . base_url() . "$controller/edit/" . $a->id . "\" >
                                 <span class=\"glyphicon glyphicon-edit\"></span>
                             </a>";
+                }
+                
                 $success_btn = "";
                 if($a->estado_visita == "realizada"){
                      $success_btn = "<a class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Calificar Visita\" href = \"" . base_url() . "$controller/view/" . $a->id . "\" >

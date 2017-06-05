@@ -74,7 +74,7 @@ class User extends CI_Controller {
             if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                 $result = $this->user_model->logIn($this->input->post('usuario'), $this->input->post('password'));
-
+                
                 if ($result !== FALSE && count($result) > 0) {
 
                     $user_info = get_object_vars($result);
